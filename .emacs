@@ -261,15 +261,20 @@ Suitable for inclusion in `c-offsets-alist'."
 
 ;; Python Hook
 (add-hook 'python-mode-hook
-          (if t
+	  (progn
+	    (setq python-check-command "pychecker --stdlib -# 0 -xXT")
+	    (define-key (current-global-map) (kbd "C-.") 'python-shift-right)
+	    (define-key (current-global-map) (kbd "C-,") 'python-shift-left)
+
+	    (if t
+		(function (lambda ()
+			    (setq indent-tabs-mode t
+				  python-indent 4
+				  tab-width 4)))
 	      (function (lambda ()
-			  (setq indent-tabs-mode t
-				python-indent 4
-				tab-width 4)))
-	    (function (lambda ()
-			(setq indent-tabs-mode nil
-			      tab-width 2
-			      python-indent 2)))))
+			  (setq indent-tabs-mode nil
+				tab-width 2
+				python-indent 2))))))
 
 
 
