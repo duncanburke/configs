@@ -43,6 +43,8 @@
   (kill-buffer)
   (delete-window)
   )
+(define-key (current-global-map) (kbd "s-v") 'clipboard-yank)
+(define-key (current-global-map) (kbd "s-c") 'clipboard-kill-ring-save)
 (define-key (current-global-map) (kbd "C-c v") 'clipboard-yank)
 (define-key (current-global-map) (kbd "C-c c") 'clipboard-kill-ring-save)
 (define-key (current-global-map) (kbd "C-c t") 'toggle-truncate-lines)
