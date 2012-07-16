@@ -3,18 +3,14 @@
 # ~/.xinitrc
 #
 # Executed by startx (run your window manager from here)
-xrandr --auto --output DVI-0 --mode 1920x1080 --left-of DVI-1
-#Set mouse cursor
+
+urxvtd -q -o -f
+
+xrdb ~/.Xresources
 xsetroot -cursor_name left_ptr
-#Start xcompmgr for transparency effects etc.
 xcompmgr&
-#Set background to ~/wallpaper.png
 feh --bg-scale .wallpaper.png&
-#Start trayer
 trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand true --width 10 --height 12 --transparent true --tint 0x000000 &
-#Start Wicd Client
-wicd-client --tray&
-#exec openbox-session
-#exec evilwm
-#exec ratpoison
+wicd-client&
+
 exec xmonad
