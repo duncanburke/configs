@@ -1,0 +1,11 @@
+*.pyc
+*~
+*.o
+*.so
+*.tar.gz
+*.egg-info
+*build
+*.back
+\#*
+.#*
+*.elc

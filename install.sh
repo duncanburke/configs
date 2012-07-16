@@ -5,6 +5,7 @@ manifest="
 bashrc:$HOME/.bashrc
 emacs:$HOME/.emacs
 gitconfig:$HOME/.gitconfig
+gitignore:$HOME/.gitignore_global
 xinitrc:$HOME/.xinitrc
 xmobarrc:$HOME/.xmobarrc
 xmonad.hs:$HOME/.xmonad/xmonad.hs
