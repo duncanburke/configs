@@ -96,6 +96,13 @@
 (when (not (window-system))
       (menu-bar-mode -1))
 
+(defun ask-user-about-supersession-threat (fn)
+  "blatantly ignore files that changed on disk"
+  )
+(defun ask-user-about-lock (file opponent)
+  "always grab lock"
+   t)
+
 
 (require 'color-theme)
 (eval-after-load "color-theme"
