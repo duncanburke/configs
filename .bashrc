@@ -118,3 +118,6 @@ set show-all-if-unmodified on
 export MPD_HOST='/home/duncan/mpd/socket'
 
 export PATH=$PATH':/usr/bin/site_perl'
+export PIP_INDEX_URL='http://pip'
+export PACKAGE_HOST='http://packages'
+export CONTEXT_HOST='http://context'
