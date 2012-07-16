@@ -64,6 +64,9 @@
 (define-key (current-global-map) (kbd "C-z z") 'close-and-kill-this-pane)
 (define-key (current-global-map) (kbd "C-c o") 'org-mode)
 (define-key (current-global-map) (kbd "C-?") 'undo-only)
+(define-key (current-global-map) (kbd "M-%") 'replace-regexp)
+;;(define-key (current-global-map) (kbd "C-M-x") '(switch-to-buffer "*scratch*"))
+
 
 (defun command-insert-tab ()
   "Insert a tab character"
@@ -87,6 +90,7 @@
 
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/color-theme.el")
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/haskell-mode/haskell-mode.el")
+;(add-to-list 'load-path "/usr/share/emacs/site-lisp/cython-mode.el")
 
 ;(defadvice indent-to (before indent-to-spaces)
 ;  "force indent-to to only insert spaces"
@@ -116,9 +120,10 @@
      ;; promising: montz, tty-dark, gray30, lethe
      ;;(if (display-graphic-p) (color-theme-charcoal-black) (color-theme-lawrence))
      ))
+
 (require 'haskell-mode)
 
-
+;; (require 'cython-mode)
 
 
 
