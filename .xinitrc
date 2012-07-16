@@ -13,7 +13,7 @@ feh --bg-scale .wallpaper.png&
 #Start trayer
 trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand true --width 10 --height 12 --transparent true --tint 0x000000 &
 #Start Wicd Client
-wicd-client&
+wicd-client --tray&
 #exec openbox-session
 #exec evilwm
 #exec ratpoison
