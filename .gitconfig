@@ -1,5 +1,5 @@
 [user]
 	name = Duncan Burke
-	email = ducnan@orionvm.com.au
+	email = duncan.burke@orionvm.com.au
 [alias]
 	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
