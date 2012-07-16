@@ -121,3 +121,20 @@ export PATH=$PATH':/usr/bin/site_perl'
 export PIP_INDEX_URL='http://pip'
 export PACKAGE_HOST='http://packages'
 export CONTEXT_HOST='http://context'
+
+gateway="master01"
+
+ssh_helper() {
+       host=$1
+       shift
+       case "$host" in
+               db*|spartan*|hydra*|charon*|monitor*|vnc*|phoebe*|artemis*|pandora*|orpheus*|apollo*|*charon*)
+                               /usr/bin/ssh $gateway -t "ssh $host '$@'"
+                       ;;
+               *)
+                               /usr/bin/ssh $host $@
+                       ;;
+       esac
+}
+
+alias ssh='ssh_helper'
