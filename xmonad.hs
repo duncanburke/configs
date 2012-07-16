@@ -18,6 +18,9 @@ myManageHook = composeAll []
 
 modm = mod4Mask
 
+
+modm = mod4Mask
+
 myLayoutHook = onWorkspace "media" myFullscreen $ onWorkspace "web" myBorderless $ myLayout
 
 main = do
@@ -34,14 +37,18 @@ main = do
                         { ppOutput = hPutStrLn xmproc
                         , ppTitle = xmobarColor "green" "" . shorten 125
                         }
-        , modMask = mod4Mask     -- Rebind Mod to the Windows key
+        , modMask = modm     -- Rebind Mod to the Windows key
         } `additionalKeys` myKeys
 
 fnWorkspaces = (map (("F" ++) . show) [1..12])
 fnWorkspacesKB = [xK_F1..xK_F12]
-workspaceMap (k, w) = [ ((mod4Mask, k), windows $ W.greedyView w)
-                      , ((shiftMask .|. mod4Mask, k), windows $ W.shift w) ]
+workspaceMap (k, w) = [ ((modm, k), windows $ W.greedyView w)
+                      , ((shiftMask .|. modm, k), windows $ W.shift w) ]
 
-myKeys = [ ((mod4Mask, xK_p), spawn "dmenu_run") ]
+myKeys = [ ((modm, xK_p), spawn "dmenu_run") ]
          ++ workspaceMap (xK_0, "0")
          ++ ((zip fnWorkspacesKB fnWorkspaces) >>= workspaceMap)
+         ++
+         [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
+         | (key, sc) <- zip [xK_w, xK_e, xK_r] [1,0]
+         , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
