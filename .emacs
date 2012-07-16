@@ -2,6 +2,7 @@
   (interactive)
   (load-file "~/.emacs"))
 
+(column-number-mode)
 (add-to-list 'default-frame-alist '(font . "Terminus:style=Regular:size=10"))
 (add-to-list 'load-path "/usr/share/emacs/site-lisp")
 
