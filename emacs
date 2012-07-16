@@ -90,7 +90,7 @@
 
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/color-theme.el")
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/haskell-mode/haskell-mode.el")
-;(add-to-list 'load-path "/usr/share/emacs/site-lisp/cython-mode.el")
+(add-to-list 'load-path "/usr/share/emacs/site-lisp/cython-mode.el")
 
 ;(defadvice indent-to (before indent-to-spaces)
 ;  "force indent-to to only insert spaces"
@@ -123,7 +123,7 @@
 
 (require 'haskell-mode)
 
-;; (require 'cython-mode)
+(require 'cython-mode)
 
 
 
