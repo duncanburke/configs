@@ -10,6 +10,7 @@ xmobarrc:$HOME/.xmobarrc
 xmonad.hs:$HOME/.xmonad/xmonad.hs
 xresources:$HOME/.Xresources
 site-lisp:/usr/share/emacs/site-lisp
+gitcompletion.sh:$HOME/.git-completion.sh
 "
 for file in $manifest; do
 src="${DIR}/${file%%:*}"

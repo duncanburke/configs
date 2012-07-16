@@ -122,6 +122,8 @@ export PIP_INDEX_URL='http://pip'
 export PACKAGE_HOST='http://packages'
 export CONTEXT_HOST='http://context'
 
+source ~/.git-completion.sh
+
 gateway="master01"
 
 ssh_helper() {
