@@ -3,3 +3,4 @@
 	email = duncan.burke@orionvm.com.au
 [alias]
 	lg = log --graph --pretty=format:'%Cred%h%Creset - %Cgreen%an%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+	all = !git branch -a | sed 's/^*//' | grep -ve '->' | xargs git lg
