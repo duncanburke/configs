@@ -63,6 +63,7 @@
 (define-key (current-global-map) (kbd "C-z x") 'close-and-kill-next-pane)
 (define-key (current-global-map) (kbd "C-z z") 'close-and-kill-this-pane)
 (define-key (current-global-map) (kbd "C-c o") 'org-mode)
+(define-key (current-global-map) (kbd "C-?") 'undo-only)
 
 (defun command-insert-tab ()
   "Insert a tab character"
