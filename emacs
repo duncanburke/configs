@@ -1,83 +1,113 @@
 (defun loade ()
+  "Reload .emacs. This is defined at the beginning so that the file can be easily reloaded even if errors have occured."
   (interactive)
   (load-file "~/.emacs"))
 
-(column-number-mode)
+;;Alternative: "DejaVu Sans Mono:style=Book:size=12"
 (add-to-list 'default-frame-alist '(font . "Terminus:style=Regular:size=10"))
-(add-to-list 'load-path "/usr/share/emacs/site-lisp")
 
-;;/ssh:root@localhost#9004:/var/lib/postgresql/
-;;(set-default-font "DejaVu Sans Mono:style=Book:size=12")
+(add-to-list 'load-path '("/usr/share/emacs/site-lisp" "~/.emacs.d"))
 
-(set-default-font "Terminus:style=Regular:size=10")
+;;Show column and line numbers on status bar
+(column-number-mode)
+
+;;Disable icons on the menu
 (tool-bar-mode -1)
+
+;;When in terminal, disable the menu bar entirely
+(when (not (window-system))
+      (menu-bar-mode -1))
+
+;;Stop dired from spamming windows as you navigate
 (put 'dired-find-alternate-file 'disabled nil)
-(put 'downcase-region 'disabled nil)
+
+;;Get rid of the annoying spash screen
 (setq inhibit-splash-screen t)
+
+;;By default these are disabled
+(put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
+
+;;I'm not sure what this does. I must have had a reason for it, though
 (setq resize-mini-windows t)
-;;(setq tramp-syntax 'url)
-(require 'tramp)
-(setq tramp-verbose 10)
-(setq tramp-debug-buffer t)
-;;(setq tramp-default-method "ssh")
 
-(toggle-truncate-lines nil)
-;;(setq tab-always-indent nil)
-;;(setq indent-tabs-mode nil)
-;;(setq tab-width 4)
-
+;;Make windows split vertically like C-x 3 for things like help, grep, compile, gdb etc.
 (setq split-height-threshold nil)
 (setq split-width-threshold 0)
 
+;;Often things will open new windows for some reason. These can be useful, but one can be
+;;left with a multitude of useless buffers lying around. Rather than just switching away from the offending
+;;buffer, use C-z z. C-z x is somewhat unpredictable, as one isn't sure exactly which other buffer it's going
+;;to close; so it's best used when there are two panes.
 (defun close-and-kill-next-pane ()
   "Close the other pane and kill the buffer in it also."
   (interactive)
   (other-window 1)
   (kill-buffer)
-  (delete-window)
-  )
+  (delete-window))
 
 (defun close-and-kill-this-pane ()
   "Close this pane and kill the buffer in it also."
   (interactive)
   (kill-buffer)
-  (delete-window)
-  )
+  (delete-window))
 
+;;Disable C-z. Normally, this would cause it to be minimised in a graphical environment, but it gets
+;;confused with xmonad
+(define-key (current-global-map) (kbd "C-z") 'nil)
+
+(define-key (current-global-map) (kbd "C-z x") 'close-and-kill-next-pane)
+(define-key (current-global-map) (kbd "C-z z") 'close-and-kill-this-pane)
+
+;;Keybindings to the X clipboard
 (define-key (current-global-map) (kbd "s-v") 'clipboard-yank)
 (define-key (current-global-map) (kbd "s-c") 'clipboard-kill-ring-save)
 (define-key (current-global-map) (kbd "C-c v") 'clipboard-yank)
 (define-key (current-global-map) (kbd "C-c c") 'clipboard-kill-ring-save)
+
+;;Line wrap at right edge of screen
 (define-key (current-global-map) (kbd "C-c t") 'toggle-truncate-lines)
+
+;;Line numbers at left edge of screen
 (define-key (current-global-map) (kbd "C-c l") 'linum-mode)
+
+;;Show whitespace
+(define-key (current-global-map) (kbd "C-c w") 'whitespace-mode)
+
+;;Jump to the specified line number
+(define-key (current-global-map) (kbd "C-c a") 'goto-line)
+
+;;What is says on the box
+(define-key (current-global-map) (kbd "C-c 1") 'compile)
+
+;;Alternate undo which doesn't undo undos like normal undo
+(define-key (current-global-map) (kbd "C-?") 'undo-only)
+
+;;Trying to get this one to work
+(define-key (current-global-map) (kbd "C-M-x") '(switch-to-buffer "*scratch*"))
+
+;The various modes
 (define-key (current-global-map) (kbd "C-c p") 'c++-mode)
 (define-key (current-global-map) (kbd "C-c h") 'haskell-mode)
 (define-key (current-global-map) (kbd "C-c i") 'haskell-indentation-mode)
 (define-key (current-global-map) (kbd "C-c m") 'matlab-mode)
 (define-key (current-global-map) (kbd "C-c y") 'python-mode)
-(define-key (current-global-map) (kbd "C-c 1") 'compile)
-(define-key (current-global-map) (kbd "C-c w") 'whitespace-mode)
 (define-key (current-global-map) (kbd "C-c r") 'picture-mode)
 (define-key (current-global-map) (kbd "C-c x") 'text-mode)
-(define-key (current-global-map) (kbd "C-c a") 'goto-line)
-(define-key (current-global-map) (kbd "C-z") 'nil)
-(define-key (current-global-map) (kbd "C-z x") 'close-and-kill-next-pane)
-(define-key (current-global-map) (kbd "C-z z") 'close-and-kill-this-pane)
 (define-key (current-global-map) (kbd "C-c o") 'org-mode)
-(define-key (current-global-map) (kbd "C-?") 'undo-only)
-(define-key (current-global-map) (kbd "M-%") 'replace-regexp)
-;;(define-key (current-global-map) (kbd "C-M-x") '(switch-to-buffer "*scratch*"))
 
 
+;;Keybinding to insert a fucking tab, rather than doing crazy indent
 (defun command-insert-tab ()
   "Insert a tab character"
   (interactive)
   (insert "\t")
   )
-
 (define-key (current-global-map) (kbd "<C-tab>") 'command-insert-tab)
 
+
+;;Make backspace delete whitespace in increments of tabstop.
+;;This is definitely a matter of taste and some improvements need to be made to make it fully pimped
 (defun backward-delete-char-tabstop ()
   (interactive)
   (cond
@@ -90,13 +120,8 @@
 (define-key (current-global-map) (kbd "<backspace>") 'backward-delete-char-tabstop)
 (define-key isearch-mode-map [backspace] 'isearch-delete-char)
 
-(add-to-list 'load-path "/usr/share/emacs/site-lisp/color-theme.el")
-(add-to-list 'load-path "/usr/share/emacs/site-lisp/haskell-mode/haskell-mode.el")
-(add-to-list 'load-path "/usr/share/emacs/site-lisp/cython-mode.el")
-
-(when (not (window-system))
-  (menu-bar-mode -1))
-
+;; Make emacs stop asking silly questions about changed files.
+;; Somewhat unsafe, and a matter of taste.
 (defun ask-user-about-supersession-threat (fn)
   "blatantly ignore files that changed on disk"
   )
@@ -104,19 +129,22 @@
   "always grab lock"
   t)
 
-
 (require 'color-theme)
+;; I've looked through all the themes in color-theme. Most of these are bad. Believe me, the rest are worse.
+;; nw: taming-mr-arneson, clarity, renegade, midnight, dark-laptop, jsc-ligh2, ld-dark, clarity, renegade
+;; promising: montz, tty-dark, gray30, lethe
 (eval-after-load "color-theme"
   '(progn
      (color-theme-initialize)
      (if (window-system)
          (color-theme-charcoal-black)
-       (color-theme-clarity))
-     ;; normal: taylor,
-     ;; nw: taming-mr-arneson, clarity, renegade, midnight, dark-laptop, jsc-ligh2, ld-dark, clarity, renegade
-     ;; promising: montz, tty-dark, gray30, lethe
-     ;;(if (display-graphic-p) (color-theme-charcoal-black) (color-theme-lawrence))
-     ))
+         (color-theme-clarity))))
+
+(require 'tramp)
+;;enable these for tramp debugging
+;(setq tramp-verbose 10)
+;;etq tramp-debug-buffer t)
+
 
 (require 'haskell-mode)
 
@@ -128,6 +156,15 @@
 (autoload 'smart-tabs-mode-enable "smart-tabs-mode")
 (autoload 'smart-tabs-advice "smart-tabs-mode")
 
+;; Yeah, this doesn't work
+;; (setq gnus-select-method '(nnml ""))
+;; (setq mail-sources
+;;       '((pop :server "pop.gmail.com"
+;;              :port 995
+;;              :user "duncan.burke@orionvm.com.au"
+;;              :password ""
+;;              :stream ssl)))
+
 
 (defun c-lineup-arglist-tabs-only (ignored)
   "Line up argument lists by tabs, not spaces"
@@ -137,6 +174,7 @@
 	 (steps (floor offset c-basic-offset)))
     (* (max steps 1)
        c-basic-offset)))
+
 
 (defun my-c-mode-hook ()
   (setq indent-tabs-mode t
