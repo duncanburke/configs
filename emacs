@@ -27,6 +27,9 @@
 ;;Get rid of the annoying spash screen
 (setq inhibit-splash-screen t)
 
+;;Follow symlinks to version-controlled files
+(setq vc-follow-symlinks t)
+
 ;;By default these are disabled
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
