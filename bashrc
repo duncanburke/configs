@@ -115,7 +115,7 @@ complete -cf sudo
 complete -cf man
 set show-all-if-ambiguous on
 set show-all-if-unmodified on
-export MPD_HOST='/home/duncan/mpd/socket'
+export MPD_HOST='/var/lib/mpd/socket'
 
 export PATH=$PATH':/usr/bin/site_perl'
 export PIP_INDEX_URL='http://pip'
