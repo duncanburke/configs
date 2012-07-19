@@ -175,20 +175,26 @@
 (defun c-lineup-arglist-tabs-only (ignored)
   "Line up argument lists by tabs, not spaces"
   (let* ((anchor (c-langelem-pos c-syntactic-element))
-	 (column (c-langelem-2nd-pos c-syntactic-element))
-	 (offset (- (1+ column) anchor))
-	 (steps (floor offset c-basic-offset)))
+     (column (c-langelem-2nd-pos c-syntactic-element))
+     (offset (- (1+ column) anchor))
+     (steps (floor offset c-basic-offset)))
     (* (max steps 1)
        c-basic-offset)))
 
 
 (defun my-c-mode-hook ()
-  (setq indent-tabs-mode t
-        c-basic-offset 4
+  (setq c-basic-offset 4
         tab-width 4)
   (smart-tabs-mode-enable)
   (smart-tabs-advice c-indent-line c-basic-offset)
-  (smart-tabs-advice c-indent-region c-basic-offset))
+  (smart-tabs-advice c-indent-region c-basic-offset)
+  (setq indent-tabs-mode 4)
+  (c-toggle-auto-newline nil)
+  (c-toggle-hungry-state t)
+  (c-toggle-electric-state t)
+  (c-toggle-syntactic-indentation t)
+  (local-set-key (kbd "RET") 'newline-and-indent)
+  (subword-mode t))
 
 (add-hook 'c-mode-hook 'my-c-mode-hook)
 
@@ -221,4 +227,3 @@
 
 (add-hook 'sql-interactive-mode-hook
           (function (lambda () ((setq tab-width 4)))))
-
