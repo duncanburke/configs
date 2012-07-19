@@ -35,7 +35,7 @@ main = do
         , terminal = "urxvtc"
         , logHook = dynamicLogWithPP $ xmobarPP
                         { ppOutput = hPutStrLn xmproc
-                        , ppTitle = xmobarColor "green" "" . shorten 125
+                        , ppTitle = xmobarColor "green" "" . shorten 190
                         }
         , modMask = modm     -- Rebind Mod to the Windows key
         } `additionalKeys` myKeys
