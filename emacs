@@ -14,6 +14,9 @@
 ;;Disable icons on the menu
 (tool-bar-mode -1)
 
+;;Remove scroll bars
+(toggle-scroll-bar nil)
+
 ;;When in terminal, disable the menu bar entirely
 (when (not (window-system))
       (menu-bar-mode -1))
