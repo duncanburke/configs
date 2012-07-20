@@ -12,6 +12,7 @@ xmonad.hs:$HOME/.xmonad/xmonad.hs
 xresources:$HOME/.Xresources
 site-lisp:/usr/share/emacs/site-lisp
 gitcompletion.sh:$HOME/.git-completion.sh
+ncmpcpp:$HOME/.ncmpcpp/config
 "
 for file in $manifest; do
 src="${DIR}/${file%%:*}"
