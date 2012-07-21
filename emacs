@@ -8,6 +8,17 @@
 
 (add-to-list 'load-path '("/usr/share/emacs/site-lisp" "~/.emacs.d"))
 
+(require 'color-theme)
+;; I've looked through all the themes in color-theme. Most of these are bad. Believe me, the rest are worse.
+;; nw: taming-mr-arneson, clarity, renegade, midnight, dark-laptop, jsc-ligh2, ld-dark, clarity, renegade
+;; promising: montz, tty-dark, gray30, lethe
+(eval-after-load "color-theme"
+	'(progn
+		 (color-theme-initialize)
+		 (if (window-system)
+			 (color-theme-charcoal-black)
+			 (color-theme-clarity))))
+
 ;; Show column and line numbers on status bar
 (column-number-mode)
 
@@ -134,17 +145,6 @@
 (defun ask-user-about-lock (file opponent)
 	"always grab lock"
 	t)
-
-(require 'color-theme)
-;; I've looked through all the themes in color-theme. Most of these are bad. Believe me, the rest are worse.
-;; nw: taming-mr-arneson, clarity, renegade, midnight, dark-laptop, jsc-ligh2, ld-dark, clarity, renegade
-;; promising: montz, tty-dark, gray30, lethe
-(eval-after-load "color-theme"
-	'(progn
-		 (color-theme-initialize)
-		 (if (window-system)
-			 (color-theme-charcoal-black)
-			 (color-theme-clarity))))
 
 (require 'tramp)
 ;; enable these for tramp debugging
