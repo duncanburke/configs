@@ -283,3 +283,43 @@
           (ediff-buffers bufa bufb))
         )
   )
+
+; run perl on the current region, updating the region
+(defun perl-replace-region (start end)
+  "Apply perl command to region"
+  (interactive "r")
+  (shell-command-on-region start end
+                           (read-from-minibuffer "Replace region command: " '("perl -pel \'s///g\'" . 14 ))
+                           t
+                           t
+                           )
+  (exchange-point-and-mark)
+  )
+
+; run perl on the current buffer, updating the buffer
+(defun perl-replace-buffer ()
+  "Apply perl command to buffer"
+  (interactive)
+  (let ((ptline (count-lines (point-min) (point)))
+        (ptcol (current-column))
+        (markline 0)
+        (markcol  0)
+        (command (read-from-minibuffer "Replace buffer command: " '("perl -pel \'s///g\'" . 14 ))))
+    (exchange-point-and-mark)
+    (setq markline (count-lines (point-min) (point)))
+    (setq markcol  (current-column))
+    (mark-whole-buffer)
+    (let ((new-start (region-beginning))
+          (new-end   (region-end)))
+      (shell-command-on-region  new-start new-end command t t )
+      )
+    (goto-line markline)
+    (move-to-column markcol)
+    (exchange-point-and-mark)
+    (goto-line ptline)
+    (move-to-column ptcol)
+    )
+  )
+
+(define-key (current-global-map) (kbd "C-M-^") 'perl-replace-region)
+(define-key (current-global-map) (kbd "C-M-&") 'perl-replace-buffer)
