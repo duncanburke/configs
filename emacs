@@ -151,8 +151,8 @@
 					(delete-backward-char 1))))
 		(t  (delete-backward-char 1))))
 
-(define-key (current-global-map) (kbd "<backspace>") 'backward-delete-char-tabstop)
-(define-key isearch-mode-map [backspace] 'isearch-delete-char)
+;; (define-key (current-global-map) (kbd "<backspace>") 'backward-delete-char-tabstop)
+;; (define-key isearch-mode-map [backspace] 'isearch-delete-char)
 
 ;; Make emacs stop asking silly questions about changed files.
 ;; Somewhat unsafe, and a matter of taste.
