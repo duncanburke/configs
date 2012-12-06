@@ -53,6 +53,9 @@
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
 
+;; Don't wrap lines by default
+(set-default 'truncate-lines t)
+
 ;; I'm not sure what this does. I must have had a reason for it, though
 (setq resize-mini-windows t)
 
