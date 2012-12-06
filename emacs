@@ -140,8 +140,8 @@
 (define-key (current-global-map) (kbd "<C-tab>") 'command-insert-tab)
 
 
-;; Make backspace delete whitespace in increments of tabstop.
-;; This is definitely a matter of taste and some improvements need to be made to make it fully pimped
+;; Make backspace delete whitespace in increments of tabstop
+;; This is definitely a matter of taste and some improvements need to be made
 (defun backward-delete-char-tabstop ()
 	(interactive)
 	(cond
