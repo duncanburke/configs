@@ -200,12 +200,13 @@
 			c-basic-offset)))
 
 (defun my-c-mode-hook ()
-	(setq c-basic-offset 4
-		tab-width 4)
+	(setq c-basic-offset 2
+		tab-width 2)
 	(smart-tabs-mode-enable)
 	(smart-tabs-advice c-indent-line c-basic-offset)
 	(smart-tabs-advice c-indent-region c-basic-offset)
-	(setq indent-tabs-mode 4)
+	(c-set-offset 'case-label '+)
+	(setq indent-tabs-mode t)
 	(c-toggle-auto-newline nil)
 	(c-toggle-hungry-state t)
 	(c-toggle-electric-state t)
