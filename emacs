@@ -36,8 +36,9 @@
 (setq diff-switches "-u")
 
 ;; When in terminal, disable the menu bar entirely
-(when (not (window-system))
-	(menu-bar-mode -1))
+;;(when (not (window-system))
+;;	(menu-bar-mode -1))
+(menu-bar-mode -1)
 
 ;; Stop dired from spamming windows as you navigate
 (put 'dired-find-alternate-file 'disabled nil)
@@ -94,6 +95,9 @@
 
 ;; Line numbers at left edge of screen
 (define-key (current-global-map) (kbd "C-c l") 'linum-mode)
+
+;; Show-hide menu
+(define-key (current-global-map) (kbd "C-x y") 'menu-bar-mode)
 
 ;; Show whitespace
 (define-key (current-global-map) (kbd "C-c w") 'whitespace-mode)
