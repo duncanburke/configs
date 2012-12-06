@@ -168,7 +168,7 @@
 ;; (setq tramp-verbose 10)
 ;; (setq tramp-debug-buffer t)
 
-
+(require 'protobuf-mode)
 (require 'haskell-mode)
 
 (require 'cython-mode)
