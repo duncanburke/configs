@@ -174,6 +174,7 @@
 (require 'cython-mode)
 
 (require 'smarttabs)
+(require 'revbufs)
 (autoload 'smart-tabs-mode "smart-tabs-mode"
 	"Intelligently indent with tabs, align with spaces!")
 (autoload 'smart-tabs-mode-enable "smart-tabs-mode")
