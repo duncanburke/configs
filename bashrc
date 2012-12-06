@@ -130,7 +130,7 @@ ssh_helper() {
        host=$1
        shift
        case "$host" in
-               db*|spartan*|hydra*|charon*|monitor*|vnc*|phoebe*|artemis*|pandora*|orpheus*|apollo*|*charon*)
+               db*|spartan*|hydra*|charon*|monitor*|vnc*|phoebe*|artemis*|pandora*|orpheus*|apollo*|*charon*|thespian*)
                                /usr/bin/ssh $gateway -t "ssh $host '$@'"
                        ;;
                *)
