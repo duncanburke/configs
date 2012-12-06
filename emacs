@@ -223,12 +223,13 @@
 	(define-key (current-global-map) (kbd "C-,") 'python-shift-left)
 
 	(setq tab-width 4
-		python-indent 4
-		indent-tabs-mode t)
+		python-indent 4)
 
 	(local-set-key (kbd "RET") 'newline-and-indent)
-	(smart-tabs-mode-enable)
-	(smart-tabs-advice python-indent-line python-indent))
+	(if nil ((setq indent-tabs-mode t)
+	         (smart-tabs-mode-enable)
+	         (smart-tabs-advice python-indent-line python-indent))
+	        nil))
 
 (setq python-mode-hook nil)
 (add-hook 'python-mode-hook 'my-python-mode-hook)
