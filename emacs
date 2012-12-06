@@ -93,6 +93,9 @@
 (define-key (current-global-map) (kbd "C-c v") 'clipboard-yank)
 (define-key (current-global-map) (kbd "C-c c") 'clipboard-kill-ring-save)
 
+;; Delete trailing whitespace
+(define-key (current-global-map) (kbd "C-x t") 'delete-trailing-whitespace)
+
 ;; Line wrap at right edge of screen
 (define-key (current-global-map) (kbd "C-c t") 'toggle-truncate-lines)
 
