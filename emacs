@@ -32,6 +32,9 @@
 ;; Remove scroll bars
 (toggle-scroll-bar nil)
 
+;; Use unified diff
+(setq diff-switches "-u")
+
 ;; When in terminal, disable the menu bar entirely
 (when (not (window-system))
 	(menu-bar-mode -1))
