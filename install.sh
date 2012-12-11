@@ -3,6 +3,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 manifest="
 bashrc:$HOME/.bashrc
+zshrc:$HOME/.zshrc
 emacs:$HOME/.emacs
 gitconfig:$HOME/.gitconfig
 gitignore:$HOME/.gitignore_global
