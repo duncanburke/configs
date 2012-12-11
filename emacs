@@ -29,8 +29,12 @@
 ;; Disable icons on the menu
 (tool-bar-mode -1)
 
+(global-linum-mode t)
+
+(fringe-mode 0)
+
 ;; Remove scroll bars
-(toggle-scroll-bar nil)
+(scroll-bar-mode -1)
 
 ;; Use unified diff
 (setq diff-switches "-u")
