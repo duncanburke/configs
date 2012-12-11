@@ -16,12 +16,7 @@ import XMonad.Layout.NoBorders
 
 myManageHook = composeAll []
 
-{- myManageHook = composeAll
-     $ map (\s -> resource =? ("atWorkspace" ++ s) --> doShift s) (s1 ++ s2)
-    where
-        s1 = map show [0..9]
-        s2 = map (("F" ++) . show) [1..12]
--}
+modm = mod4Mask
 
 myLayoutHook = onWorkspace "media" myFullscreen $ onWorkspace "web" myBorderless $ myLayout
         where
