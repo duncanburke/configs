@@ -3,6 +3,7 @@
 	email = duncan.burke@orionvm.com.au
 [alias]
 	lg = log --graph --pretty=format:'%Cred%h%Creset - %Cgreen%an%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
-	all = !git show-ref | cut -d ' ' -f2 | xargs git lg
+	allrefs = !git show-ref | cut -d ' ' -f2 | xargs git lg HEAD
+        all = log --all --graph --pretty=format:'%Cred%h%Creset - %Cgreen%an%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
 	ff = merge --ff-only
 	fixup = !EDITOR='sed -i 2s/pick/fixup/' git rebase -i HEAD~2
