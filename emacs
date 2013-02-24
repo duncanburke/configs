@@ -220,6 +220,8 @@
 
 (setq c-mode-hook nil)
 (add-hook 'c-mode-hook 'my-c-mode-hook)
+(setq c++-mode-hook nil)
+(add-hook 'c++-mode-hook 'my-c-mode-hook)
 
 (defun my-python-mode-hook ()
 	(setq python-check-command "pychecker --stdlib -# 0 -xXT")
