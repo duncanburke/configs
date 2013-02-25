@@ -1,3 +1,4 @@
+;; -*- mode: lisp -*-
 (defun loade ()
 	"Reload .emacs. This is defined at the beginning so that the file can be easily reloaded even if errors have occured."
 	(interactive)
@@ -160,12 +161,8 @@
 
 ;; Make emacs stop asking silly questions about changed files.
 ;; Somewhat unsafe, and a matter of taste.
-(defun ask-user-about-supersession-threat (fn)
-	"blatantly ignore files that changed on disk"
-	)
-(defun ask-user-about-lock (file opponent)
-	"always grab lock"
-	t)
+(defun ask-user-about-supersession-threat (fn) "blatantly ignore files that changed on disk")
+(defun ask-user-about-lock (file opponent) "always grab lock" t)
 
 (require 'tramp)
 ;; enable these for tramp debugging
@@ -206,6 +203,7 @@
 (defun my-c-mode-hook ()
 	(setq c-basic-offset 2
 		tab-width 2)
+	(setq fill-column 80)
 	(smart-tabs-mode-enable)
 	(smart-tabs-advice c-indent-line c-basic-offset)
 	(smart-tabs-advice c-indent-region c-basic-offset)
@@ -218,8 +216,21 @@
 	(local-set-key (kbd "RET") 'newline-and-indent)
 	(subword-mode t))
 
+
+(defun my-c++-mode-hook ()
+	(my-c-mode-hook)
+	)
+
 (setq c-mode-hook nil)
 (add-hook 'c-mode-hook 'my-c-mode-hook)
+
+(setq c++-mode-hook nil)
+(add-hook 'c++-mode-hook 'my-c++-mode-hook)
+
+(defun my-gud-mode-hook ()
+	(fringe-mode nil))
+
+(add-hook 'gud-mode-hook 'my-gud-mode-hook)
 
 (defun my-python-mode-hook ()
 	(setq python-check-command "pychecker --stdlib -# 0 -xXT")
@@ -293,7 +304,7 @@
   "Apply perl command to region"
   (interactive "r")
   (shell-command-on-region start end
-                           (read-from-minibuffer "Replace region command: " '("perl -pel \'s///g\'" . 14 ))
+                           (read-from-minibuffer "Replace region command: " '("perl -ple \'s///g\'" . 14 ))
                            t
                            t
                            )
@@ -308,7 +319,7 @@
         (ptcol (current-column))
         (markline 0)
         (markcol  0)
-        (command (read-from-minibuffer "Replace buffer command: " '("perl -pel \'s///g\'" . 14 ))))
+        (command (read-from-minibuffer "Replace buffer command: " '("perl -ple \'s///g\'" . 14 ))))
     (exchange-point-and-mark)
     (setq markline (count-lines (point-min) (point)))
     (setq markcol  (current-column))
