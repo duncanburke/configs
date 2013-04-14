@@ -28,15 +28,17 @@
 ;; Show column and line numbers on status bar
 (column-number-mode)
 
-;; Disable icons on the menu
-(tool-bar-mode -1)
+(if window-system
+    (
+     ;; Disable icons on the menu
+     (tool-bar-mode -1)
+     (fringe-mode 0)
+     ;; Remove scroll bars
+     (scroll-bar-mode -1)
+     )
+  )
 
 (global-linum-mode t)
-
-(fringe-mode 0)
-
-;; Remove scroll bars
-(scroll-bar-mode -1)
 
 ;; Use unified diff
 (setq diff-switches "-u")
@@ -174,18 +176,18 @@
 ;; (setq tramp-verbose 10)
 ;; (setq tramp-debug-buffer t)
 
-(require 'protobuf-mode)
-(require 'haskell-mode)
+(ignore-errors (require 'protobuf-mode))
+(ignore-errors (require 'haskell-mode))
+(ignore-errors (require 'cython-mode))
+(ignore-errors (require 'revbufs))
 
-(require 'cython-mode)
-
-(require 'smarttabs)
-(require 'revbufs)
-(autoload 'smart-tabs-mode "smart-tabs-mode"
-	"Intelligently indent with tabs, align with spaces!")
-(autoload 'smart-tabs-mode-enable "smart-tabs-mode")
-(autoload 'smart-tabs-advice "smart-tabs-mode")
-
+(ignore-errors
+  (
+   (require 'smarttabs)
+   (autoload 'smart-tabs-mode "smart-tabs-mode"
+     "Intelligently indent with tabs, align with spaces!")
+   (autoload 'smart-tabs-mode-enable "smart-tabs-mode")
+   (autoload 'smart-tabs-advice "smart-tabs-mode")))
 ;; Yeah, this doesn't work
 ;; (setq gnus-select-method '(nnml ""))
 ;; (setq mail-sources
