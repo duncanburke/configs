@@ -1,3 +1,5 @@
+;; -*- mode: Lisp; -*-
+
 (defun loade ()
 	"Reload .emacs. This is defined at the beginning so that the file can be easily reloaded even if errors have occured."
 	(interactive)
