@@ -14,13 +14,13 @@
 ;; I've looked through all the themes in color-theme. Most of these are bad. Believe me, the rest are worse.
 ;; nw: taming-mr-arneson, clarity, renegade, midnight, dark-laptop, jsc-ligh2, ld-dark, clarity, renegade
 ;; promising: montz, tty-dark, gray30, lethe
-(require 'color-theme-solarized)
-(eval-after-load "color-theme"
-	'(progn
-		 (color-theme-initialize)
-		 (if (window-system)
-			 (color-theme-solarized-dark)
-			 (color-theme-clarity))))
+;; (require 'color-theme-solarized)
+;; (eval-after-load "color-theme"
+;; 	'(progn
+;; 		 (color-theme-initialize)
+;; 		 (if (window-system)
+;; 			 (color-theme-solarized-dark)
+;; 			 (color-theme-clarity))))
 
 ;;(require 'color-theme-solarized)
 ;;(color-theme-solarized-dark)
