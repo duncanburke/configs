@@ -1,7 +1,7 @@
 Config { font = "xft:Terminus-9"
        , bgColor = "black"
        , fgColor = "grey"
-       , position = TopW L 80
+       , position = TopW L 98
        , lowerOnStart = True
        , commands = [ Run Cpu ["-L","10","-H","50","--normal","green","--high","red"] 10
 		    , Run Memory ["-t","Mem: <usedratio>%"] 10

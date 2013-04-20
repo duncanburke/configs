@@ -1,8 +1,3 @@
-{- Joeys Xmonad config
-Running Xmonad Darcs & Contrib Darcs
-Requires atleast Xmonad 0.9 & mobar 0.8
-Include .xmobarrc + ~/bin
- -}
 import XMonad
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
@@ -18,8 +13,6 @@ myManageHook = composeAll []
 
 modm = mod4Mask
 
-myLayoutHook = onWorkspace "media" myFullscreen $ onWorkspace "web" myBorderless $ myLayout
-
 main = do
      xmproc <- spawnPipe "/usr/bin/xmobar /home/duncan/.xmobarrc"
      xmonad $ defaultConfig
@@ -32,7 +25,7 @@ main = do
         , terminal = "urxvtc"
         , logHook = dynamicLogWithPP $ xmobarPP
                         { ppOutput = hPutStrLn xmproc
-                        , ppTitle = xmobarColor "green" "" . shorten 125
+                        , ppTitle = xmobarColor "green" "" . shorten 190
                         }
         , modMask = mod4Mask     -- Rebind Mod to the Windows key
         } `additionalKeys` myKeys
@@ -45,3 +38,6 @@ workspaceMap (k, w) = [ ((mod4Mask, k), windows $ W.greedyView w)
 myKeys = [ ((mod4Mask, xK_p), spawn "dmenu_run") ]
          ++ workspaceMap (xK_0, "0")
          ++ ((zip fnWorkspacesKB fnWorkspaces) >>= workspaceMap)
+         ++ [((m .|. mod4Mask, key), screenWorkspace sc >>= flip whenJust (windows . f))
+            | (key, sc) <- zip [xK_w, xK_e, xK_r] [1,0,2]
+            , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
