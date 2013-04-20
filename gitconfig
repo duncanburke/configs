@@ -1,6 +1,7 @@
 [user]
 	name = Duncan Burke
 	email = duncankburke@gmail.com
+	signingkey = 2269968D
 [alias]
 	lg = log --graph --pretty=format:'%Cred%h%Creset - %Cgreen%an%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
 	all = !git show-ref | cut -d ' ' -f2 | xargs git lg
