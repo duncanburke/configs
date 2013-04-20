@@ -1,42 +1,36 @@
-;; -*- mode: Lisp; -*-
+;; -*- mode: Emacs-Lisp; -*-
+
 
 (defun loade ()
-	"Reload .emacs. This is defined at the beginning so that the file can be easily reloaded even if errors have occured."
-	(interactive)
-	(load-file "~/.emacs"))
+  "Reload .emacs. This is defined at the beginning so that the file can be easily reloaded even if errors have occured."
+  (interactive)
+  (load-file "~/.emacs"))
+
+(defun try-load (feature)
+  (require feature nil 'noerror))
 
 ;; Alternative: "DejaVu Sans Mono:style=Book:size=12"
 (add-to-list 'default-frame-alist '(font . "Terminus:style=Regular:size=10"))
 
 (add-to-list 'load-path "/usr/share/emacs/site-lisp" "~/.emacs.d")
 
-;;(require 'color-theme)
-;; I've looked through all the themes in color-theme. Most of these are bad. Believe me, the rest are worse.
-;; nw: taming-mr-arneson, clarity, renegade, midnight, dark-laptop, jsc-ligh2, ld-dark, clarity, renegade
-;; promising: montz, tty-dark, gray30, lethe
-;; (require 'color-theme-solarized)
-;; (eval-after-load "color-theme"
-;; 	'(progn
-;; 		 (color-theme-initialize)
-;; 		 (if (window-system)
-;; 			 (color-theme-solarized-dark)
-;; 			 (color-theme-clarity))))
-
-;;(require 'color-theme-solarized)
-;;(color-theme-solarized-dark)
-
 ;; Show column and line numbers on status bar
 (column-number-mode)
 
 (if window-system
     (progn
-     ;; Disable icons on the menu
-     (tool-bar-mode -1)
-     (fringe-mode 0)
-     ;; Remove scroll bars
-     (scroll-bar-mode -1)
-     )
-  )
+      ;; Disable icons on the menu
+      (tool-bar-mode -1)
+      (fringe-mode 0)
+      ;; Remove scroll bars
+      (scroll-bar-mode -1)
+
+      (require 'color-theme)
+      (if (try-load 'color-theme-solarized)
+          (color-theme-solarized-dark))))
+
+
+(setq-default indent-tabs-mode nil)
 
 (global-linum-mode t)
 
@@ -79,17 +73,17 @@
 ;; buffer, use C-z z. C-z x is somewhat unpredictable, as one isn't sure exactly which other buffer it's going
 ;; to close; so it's best used when there are two panes.
 (defun close-and-kill-next-pane ()
-	"Close the other pane and kill the buffer in it also."
-	(interactive)
-	(other-window 1)
-	(kill-buffer)
-	(delete-window))
+  "Close the other pane and kill the buffer in it also."
+  (interactive)
+  (other-window 1)
+  (kill-buffer)
+  (delete-window))
 
 (defun close-and-kill-this-pane ()
-	"Close this pane and kill the buffer in it also."
-	(interactive)
-	(kill-buffer)
-	(delete-window))
+  "Close this pane and kill the buffer in it also."
+  (interactive)
+  (kill-buffer)
+  (delete-window))
 
 ;; Disable C-z. Normally, this would cause it to be minimised in a graphical environment, but it gets
 ;; confused with xmonad
@@ -144,23 +138,23 @@
 
 ;; Keybinding to insert a fucking tab, rather than doing crazy indent
 (defun command-insert-tab ()
-	"Insert a tab character"
-	(interactive)
-	(insert "\t")
-	)
+  "Insert a tab character"
+  (interactive)
+  (insert "\t")
+  )
 (define-key (current-global-map) (kbd "<C-tab>") 'command-insert-tab)
 
 
 ;; Make backspace delete whitespace in increments of tabstop
 ;; This is definitely a matter of taste and some improvements need to be made
 (defun backward-delete-char-tabstop ()
-	(interactive)
-	(cond
-		((looking-back " ")
-			(let ((i tab-width))
-				(while (progn (setq i (- i 1)) (and (>= i 0) (looking-back " ")))
-					(delete-backward-char 1))))
-		(t  (delete-backward-char 1))))
+  (interactive)
+  (cond
+   ((looking-back " ")
+    (let ((i tab-width))
+      (while (progn (setq i (- i 1)) (and (>= i 0) (looking-back " ")))
+        (delete-backward-char 1))))
+   (t  (delete-backward-char 1))))
 
 ;; (define-key (current-global-map) (kbd "<backspace>") 'backward-delete-char-tabstop)
 ;; (define-key isearch-mode-map [backspace] 'isearch-delete-char)
@@ -168,42 +162,45 @@
 ;; Make emacs stop asking silly questions about changed files.
 ;; Somewhat unsafe, and a matter of taste.
 (defun ask-user-about-supersession-threat (fn)
-	"blatantly ignore files that changed on disk"
-	)
+  "blatantly ignore files that changed on disk"
+  )
 (defun ask-user-about-lock (file opponent)
-	"always grab lock"
-	t)
+  "always grab lock"
+  t)
 
 (require 'tramp)
 ;; enable these for tramp debugging
 ;; (setq tramp-verbose 10)
 ;; (setq tramp-debug-buffer t)
 
-(ignore-errors (require 'protobuf-mode))
-(ignore-errors (require 'haskell-mode))
-(ignore-errors (require 'cython-mode))
-(ignore-errors (require 'revbufs))
+
+(mapc 'try-load '(tramp
+                  protobuf-mode
+                  haskell-mode
+                  cython-mode
+                  revbufs))
+
 
 
 (ignore-errors (progn (load-file "~/.emacs.d/irc.el")
 				   (define-key (current-global-map) (kbd "C-c f") 'freenode)))
 (ignore-errors
-  (
-   (require 'smarttabs)
-   (autoload 'smart-tabs-mode "smart-tabs-mode"
-     "Intelligently indent with tabs, align with spaces!")
-   (autoload 'smart-tabs-mode-enable "smart-tabs-mode")
-   (autoload 'smart-tabs-advice "smart-tabs-mode")))
+  (progn
+    (require 'smarttabs)
+    (autoload 'smart-tabs-mode "smart-tabs-mode"
+      "Intelligently indent with tabs, align with spaces!")
+    (autoload 'smart-tabs-mode-enable "smart-tabs-mode")
+    (autoload 'smart-tabs-advice "smart-tabs-mode")))
 
 ;; This is for kernel work - currently not used
 (defun c-lineup-arglist-tabs-only (ignored)
-	"Line up argument lists by tabs, not spaces"
-	(let* ((anchor (c-langelem-pos c-syntactic-element))
-		      (column (c-langelem-2nd-pos c-syntactic-element))
-		      (offset (- (1+ column) anchor))
-		      (steps (floor offset c-basic-offset)))
-		(* (max steps 1)
-			c-basic-offset)))
+  "Line up argument lists by tabs, not spaces"
+  (let* ((anchor (c-langelem-pos c-syntactic-element))
+         (column (c-langelem-2nd-pos c-syntactic-element))
+         (offset (- (1+ column) anchor))
+         (steps (floor offset c-basic-offset)))
+    (* (max steps 1)
+       c-basic-offset)))
 
 (defun tabstop-hook ()
 	(define-key (current-local-map) (kbd "TAB") 'tab-to-tab-stop)
@@ -217,36 +214,35 @@
 
 
 (defun my-c-mode-hook ()
-	(setq c-basic-offset 2
-		tab-width 2)
-	(smart-tabs-mode-enable)
-	(smart-tabs-advice c-indent-line c-basic-offset)
-	(smart-tabs-advice c-indent-region c-basic-offset)
-	(c-set-offset 'case-label '+)
-	(setq indent-tabs-mode t)
-	(c-toggle-auto-newline nil)
-	(c-toggle-hungry-state t)
-	(c-toggle-electric-state t)
-	(c-toggle-syntactic-indentation t)
-	(local-set-key (kbd "RET") 'newline-and-indent)
-	(subword-mode t))
+  (setq c-basic-offset 2
+        tab-width 2)
+  (smart-tabs-mode-enable)
+  (smart-tabs-advice c-indent-line c-basic-offset)
+  (smart-tabs-advice c-indent-region c-basic-offset)
+  (c-set-offset 'case-label '+)
+  (setq indent-tabs-mode t)
+  (c-toggle-auto-newline nil)
+  (c-toggle-hungry-state t)
+  (c-toggle-electric-state t)
+  (c-toggle-syntactic-indentation t)
+  (local-set-key (kbd "RET") 'newline-and-indent)
+  (subword-mode t))
 
 (setq c-mode-hook nil)
 (add-hook 'c-mode-hook 'my-c-mode-hook)
 
 (defun my-python-mode-hook ()
-	(setq python-check-command "pychecker --stdlib -# 0 -xXT")
-	(define-key (current-global-map) (kbd "C-.") 'python-shift-right)
-	(define-key (current-global-map) (kbd "C-,") 'python-shift-left)
-
-	(setq tab-width 4
-		python-indent 4)
-
-	(local-set-key (kbd "RET") 'newline-and-indent)
-	(if nil ((setq indent-tabs-mode t)
-	         (smart-tabs-mode-enable)
-	         (smart-tabs-advice python-indent-line python-indent))
-	        nil))
+  (setq python-check-command "pychecker --stdlib -# 0 -xXT")
+  (define-key (current-global-map) (kbd "C-.") 'python-shift-right)
+  (define-key (current-global-map) (kbd "C-,") 'python-shift-left)
+  (setq tab-width 4
+        python-indent 4)
+  (local-set-key (kbd "RET") 'newline-and-indent)
+  (if nil (progn
+            (setq indent-tabs-mode t)
+            (smart-tabs-mode-enable)
+            (smart-tabs-advice python-indent-line python-indent))
+    nil))
 
 (setq python-mode-hook nil)
 (add-hook 'python-mode-hook 'my-python-mode-hook)
@@ -268,17 +264,17 @@
 
 
 (defun my-matlab-mode-hook ()
-	(auto-fill-mode))
+  (auto-fill-mode))
 (add-hook 'matlab-mode-hook 'my-matlab-mode-hook)
 
-(defun my-lisp-hook ()
-	(setq indent-tabs-mode t
-		lisp-indent-offset 4
-		tab-width 4)
-	(local-set-key (kbd "RET") 'newline-and-indent)
-	(smart-tabs-mode-enable)
-	(smart-tabs-advice lisp-indent-line lisp-indent-offset))
 
+
+(defun my-lisp-hook ()
+  (setq indent-tabs-mode nil
+        lisp-indent-offset 4
+        tab-width 4)
+  (local-set-key (kbd "RET") 'newline-and-indent)
+  )
 (setq lisp-mode-hook nil)
 (add-hook 'lisp-mode-hook 'my-lisp-hook)
 
@@ -292,13 +288,13 @@
   "Select a region to compare"
   (interactive)
   (when (use-region-p) ; there is a region
-        (let (buf)
-          (setq buf (get-buffer-create "*Diff-regionA*"))
-          (save-current-buffer
-            (set-buffer buf)
-            (erase-buffer))
-          (append-to-buffer buf (region-beginning) (region-end)))
-        )
+    (let (buf)
+      (setq buf (get-buffer-create "*Diff-regionA*"))
+      (save-current-buffer
+        (set-buffer buf)
+        (erase-buffer))
+      (append-to-buffer buf (region-beginning) (region-end)))
+    )
   (message "Now select other region to compare and run `diff-region-now`")
   )
 
@@ -306,18 +302,18 @@
   "Compare current region with region already selected by `diff-region`"
   (interactive)
   (when (use-region-p)
-        (let (bufa bufb)
-          (setq bufa (get-buffer-create "*Diff-regionA*"))
-          (setq bufb (get-buffer-create "*Diff-regionB*"))
-          (save-current-buffer
-            (set-buffer bufb)
-            (erase-buffer))
-          (append-to-buffer bufb (region-beginning) (region-end))
-          (ediff-buffers bufa bufb))
-        )
+    (let (bufa bufb)
+      (setq bufa (get-buffer-create "*Diff-regionA*"))
+      (setq bufb (get-buffer-create "*Diff-regionB*"))
+      (save-current-buffer
+        (set-buffer bufb)
+        (erase-buffer))
+      (append-to-buffer bufb (region-beginning) (region-end))
+      (ediff-buffers bufa bufb))
+    )
   )
 
-; run perl on the current region, updating the region
+                                        ; run perl on the current region, updating the region
 (defun perl-replace-region (start end)
   "Apply perl command to region"
   (interactive "r")
@@ -326,10 +322,9 @@
                            t
                            t
                            )
-  (exchange-point-and-mark)
-  )
+  (exchange-point-and-mark))
 
-; run perl on the current buffer, updating the buffer
+                                        ; run perl on the current buffer, updating the buffer
 (defun perl-replace-buffer ()
   "Apply perl command to buffer"
   (interactive)
