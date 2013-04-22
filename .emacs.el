@@ -9,13 +9,13 @@
 (defun try-load (feature)
   (require feature nil 'noerror))
 
+(defun mode-extension (mode extension)
+  (add-to-list 'auto-mode-alist `(,(concat "\\" extension "$") . ,mode)))
+
 ;; Alternative: "DejaVu Sans Mono:style=Book:size=12"
 (add-to-list 'default-frame-alist '(font . "Terminus:style=Regular:size=10"))
 
 (add-to-list 'load-path "/usr/share/emacs/site-lisp" "~/.emacs.d")
-
-;; Show column and line numbers on status bar
-(column-number-mode)
 
 (if window-system
     (progn
@@ -27,20 +27,32 @@
 
       (require 'color-theme)
       (if (try-load 'color-theme-solarized)
-          (color-theme-solarized-dark))))
+          (color-theme-solarized-dark)))
+  (progn
+    (menu-bar-mode -1)))
 
 
-(setq-default indent-tabs-mode nil)
+(setq-default
+ indent-tabs-mode nil
+ require-final-newline 'ask
+ default-major-mode 'text-mode
+ even-window-heights nil
+ resize-mini-windows nil
+ default-tab-width 4
+ user-mail-address "duncankburke@gmail.com"
+ diff-switches "-u"
+ truncate-lines t
+ mouse-yank-at-point t
+ mouse-hilight 1
+ truncate-lines t)
 
 (global-linum-mode t)
 
+;; Show column and line numbers on status bar
+(column-number-mode)
+
 ;; Use unified diff
 (setq diff-switches "-u")
-
-;; When in terminal, disable the menu bar entirely
-;;(when (not (window-system))
-;;	(menu-bar-mode -1))
-(menu-bar-mode -1)
 
 ;; Stop dired from spamming windows as you navigate
 (put 'dired-find-alternate-file 'disabled nil)
@@ -51,18 +63,12 @@
 ;; Get rid of the annoying spash screen
 (setq inhibit-splash-screen t)
 
-;; Follow symlinks to version-controlled files
-(setq vc-follow-symlinks t)
+;; Don't follow symlinks to version-controlled files
+(setq vc-follow-symlinks nil)
 
-;; By default these are disabled
-(put 'downcase-region 'disabled nil)
-(put 'upcase-region 'disabled nil)
-
-;; Don't wrap lines by default
-(set-default 'truncate-lines t)
-
-;; I'm not sure what this does. I must have had a reason for it, though
-(setq resize-mini-windows t)
+(mapc (lambda (sym) (put sym 'disabled nil))
+      '(downcase-region
+        upcase-region))
 
 ;; Make windows split vertically like C-x 3 for things like help, grep, compile, gdb etc.
 (setq split-height-threshold nil)
@@ -180,6 +186,7 @@
                   cython-mode
                   revbufs))
 
+(mapc (lambda (a) (mode-extension (car a) (cdr a))) '((haskell-mode . ".hs")))
 
 
 (ignore-errors (progn (load-file "~/.emacs.d/irc.el")
@@ -230,6 +237,24 @@
 
 (setq c-mode-hook nil)
 (add-hook 'c-mode-hook 'my-c-mode-hook)
+
+
+(if (try-load 'rust-mode)
+    (progn
+;      (mode-extension 'rust-mode ".rs")
+      (add-hook 'rust-mode-hook
+                (lambda ()
+                  (if nil
+                      (progn
+                        (require 'smarttabs)
+                        (setq indent-tabs-mode t)
+                        (smart-tabs-mode-enable)
+                        (smart-tabs-advice rust-indent rust-indent-unit)))))
+      (add-hook 'compilation-mode-hook
+                (lambda ()
+                  (add-to-list 'compilation-error-regexp-alist 'rust)
+                  (add-to-list 'compilation-error-regexp-alist-alist
+                               '(rust "^\\([.a-zA-Z0-9]+\\):\\([0-9]+\\):\\([0-9]+\\):" 1 2 3))))))
 
 (defun my-python-mode-hook ()
   (setq python-check-command "pychecker --stdlib -# 0 -xXT")
