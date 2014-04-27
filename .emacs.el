@@ -207,6 +207,17 @@
 		(* (max steps 1)
 			c-basic-offset)))
 
+(defun tabstop-hook ()
+	(define-key (current-local-map) (kbd "TAB") 'tab-to-tab-stop)
+	(setq tab-width 4
+		indent-tabs-mode t
+		tab-stop-list (number-sequence 4 200 4))
+	)
+(add-hook 'fundamental-mode-hook 'tabstop-hook)
+(add-hook 'text-mode-hook 'tabstop-hook)
+(add-hook 'conf-mode-hook 'tabstop-hook)
+
+
 (defun my-c-mode-hook ()
 	(setq c-basic-offset 2
 		tab-width 2)
