@@ -181,6 +181,9 @@
 (ignore-errors (require 'cython-mode))
 (ignore-errors (require 'revbufs))
 
+
+(ignore-errors (progn (load-file "~/.emacs.d/irc.el")
+				   (define-key (current-global-map) (kbd "C-c f") 'freenode)))
 (ignore-errors
   (
    (require 'smarttabs)
