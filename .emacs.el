@@ -29,7 +29,7 @@
 (column-number-mode)
 
 (if window-system
-    (
+    (progn
      ;; Disable icons on the menu
      (tool-bar-mode -1)
      (fringe-mode 0)
