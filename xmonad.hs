@@ -14,7 +14,7 @@ myManageHook = composeAll []
 modm = mod4Mask
 
 main = do
-     xmproc <- spawnPipe "/usr/bin/xmobar /home/duncan/.xmobarrc"
+     xmproc <- spawnPipe "/home/duncan/.cabal/bin/xmobar /home/duncan/.xmobarrc"
      xmonad $ defaultConfig
         { workspaces = (map show $ [1..9] ++ [0]) ++ fnWorkspaces
         , manageHook = manageDocks <+> myManageHook
