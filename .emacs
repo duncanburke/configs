@@ -7,7 +7,7 @@
 	(equal (nth 4 (file-attributes dot-emacs)) (list 0 0)))
     (byte-compile-file dot-emacs))
 ;(load dot-emacs)
-(load compiled-dot-emacs))
+(load compiled-dot-emacs)
 
 ;; (add-hook 'kill-emacs-hook
 ;; 	  '(lambda () (and (file-newer-than-file-p dot-emacs compiled-dot-emacs)
