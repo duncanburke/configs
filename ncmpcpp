@@ -6,7 +6,6 @@ visualizer_type = "spectrum" (spectrum/wave)
 mpd_music_dir = "~/music"
 colors_enabled = "yes"
 header_text_scrolling = "yes"
-fancy_scrolling = "yes"
 cyclic_scrolling = "yes"
 playlist_shorten_total_times = "yes"
 playlist_display_mode = "columns"
