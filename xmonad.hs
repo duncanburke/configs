@@ -35,7 +35,9 @@ fnWorkspacesKB = [xK_F1..xK_F12]
 workspaceMap (k, w) = [ ((mod4Mask, k), windows $ W.greedyView w)
                       , ((shiftMask .|. mod4Mask, k), windows $ W.shift w) ]
 
-myKeys = [ ((mod4Mask, xK_p), spawn "dmenu_run") ]
+myKeys = [ ((mod4Mask, xK_p), spawn "dmenu_run"),
+           ((mod4Mask, xK_z), spawn "mpc toggle"),
+           ((mod4Mask, xK_x), spawn "mpc next")]
          ++ workspaceMap (xK_0, "0")
          ++ ((zip fnWorkspacesKB fnWorkspaces) >>= workspaceMap)
          ++ [((m .|. mod4Mask, key), screenWorkspace sc >>= flip whenJust (windows . f))
