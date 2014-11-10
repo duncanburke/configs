@@ -16,3 +16,5 @@
 	smtp-server = smtp.gmail.com
 	signedoffbycc = no
 	suppress-from = yes
+[push]
+	default = simple
