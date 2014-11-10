@@ -284,7 +284,7 @@
 
 
 (add-hook 'sql-interactive-mode-hook
-	(function (lambda () ((setq tab-width 4)))))
+	(function (lambda () (setq tab-width 4))))
 
 (setq gdb-non-stop-setting nil)
 
