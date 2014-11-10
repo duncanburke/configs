@@ -10,6 +10,7 @@ import XMonad.Layout.PerWorkspace
 import XMonad.Layout.NoBorders
 
 myManageHook = composeAll []
+myLayoutHook = avoidStruts $ layoutHook defaultConfig
 
 modm = mod4Mask
 
