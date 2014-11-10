@@ -194,14 +194,6 @@
      "Intelligently indent with tabs, align with spaces!")
    (autoload 'smart-tabs-mode-enable "smart-tabs-mode")
    (autoload 'smart-tabs-advice "smart-tabs-mode")))
-;; Yeah, this doesn't work
-;; (setq gnus-select-method '(nnml ""))
-;; (setq mail-sources
-;;       '((pop :server "pop.gmail.com"
-;;              :port 995
-;;              :user "duncan.burke@orionvm.com.au"
-;;              :password ""
-;;              :stream ssl)))
 
 ;; This is for kernel work - currently not used
 (defun c-lineup-arglist-tabs-only (ignored)
