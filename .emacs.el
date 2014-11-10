@@ -8,7 +8,7 @@
 ;; Alternative: "DejaVu Sans Mono:style=Book:size=12"
 (add-to-list 'default-frame-alist '(font . "Terminus:style=Regular:size=10"))
 
-(add-to-list 'load-path '("/usr/share/emacs/site-lisp" "~/.emacs.d"))
+(add-to-list 'load-path "/usr/share/emacs/site-lisp" "~/.emacs.d")
 
 ;;(require 'color-theme)
 ;; I've looked through all the themes in color-theme. Most of these are bad. Believe me, the rest are worse.
