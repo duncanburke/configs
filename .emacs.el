@@ -251,6 +251,22 @@
 (setq python-mode-hook nil)
 (add-hook 'python-mode-hook 'my-python-mode-hook)
 
+(defun my-haskell-mode-hook ()
+	(setq indent-tabs-mode nil
+		tab-width 2)
+	(turn-on-haskell-indentation)
+	(define-key haskell-mode-map (kbd "C-:") 'haskell-move-nested-left)
+	(define-key haskell-mode-map (kbd "C-Q") 'haskell-move-nested-right))
+
+(setq haskell-mode-hook nil)
+(add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
+
+(defun my-haskell-cabal-mode-hook ()
+	(setq indent-tabs-mode nil))
+
+(add-hook 'haskell-cabal-mode-hook 'my-haskell-cabal-mode-hook)
+
+
 (defun my-matlab-mode-hook ()
 	(auto-fill-mode))
 (add-hook 'matlab-mode-hook 'my-matlab-mode-hook)
