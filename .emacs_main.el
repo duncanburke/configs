@@ -1,6 +1,5 @@
 ;; -*- mode: Emacs-Lisp; -*-
 
-
 (defun loade ()
   "Reload .emacs. This is defined at the beginning so that the file can be easily reloaded even if errors have occured."
   (interactive)
@@ -141,7 +140,6 @@
 (define-key (current-global-map) (kbd "C-c x") 'text-mode)
 (define-key (current-global-map) (kbd "C-c o") 'org-mode)
 
-
 ;; Keybinding to insert a fucking tab, rather than doing crazy indent
 (defun command-insert-tab ()
   "Insert a tab character"
@@ -149,7 +147,6 @@
   (insert "\t")
   )
 (define-key (current-global-map) (kbd "<C-tab>") 'command-insert-tab)
-
 
 ;; Make backspace delete whitespace in increments of tabstop
 ;; This is definitely a matter of taste and some improvements need to be made
@@ -178,7 +175,6 @@
 ;; enable these for tramp debugging
 ;; (setq tramp-verbose 10)
 ;; (setq tramp-debug-buffer t)
-
 
 (mapc 'try-load '(tramp
                   protobuf-mode
@@ -220,7 +216,6 @@
 (add-hook 'text-mode-hook 'tabstop-hook)
 (add-hook 'conf-mode-hook 'tabstop-hook)
 
-
 (defun my-c-mode-hook ()
   (setq c-basic-offset 2
         tab-width 2)
@@ -238,7 +233,6 @@
 
 (setq c-mode-hook nil)
 (add-hook 'c-mode-hook 'my-c-mode-hook)
-
 
 (if (try-load 'rust-mode)
     (progn
@@ -288,12 +282,9 @@
 
 (add-hook 'haskell-cabal-mode-hook 'my-haskell-cabal-mode-hook)
 
-
 (defun my-matlab-mode-hook ()
   (auto-fill-mode))
 (add-hook 'matlab-mode-hook 'my-matlab-mode-hook)
-
-
 
 (defun my-lisp-hook ()
   (setq indent-tabs-mode nil
@@ -303,7 +294,6 @@
   )
 (setq lisp-mode-hook nil)
 (add-hook 'lisp-mode-hook 'my-lisp-hook)
-
 
 (add-hook 'sql-interactive-mode-hook
 	(function (lambda () (setq tab-width 4))))
@@ -339,7 +329,7 @@
     )
   )
 
-                                        ; run perl on the current region, updating the region
+; run perl on the current region, updating the region
 (defun perl-replace-region (start end)
   "Apply perl command to region"
   (interactive "r")
@@ -350,7 +340,7 @@
                            )
   (exchange-point-and-mark))
 
-                                        ; run perl on the current buffer, updating the buffer
+; run perl on the current buffer, updating the buffer
 (defun perl-replace-buffer ()
   "Apply perl command to buffer"
   (interactive)

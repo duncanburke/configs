@@ -11,4 +11,3 @@
       (error "compilation failed")))
 
 (load compiled-dot-emacs)
-
