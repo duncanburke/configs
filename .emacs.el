@@ -186,8 +186,9 @@
                   cython-mode
                   revbufs))
 
-(mapc (lambda (a) (mode-extension (car a) (cdr a))) '((haskell-mode . ".hs")))
-
+(mapc (lambda (a) (mode-extension (car a) (cdr a))) '((haskell-mode . ".hs")
+                                                      (c-mode . ".cs")
+                                                      (octave-mode . ".m")))
 
 (ignore-errors (progn (load-file "~/.emacs.d/irc.el")
 				   (define-key (current-global-map) (kbd "C-c f") 'freenode)))
