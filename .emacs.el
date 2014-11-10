@@ -51,6 +51,9 @@
 ;; Stop dired from spamming windows as you navigate
 (put 'dired-find-alternate-file 'disabled nil)
 
+;; Allow dired to recursive delete without confirmation
+(setq dired-recursive-deletes 'always)
+
 ;; Get rid of the annoying spash screen
 (setq inhibit-splash-screen t)
 
