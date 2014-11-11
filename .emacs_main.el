@@ -14,7 +14,7 @@
 ;; Alternative: "DejaVu Sans Mono:style=Book:size=12"
 (add-to-list 'default-frame-alist '(font . "Terminus:style=Regular:size=10"))
 
-(add-to-list 'load-path "/usr/share/emacs/site-lisp" "~/.emacs.d")
+(add-to-list 'load-path "~/.emacs.d/lisp")
 
 (if window-system
     (progn
