@@ -28,6 +28,8 @@ alias mv='mv -i'
 alias rm='rm -I'                    # 'rm -i' prompts for every file
 alias ln='ln -i'
 
+alias ec='emacsclient -cnw -a ""'
+
 complete -cf sudo
 complete -cf man
 set show-all-if-ambiguous on
@@ -40,7 +42,7 @@ export PATH='.cabal-sandbox/bin:~/.cabal/bin':$PATH
 source ~/.git-completion.sh
 
 export PRINTER='xerox_3220'
-export EDITOR="emacs"
+export EDITOR='emacsclient -cnw -a ""'
 
 # As this in an interactive shell, set GPG_TTY
 export GPG_TTY=`tty`
