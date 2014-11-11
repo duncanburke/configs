@@ -180,11 +180,14 @@
                   protobuf-mode
                   haskell-mode
                   cython-mode
-                  revbufs))
+                  revbufs
+                  markdown-mode))
 
 (mapc (lambda (a) (mode-extension (car a) (cdr a))) '((haskell-mode . ".hs")
                                                       (c-mode . ".cs")
-                                                      (octave-mode . ".m")))
+                                                      (octave-mode . ".m")
+                                                      (markdown-mode . ".md")
+                                                      (markdown-mode . ".page")))
 
 (ignore-errors (progn (load-file "~/.emacs.d/irc.el")
 				   (define-key (current-global-map) (kbd "C-c f") 'freenode)))
