@@ -277,12 +277,17 @@
 (setq python-mode-hook nil)
 (add-hook 'python-mode-hook 'my-python-mode-hook)
 
+(autoload 'ghc-init "ghc" nil t)
+(autoload 'ghc-debug "ghc" nil t)
+
 (defun my-haskell-mode-hook ()
 	(setq indent-tabs-mode nil
 		tab-width 2)
 	(turn-on-haskell-indentation)
 	(define-key haskell-mode-map (kbd "C-:") 'haskell-move-nested-left)
-	(define-key haskell-mode-map (kbd "C-Q") 'haskell-move-nested-right))
+	(define-key haskell-mode-map (kbd "C-Q") 'haskell-move-nested-right)
+    (setq ghc-hlint-options '("--ignore=Use camelCase"))
+    (ghc-init))
 
 (setq haskell-mode-hook nil)
 (add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
