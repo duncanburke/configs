@@ -171,6 +171,13 @@
   "always grab lock"
   t)
 
+;; Initialise packaging
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa-stable.milkbox.net/packages/"))
+(package-initialize)
+
+
 (require 'tramp)
 ;; enable these for tramp debugging
 ;; (setq tramp-verbose 10)
