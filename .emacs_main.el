@@ -186,11 +186,15 @@
 
 (mapc 'try-load '(tramp
                   haskell-mode
+                  haskell-cabal
+                  haskell-doc
+                  haskell-c
                   markdown-mode))
 
 (mapc (lambda (a) (mode-extension (car a) (cdr a))) '((haskell-mode . ".hs")
                                                       (c-mode . ".cs")
                                                       (octave-mode . ".m")
+                                                      (haskell-cabal-mode . ".cabal")
                                                       (markdown-mode . ".md")
                                                       (markdown-mode . ".page")))
 
