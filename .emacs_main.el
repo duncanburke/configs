@@ -185,10 +185,7 @@
 ;; (setq tramp-debug-buffer t)
 
 (mapc 'try-load '(tramp
-                  protobuf-mode
                   haskell-mode
-                  cython-mode
-                  revbufs
                   markdown-mode))
 
 (mapc (lambda (a) (mode-extension (car a) (cdr a))) '((haskell-mode . ".hs")
