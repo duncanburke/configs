@@ -8,7 +8,7 @@ URxvt.font: xft:terminus:size=10
 
 URxvt.termName:rxvt-unicode
 URxvt.scrollBar: false
-URxvt.perl-ext-common: default,clipboard,vtwheel
+URxvt.perl-ext-common: default,clipboard,vtwheel,-searchable-scrollback
 URxvt.keysym.Mod4-c: perl:clipboard:copy
 URxvt.keysym.Mod4-v: perl:clipboard:paste
 
