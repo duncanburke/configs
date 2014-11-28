@@ -46,3 +46,5 @@ export EDITOR='emacsclient -cnw -a ""'
 
 # As this in an interactive shell, set GPG_TTY
 export GPG_TTY=`tty`
+
+export TERM=xterm-256color
