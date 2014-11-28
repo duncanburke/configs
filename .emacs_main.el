@@ -192,6 +192,7 @@
                   markdown-mode))
 
 (mapc (lambda (a) (mode-extension (car a) (cdr a))) '((haskell-mode . ".hs")
+                                                      (haskell-mode . ".hs-boot")
                                                       (c-mode . ".cs")
                                                       (octave-mode . ".m")
                                                       (haskell-cabal-mode . ".cabal")
