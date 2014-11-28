@@ -35,6 +35,7 @@
       (if (try-load 'color-theme-solarized)
           (color-theme-solarized-dark)))
   (progn
+    (load-theme 'subatomic256 t)
     (menu-bar-mode -1)))
 
 
