@@ -287,10 +287,9 @@
 	(setq indent-tabs-mode nil
 		tab-width 2)
 	(turn-on-haskell-indentation)
-	(define-key haskell-mode-map (kbd "C-:") 'haskell-move-nested-left)
-	(define-key haskell-mode-map (kbd "C-Q") 'haskell-move-nested-right)
     (setq ghc-hlint-options '("--ignore=Use camelCase"))
-    (ghc-init))
+    (ghc-init)
+    (define-key haskell-mode-map (kbd "M-s") 'ghc-display-errors))
 
 (setq haskell-mode-hook nil)
 (add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
