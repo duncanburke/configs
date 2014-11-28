@@ -11,6 +11,12 @@
 (defun mode-extension (mode extension)
   (add-to-list 'auto-mode-alist `(,(concat "\\" extension "$") . ,mode)))
 
+;; Initialise packaging
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.org/packages/") t)
+(package-initialize)
+
 ;; Alternative: "DejaVu Sans Mono:style=Book:size=12"
 (add-to-list 'default-frame-alist '(font . "Terminus:style=Regular:size=10"))
 
@@ -171,13 +177,6 @@
 (defun ask-user-about-lock (file opponent)
   "always grab lock"
   t)
-
-;; Initialise packaging
-(require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa-stable.milkbox.net/packages/"))
-(package-initialize)
-
 
 (require 'tramp)
 ;; enable these for tramp debugging
