@@ -1,46 +1,68 @@
+import Control.Applicative
+import System.IO (hPutStrLn)
+
 import XMonad
-import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.ManageDocks
-import XMonad.Util.Run(spawnPipe)
-import XMonad.Util.EZConfig
-import qualified XMonad.StackSet as W
-import System.IO
-import XMonad.Layout.Named
-import XMonad.Layout.PerWorkspace
-import XMonad.Layout.NoBorders
+import XMonad.Hooks.DynamicLog (xmobarPP, ppOutput, ppTitle,
+                                dynamicLogWithPP,
+                                shorten,
+                                xmobarColor)
+import XMonad.Hooks.ManageDocks (manageDocks, avoidStruts)
+import XMonad.Util.Run (spawnPipe)
+import XMonad.Util.EZConfig (additionalKeys)
+import XMonad.StackSet (greedyView, shift, view)
 
-myManageHook = composeAll []
-myLayoutHook = avoidStruts $ layoutHook defaultConfig
-
-modm = mod4Mask
-
+main :: IO ()
 main = do
      xmproc <- spawnPipe "/home/duncan/.cabal/bin/xmobar /home/duncan/.xmobarrc"
-     xmonad $ defaultConfig
-        { workspaces = (map show $ [1..9] ++ [0]) ++ fnWorkspaces
-        , manageHook = manageDocks <+> myManageHook
-                                   <+> manageHook defaultConfig
-        , layoutHook = myLayoutHook
-        , normalBorderColor = "#000000"
-        , focusedBorderColor = "#1793d1"
-        , terminal = "urxvtc"
-        , logHook = dynamicLogWithPP $ xmobarPP
-                        { ppOutput = hPutStrLn xmproc
-                        , ppTitle = xmobarColor "green" "" . shorten 190
-                        }
-        , modMask = mod4Mask     -- Rebind Mod to the Windows key
-        } `additionalKeys` myKeys
+     let conf = defaultConfig {
+           workspaces = (show <$> ([1..9] ++ [0] :: [Int])) ++ (take nFn fnWorkspaceIds),
+           manageHook = manageDocks <+>
+                        composeAll [] <+>
+                        manageHook defaultConfig,
+           layoutHook = avoidStruts $ layoutHook defaultConfig,
+           normalBorderColor = "#000000",
+           focusedBorderColor = "#1793d1",
+           terminal = "urxvtc",
+           logHook = dynamicLogWithPP $ xmobarPP {
+             ppOutput = hPutStrLn xmproc,
+             ppTitle = xmobarColor "green" "" . shorten 190},
+           modMask = mod4Mask }
+     xmonad $ (conf `additionalKeys` keyBindings)
 
-fnWorkspaces = (map (("F" ++) . show) [1..12])
-fnWorkspacesKB = [xK_F1..xK_F12]
-workspaceMap (k, w) = [ ((mod4Mask, k), windows $ W.greedyView w)
-                      , ((shiftMask .|. mod4Mask, k), windows $ W.shift w) ]
+type Keybinding = ((KeyMask, KeySym), X ())
 
-myKeys = [ ((mod4Mask, xK_p), spawn "dmenu_run"),
-           ((mod4Mask, xK_z), spawn "mpc toggle"),
-           ((mod4Mask, xK_x), spawn "mpc next")]
-         ++ workspaceMap (xK_0, "0")
-         ++ ((zip fnWorkspacesKB fnWorkspaces) >>= workspaceMap)
-         ++ [((m .|. mod4Mask, key), screenWorkspace sc >>= flip whenJust (windows . f))
-            | (key, sc) <- zip [xK_w, xK_e, xK_r] [1,0,2]
-            , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+keyBindings :: [Keybinding]
+keyBindings = commandBindings ++
+              workspaceBindings ++
+              screenBindings
+
+workspaceBindings :: [Keybinding]
+workspaceBindings = workspaceMap xK_0 "0" ++
+                    ((take nFn $ zip [xK_F1..] fnWorkspaceIds) >>= (uncurry workspaceMap))
+
+commandBindings :: [Keybinding]
+commandBindings = [((mod4Mask, xK_p), spawn "dmenu_run"),
+                   ((mod4Mask, xK_z), spawn "mpc toggle"),
+                   ((mod4Mask, xK_x), spawn "mpc next")]
+
+screenBindings :: [Keybinding]
+screenBindings = [((m .|. mod4Mask, key), screenWorkspace sc >>= flip whenJust (windows . f)) |
+                  (key, sc) <- zip screenKeys screenOrder,
+                  (f, m) <- [(view, 0), (shift, shiftMask)]]
+
+fnWorkspaceIds :: [WorkspaceId]
+fnWorkspaceIds = (("F" ++) . show) <$> ([1..] :: [Int])
+
+nFn :: Int
+nFn = 12
+
+workspaceMap :: KeySym -> WorkspaceId -> [Keybinding]
+workspaceMap k w = [((mod4Mask, k), windows $ greedyView w),
+                    ((shiftMask .|. mod4Mask, k),
+                     windows $ shift w)]
+
+screenKeys :: [KeySym]
+screenKeys = [xK_h, xK_t, xK_n]
+
+screenOrder :: [ScreenId]
+screenOrder = [2,0,1]
