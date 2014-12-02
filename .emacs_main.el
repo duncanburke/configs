@@ -148,6 +148,8 @@
 (define-key (current-global-map) (kbd "C-c x") 'text-mode)
 (define-key (current-global-map) (kbd "C-c o") 'org-mode)
 
+(define-key (current-global-map) (kbd "C-c g") 'magit-status)
+
 ;; Keybinding to insert a fucking tab, rather than doing crazy indent
 (defun command-insert-tab ()
   "Insert a tab character"
