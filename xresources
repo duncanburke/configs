@@ -7,7 +7,7 @@ URxvt.foreground: #FFFFFF
 URxvt.font: xft:proggysquarett:size=12
 URxvt.boldFont:
 
-URxvt.termName:rxvt-unicode
+URxvt.termName:rxvt-unicode-256color
 URxvt.scrollBar: false
 URxvt.perl-ext-common: default,clipboard,vtwheel,-searchable-scrollback
 URxvt.keysym.Mod4-c: perl:clipboard:copy
