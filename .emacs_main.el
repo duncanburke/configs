@@ -359,9 +359,7 @@
   (interactive "r")
   (shell-command-on-region start end
                            (read-from-minibuffer "Replace region command: " '("perl -pel \'s///g\'" . 14 ))
-                           t
-                           t
-                           )
+                           t t )
   (exchange-point-and-mark))
 
 ; run perl on the current buffer, updating the buffer
@@ -379,8 +377,7 @@
     (mark-whole-buffer)
     (let ((new-start (region-beginning))
           (new-end   (region-end)))
-      (shell-command-on-region  new-start new-end command t t )
-      )
+      (shell-command-on-region  new-start new-end command t t))
     (goto-line markline)
     (move-to-column markcol)
     (exchange-point-and-mark)
