@@ -6,17 +6,20 @@
 
 # colored prompt
 if [ "`tput colors`" = "256" ]; then
-  B="\e[0;38;5;67m"
-  G="\e[0;38;5;114m"
-  Y="\e[0;38;5;214m"
+    R="\e[0;38;5;125m"
+    B="\e[0;38;5;67m"
+    G="\e[0;38;5;114m"
+    Y="\e[0;38;5;214m"
 else
-  B="\e[0;34m"
-  G="\e[0;32m"
-  Y="\e[0;33m"
+    R="\e[0;41m"
+    B="\e[0;34m"
+    G="\e[0;32m"
+    Y="\e[0;33m"
 fi
 
 W="\e[0m"
-PS1="\[$B\]┌─\[$W\][ \[$Y\]\A \[$W\]][ \[$G\]\h:\w \[$W\]]\n\[$B\]└─\[$Y\]> \[$W\]"
+[[ $EUID -ne 0 ]] && U_COL=$G || U_COL=$R
+PS1="\[$B\]┌─\[$W\][ \[$Y\]\A \[$W\]][ \[$U_COL\]\u\[$G\]@\h:\w \[$W\]]\n\[$B\]└─\[$Y\]> \[$W\]"
 
 alias nemacs='emacs -nw'
 alias ls='ls -h --color=auto'
