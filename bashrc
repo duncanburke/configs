@@ -1,8 +1,6 @@
 # Check that gpg-agent is running, regardless of interactive status
 . ~/.start_agent
 
-. ~/ghc_scripts
-
 ## Check for an interactive session
 [ -z "$PS1" ] && return
 
