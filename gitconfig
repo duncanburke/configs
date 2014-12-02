@@ -24,3 +24,5 @@
 	default = simple
 [merge]
 	conflictstyle = diff3
+[push]
+	default = simple
