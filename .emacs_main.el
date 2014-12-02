@@ -102,6 +102,9 @@
 ;; confused with xmonad
 (define-key (current-global-map) (kbd "C-z") 'nil)
 
+;; Alternate binding for M-x
+(define-key (current-global-map) (kbd "C-x RET") 'execute-extended-command)
+
 (define-key (current-global-map) (kbd "C-z x") 'close-and-kill-next-pane)
 (define-key (current-global-map) (kbd "C-z z") 'close-and-kill-this-pane)
 
