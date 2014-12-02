@@ -4,7 +4,8 @@ URxvt.transparent: true
 URxvt.shading: 20
 
 URxvt.foreground: #FFFFFF
-URxvt.font: xft:terminus:size=10
+URxvt.font: xft:proggysquarett:size=12
+URxvt.boldFont:
 
 URxvt.termName:rxvt-unicode
 URxvt.scrollBar: false
