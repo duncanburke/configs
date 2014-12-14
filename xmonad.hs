@@ -53,35 +53,39 @@ keys' conf = commandBindings conf ++
 
 commandBindings :: XConfig Layout -> [Keybinding]
 commandBindings conf@(XConfig {XMonad.modMask = modMask'}) =
-  [((modMask' .|. shiftMask, xK_Return ), spawn $ terminal conf),
-   ((modMask'              , xK_p      ), spawn "dmenu_run"),
-   ((modMask'              , xK_z      ), spawn "mpc toggle"),
-   ((modMask'              , xK_x      ), spawn "mpc next"),
-   ((modMask' .|. shiftMask, xK_j      ), kill),
-   ((modMask'              , xK_space  ), sendMessage NextLayout),
-   ((modMask' .|. shiftMask, xK_space  ), setLayout $ layoutHook conf),
-   ((modMask' .|. shiftMask, xK_q      ), io (exitWith ExitSuccess)),
-   ((modMask'              , xK_q      ), spawn "if type xmonad; then xmonad --recompile && xmonad --restart; else xmessage xmonad not in \\$PATH: \"$PATH\"; fi"),
+  [((modMask' .|. shiftMask, xK_Return    ), spawn $ terminal conf),
+   ((modMask'              , xK_p         ), spawn "dmenu_run"),
+   ((modMask'              , xK_semicolon ), spawn "mpc toggle"),
+   ((modMask'              , xK_q         ), spawn "mpc next"),
+   ((modMask' .|. shiftMask, xK_q         ), spawn "mpc prev"),
+   ((modMask'              , xK_o         ), spawn "mpc random"),
+   ((modMask'              , xK_a         ), spawn "mpc repeat"),
+   ((modMask' .|. shiftMask, xK_a         ), spawn "mpc single"),
+   ((modMask' .|. shiftMask, xK_j         ), kill),
+   ((modMask'              , xK_space     ), sendMessage NextLayout),
+   ((modMask' .|. shiftMask, xK_space     ), setLayout $ layoutHook conf),
+   ((modMask' .|. shiftMask, xK_apostrophe), io (exitWith ExitSuccess)),
+   ((modMask'              , xK_apostrophe), spawn "if type xmonad; then xmonad --recompile && xmonad --restart; else xmessage xmonad not in \\$PATH: \"$PATH\"; fi"),
 
-   ((modMask'              , xK_n      ), refresh),
+   ((modMask'              , xK_n         ), refresh),
 
-   ((modMask'              , xK_Tab    ), windows W.focusDown),
-   ((modMask' .|. shiftMask, xK_Tab    ), windows W.focusUp),
-   ((modMask'              , xK_c      ), windows W.focusDown),
-   ((modMask'              , xK_r      ), windows W.focusUp),
-   ((modMask'              , xK_s      ), windows W.focusMaster),
+   ((modMask'              , xK_Tab       ), windows W.focusDown),
+   ((modMask' .|. shiftMask, xK_Tab       ), windows W.focusUp),
+   ((modMask'              , xK_c         ), windows W.focusDown),
+   ((modMask'              , xK_r         ), windows W.focusUp),
+   ((modMask'              , xK_s         ), windows W.focusMaster),
 
-   ((modMask'              , xK_Return ), windows W.swapMaster),
-   ((modMask' .|. shiftMask, xK_c      ), windows W.swapDown),
-   ((modMask' .|. shiftMask, xK_r      ), windows W.swapUp),
+   ((modMask'              , xK_Return    ), windows W.swapMaster),
+   ((modMask' .|. shiftMask, xK_c         ), windows W.swapDown),
+   ((modMask' .|. shiftMask, xK_r         ), windows W.swapUp),
 
-   ((modMask'              , xK_g      ), sendMessage Shrink),
-   ((modMask'              , xK_l      ), sendMessage Expand),
+   ((modMask'              , xK_g         ), sendMessage Shrink),
+   ((modMask'              , xK_l         ), sendMessage Expand),
 
-   ((modMask'              , xK_d      ), withFocused $ windows . W.sink),
+   ((modMask'              , xK_d         ), withFocused $ windows . W.sink),
 
-   ((modMask'              , xK_b      ), sendMessage (IncMasterN 1)),
-   ((modMask'              , xK_m      ), sendMessage (IncMasterN (-1)))]
+   ((modMask'              , xK_b         ), sendMessage (IncMasterN 1)),
+   ((modMask'              , xK_m         ), sendMessage (IncMasterN (-1)))]
 
 
 screenBindings :: [Keybinding]
