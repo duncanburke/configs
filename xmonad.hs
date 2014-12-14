@@ -13,13 +13,14 @@ import XMonad.Hooks.ManageDocks (manageDocks, avoidStruts, docksEventHook)
 import XMonad.Util.Run (spawnPipe)
 import XMonad.StackSet (greedyView, shift, view)
 import qualified XMonad.StackSet as W
+import XMonad.Layout.NoBorders (noBorders)
 
 main :: IO ()
 main = do
      xmproc <- spawnPipe "/home/duncan/.cabal/bin/xmobar /home/duncan/.xmobarrc"
      xmonad $ defaultConfig {
            workspaces = workspaceIds,
-           layoutHook = avoidStruts $ layoutHook defaultConfig,
+           layoutHook = layoutHook',
            terminal = "urxvtc",
            normalBorderColor = "#000000",
            focusedBorderColor = "#1793d1",
@@ -32,6 +33,14 @@ main = do
            handleEventHook = docksEventHook}
 
 type Keybinding = ((KeyMask, KeySym), X ())
+
+layoutHook' = noBorders $ avoidStruts $ (tiled ||| Full)
+  where
+     tiled   = Tall nmaster delta ratio
+     nmaster = 1
+     ratio   = 1/2
+     delta   = 3/100
+
 
 manageHook' :: ManageHook
 manageHook' = manageDocks <+>
