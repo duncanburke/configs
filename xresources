@@ -12,8 +12,8 @@ URxvt.boldItalicFont:
 URxvt.termName:rxvt-unicode-256color
 URxvt.scrollBar: false
 URxvt.perl-ext-common: default,clipboard,vtwheel,-searchable-scrollback
-URxvt.keysym.Mod4-c: perl:clipboard:copy
-URxvt.keysym.Mod4-v: perl:clipboard:paste
+URxvt.keysym.Mod4-e: perl:clipboard:copy
+URxvt.keysym.Mod4-u: perl:clipboard:paste
 
 URxvt.iso14755: false
 
