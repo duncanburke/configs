@@ -50,16 +50,12 @@
  diff-switches "-u"
  truncate-lines t
  mouse-yank-at-point t
- mouse-hilight 1
- truncate-lines t)
+ mouse-hilight 1)
 
 (global-linum-mode t)
 
 ;; Show column and line numbers on status bar
 (column-number-mode)
-
-;; Use unified diff
-(setq diff-switches "-u")
 
 ;; Stop dired from spamming windows as you navigate
 (put 'dired-find-alternate-file 'disabled nil)
