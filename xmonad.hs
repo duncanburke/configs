@@ -9,7 +9,7 @@ import XMonad.Hooks.DynamicLog (xmobarPP, ppOutput, ppTitle,
                                 dynamicLogWithPP,
                                 shorten,
                                 xmobarColor)
-import XMonad.Hooks.ManageDocks (manageDocks, avoidStruts)
+import XMonad.Hooks.ManageDocks (manageDocks, avoidStruts, docksEventHook)
 import XMonad.Util.Run (spawnPipe)
 import XMonad.StackSet (greedyView, shift, view)
 import qualified XMonad.StackSet as W
@@ -28,7 +28,8 @@ main = do
            logHook = dynamicLogWithPP $ xmobarPP {
              ppOutput = hPutStrLn xmproc,
              ppTitle = xmobarColor "green" "" . shorten 190},
-           manageHook = manageHook'}
+           manageHook = manageHook',
+           handleEventHook = docksEventHook}
 
 type Keybinding = ((KeyMask, KeySym), X ())
 
