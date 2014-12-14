@@ -36,9 +36,8 @@ complete -cf man
 set show-all-if-ambiguous on
 set show-all-if-unmodified on
 
-export MPD_HOST='/var/lib/mpd/socket'
-
-export PATH='.cabal-sandbox/bin:~/.cabal/bin':$PATH
+export MPD_HOST='127.0.0.1'
+export MPD_PORT='6600'
 
 source ~/.git-completion.sh
 
