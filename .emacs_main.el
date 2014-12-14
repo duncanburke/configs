@@ -105,8 +105,8 @@
 (define-key (current-global-map) (kbd "C-z z") 'close-and-kill-this-pane)
 
 ;; Keybindings to the X clipboard
-(define-key (current-global-map) (kbd "s-v") 'clipboard-yank)
-(define-key (current-global-map) (kbd "s-c") 'clipboard-kill-ring-save)
+(define-key (current-global-map) (kbd "s-u") 'clipboard-yank)
+(define-key (current-global-map) (kbd "s-e") 'clipboard-kill-ring-save)
 (define-key (current-global-map) (kbd "C-c v") 'clipboard-yank)
 (define-key (current-global-map) (kbd "C-c c") 'clipboard-kill-ring-save)
 
