@@ -153,6 +153,8 @@
 
 (define-key (current-global-map) (kbd "C-c g") 'magit-status)
 
+;; Global initialisation
+
 (global-magit-wip-save-mode 1)
 
 ;; Keybinding to insert a fucking tab, rather than doing crazy indent
