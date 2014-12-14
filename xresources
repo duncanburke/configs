@@ -6,6 +6,7 @@ URxvt.shading: 20
 URxvt.foreground: #FFFFFF
 URxvt.font: xft:proggysquarett:size=12
 URxvt.boldFont:
+URxvt.italicFont:
 URxvt.boldItalicFont:
 
 URxvt.termName:rxvt-unicode-256color
