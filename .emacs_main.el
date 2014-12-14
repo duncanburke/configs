@@ -23,21 +23,11 @@
 (let ((default-directory "~/.emacs.d/lisp/"))
   (normal-top-level-add-subdirs-to-load-path))
 
-(if window-system
-    (progn
-      ;; Disable icons on the menu
-      (tool-bar-mode -1)
-      (fringe-mode 0)
-      ;; Remove scroll bars
-      (scroll-bar-mode -1)
-
-      (require 'color-theme)
-      (if (try-load 'color-theme-solarized)
-          (color-theme-solarized-dark)))
-  (progn
-    (load-theme 'subatomic256 t)
-    (menu-bar-mode -1)))
-
+(load-theme 'subatomic256 t)
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+(fringe-mode 0)
+(scroll-bar-mode -1)
 
 (setq-default
  indent-tabs-mode nil
