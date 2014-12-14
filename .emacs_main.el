@@ -196,6 +196,8 @@
                   haskell-cabal
                   haskell-doc
                   haskell-c
+                  company-mode
+                  company
                   markdown-mode))
 
 (mapc (lambda (a) (mode-extension (car a) (cdr a))) '((haskell-mode . ".hs")
@@ -290,13 +292,18 @@
 (autoload 'ghc-init "ghc" nil t)
 (autoload 'ghc-debug "ghc" nil t)
 
+(add-to-list 'company-backends 'company-ghc)
+
 (defun my-haskell-mode-hook ()
 	(setq indent-tabs-mode nil
-		tab-width 2)
-	(turn-on-haskell-indentation)
+          tab-width 2)
+    (turn-on-haskell-indentation)
+
     (setq ghc-hlint-options '("--ignore=Use camelCase"))
     (ghc-init)
-    (define-key haskell-mode-map (kbd "M-s") 'ghc-display-errors))
+    (define-key haskell-mode-map (kbd "M-s") 'ghc-display-errors)
+
+    (company-mode))
 
 (setq haskell-mode-hook nil)
 (add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
