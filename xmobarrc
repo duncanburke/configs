@@ -7,7 +7,7 @@ Config { font = "xft:Terminus-9",
          lowerOnStart = True,
          commands = [
            Run MPD ["-t",
-                    "<artist>/<album>/<title> <lapsed>/<length> <volume>%"] 1,
+                    "<artist>/<album>/<title> <lapsed>/<length> [<flags>]"] 1,
            Run Cpu ["-L","10","-H","50","--normal","green","--high","red"] 10,
            Run Memory ["-t","Mem: <usedratio>%"] 10,
            Run Swap [] 10,
