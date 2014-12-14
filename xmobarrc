@@ -1,3 +1,5 @@
+-- -*- mode: Haskell; -*-
+
 Config { font = "xft:Terminus-9",
          bgColor = "black",
          fgColor = "grey",
