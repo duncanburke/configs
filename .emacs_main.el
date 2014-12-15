@@ -183,15 +183,7 @@
 (autoload 'uncomment-region "newcomment" "")
 (global-set-key (kbd "M-C") 'uncomment-region)
 
-;; The various modes
-(global-set-key (kbd "C-c p") 'c++-mode)
-(global-set-key (kbd "C-c h") 'haskell-mode)
-(global-set-key (kbd "C-c i") 'haskell-indentation-mode)
-(global-set-key (kbd "C-c m") 'matlab-mode)
-(global-set-key (kbd "C-c y") 'python-mode)
-(global-set-key (kbd "C-c r") 'picture-mode)
 (global-set-key (kbd "C-c x") 'text-mode)
-(global-set-key (kbd "C-c o") 'org-mode)
 
 (global-set-key (kbd "C-c g") 'magit-status)
 
@@ -229,7 +221,6 @@
         (mode-extension (car a) (cdr a)))
       '((haskell-mode . ".hs")
         (haskell-mode . ".hs-boot")
-        (c-mode . ".cs")
         (haskell-cabal-mode . ".cabal")
         (markdown-mode . ".md")
         (markdown-mode . ".page")))
