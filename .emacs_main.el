@@ -213,6 +213,7 @@
 (autoload 'haskell-cabal-mode "haskell-cabal")
 (autoload 'haskell-doc-mode "haskell-doc")
 (autoload 'haskell-c-mode "haskell-c")
+(autoload 'ido-mode "ido")
 
 (defun mode-extension (mode extension)
   (add-to-list 'auto-mode-alist `(,(concat "\\" extension "$") . ,mode)))
@@ -320,3 +321,13 @@
  'markdown-mode-hook
  '(lambda ()
     (flyspell-mode)))
+
+(add-hook
+ 'ido-mode-hook
+ '(lambda ()
+    (setq ido-enable-flex-matching t
+          ido-everywhere t
+          ido-use-filename-at-point 'guess
+          ido-create-new-buffer 'always)))
+
+(ido-mode 1)
