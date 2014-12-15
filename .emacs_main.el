@@ -208,7 +208,7 @@
 
 (autoload 'smart-tabs-mode "smart-tabs-mode")
 (autoload 'company-mode "company")
-(autoload 'markdown-mode "markdown")
+(autoload 'markdown-mode "markdown-mode")
 (autoload 'haskell-mode "haskell")
 (autoload 'haskell-cabal-mode "haskell-cabal")
 (autoload 'haskell-doc-mode "haskell-doc")
