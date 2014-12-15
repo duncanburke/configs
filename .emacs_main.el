@@ -5,23 +5,36 @@
   (interactive)
   (load-file "~/.emacs"))
 
-(defun try-load (feature)
-  (require feature nil 'noerror))
-
-(defun mode-extension (mode extension)
-  (add-to-list 'auto-mode-alist `(,(concat "\\" extension "$") . ,mode)))
-
-;; Initialise packaging
 (require 'package)
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
 
+(defun ensure-package-installed (&rest packages)
+  "Assure every package is installed, ask for installation if it’s not. Return a list of installed packages or nil for every skipped package."
+  (mapcar
+   (lambda (package)
+     (if (package-installed-p package)
+         nil
+       (if (y-or-n-p (format "Package %s is missing. Install it? " package))
+           (package-install package)
+         package)))
+   packages))
+
+(or (file-exists-p package-user-dir)
+    (package-refresh-contents))
+
+(ensure-package-installed
+ 'ghc
+ 'company-ghc
+ 'haskell-mode
+ 'magit
+ 'markdown-mode
+ 'smart-tabs-mode
+ 'subatomic256-theme)
+
 ;; Alternative: "DejaVu Sans Mono:style=Book:size=12"
 (add-to-list 'default-frame-alist '(font . "Terminus:style=Regular:size=10"))
-
-(let ((default-directory "~/.emacs.d/lisp/"))
-  (normal-top-level-add-subdirs-to-load-path))
 
 (load-theme 'subatomic256 t)
 (tool-bar-mode -1)
@@ -47,17 +60,17 @@
 ;; Show column and line numbers on status bar
 (column-number-mode)
 
-;; Stop dired from spamming windows as you navigate
-(put 'dired-find-alternate-file 'disabled nil)
-
-;; Allow dired to recursive delete without confirmation
-(setq dired-recursive-deletes 'always)
-
 ;; Get rid of the annoying spash screen
 (setq inhibit-splash-screen t)
 
 ;; Don't follow symlinks to version-controlled files
 (setq vc-follow-symlinks nil)
+
+;; Stop pop-up windows
+(setq pop-up-windows nil)
+
+;; I rarely don't want to see trailing whitespace. Also, it's not very intrusive in windowed mode.
+(setq show-trailing-whitespace t)
 
 (mapc (lambda (sym) (put sym 'disabled nil))
       '(downcase-region
@@ -66,6 +79,9 @@
 ;; Make windows split vertically like C-x 3 for things like help, grep, compile, gdb etc.
 (setq split-height-threshold nil)
 (setq split-width-threshold 0)
+
+;; Answer y or n instead of yes or no at minibar prompts.
+(defalias 'yes-or-no-p 'y-or-n-p)
 
 ;; Often things will open new windows for some reason. These can be useful, but one can be
 ;; left with a multitude of useless buffers lying around. Rather than just switching away from the offending
@@ -84,240 +100,10 @@
   (kill-buffer)
   (delete-window))
 
-;; Disable C-z. Normally, this would cause it to be minimised in a graphical environment, but it gets
-;; confused with xmonad
-(define-key (current-global-map) (kbd "C-z") 'nil)
-
-;; Alternate binding for M-x
-(define-key (current-global-map) (kbd "C-x RET") 'execute-extended-command)
-
-(define-key (current-global-map) (kbd "C-z x") 'close-and-kill-next-pane)
-(define-key (current-global-map) (kbd "C-z z") 'close-and-kill-this-pane)
-
-;; Keybindings to the X clipboard
-(define-key (current-global-map) (kbd "s-u") 'clipboard-yank)
-(define-key (current-global-map) (kbd "s-e") 'clipboard-kill-ring-save)
-(define-key (current-global-map) (kbd "C-c v") 'clipboard-yank)
-(define-key (current-global-map) (kbd "C-c c") 'clipboard-kill-ring-save)
-
-;; Delete trailing whitespace
-(define-key (current-global-map) (kbd "C-x t") 'delete-trailing-whitespace)
-
-;; Line wrap at right edge of screen
-(define-key (current-global-map) (kbd "C-c t") 'toggle-truncate-lines)
-
-;; Line numbers at left edge of screen
-(define-key (current-global-map) (kbd "C-c l") 'linum-mode)
-
-;; Show-hide menu
-(define-key (current-global-map) (kbd "C-x y") 'menu-bar-mode)
-
-;; Show whitespace
-(define-key (current-global-map) (kbd "C-c w") 'whitespace-mode)
-
-;; Jump to the specified line number
-(define-key (current-global-map) (kbd "C-c a") 'goto-line)
-
-;; What is says on the box
-(define-key (current-global-map) (kbd "C-c 1") 'compile)
-
-;; Alternate undo which doesn't undo undos like normal undo
-(define-key (current-global-map) (kbd "C-?") 'undo-only)
-
-;; Trying to get this one to work
-(define-key (current-global-map) (kbd "C-M-x") '(switch-to-buffer "*scratch*"))
-
-;; The various modes
-(define-key (current-global-map) (kbd "C-c p") 'c++-mode)
-(define-key (current-global-map) (kbd "C-c h") 'haskell-mode)
-(define-key (current-global-map) (kbd "C-c i") 'haskell-indentation-mode)
-(define-key (current-global-map) (kbd "C-c m") 'matlab-mode)
-(define-key (current-global-map) (kbd "C-c y") 'python-mode)
-(define-key (current-global-map) (kbd "C-c r") 'picture-mode)
-(define-key (current-global-map) (kbd "C-c x") 'text-mode)
-(define-key (current-global-map) (kbd "C-c o") 'org-mode)
-
-(define-key (current-global-map) (kbd "C-c g") 'magit-status)
-
-;; Global initialisation
-
-(global-magit-wip-save-mode 1)
-
-;; Keybinding to insert a fucking tab, rather than doing crazy indent
-(defun command-insert-tab ()
-  "Insert a tab character"
-  (interactive)
-  (insert "\t")
-  )
-(define-key (current-global-map) (kbd "<C-tab>") 'command-insert-tab)
-
-;; Make backspace delete whitespace in increments of tabstop
-;; This is definitely a matter of taste and some improvements need to be made
-(defun backward-delete-char-tabstop ()
-  (interactive)
-  (cond
-   ((looking-back " ")
-    (let ((i tab-width))
-      (while (progn (setq i (- i 1)) (and (>= i 0) (looking-back " ")))
-        (delete-backward-char 1))))
-   (t  (delete-backward-char 1))))
-
-;; (define-key (current-global-map) (kbd "<backspace>") 'backward-delete-char-tabstop)
-;; (define-key isearch-mode-map [backspace] 'isearch-delete-char)
-
-;; Make emacs stop asking silly questions about changed files.
-;; Somewhat unsafe, and a matter of taste.
-(defun ask-user-about-supersession-threat (fn)
-  "blatantly ignore files that changed on disk"
-  )
-(defun ask-user-about-lock (file opponent)
-  "always grab lock"
-  t)
-
-(require 'tramp)
-;; enable these for tramp debugging
-;; (setq tramp-verbose 10)
-;; (setq tramp-debug-buffer t)
-
-(mapc 'try-load '(tramp
-                  haskell-mode
-                  haskell-cabal
-                  haskell-doc
-                  haskell-c
-                  company-mode
-                  company
-                  markdown-mode))
-
-(mapc (lambda (a) (mode-extension (car a) (cdr a))) '((haskell-mode . ".hs")
-                                                      (haskell-mode . ".hs-boot")
-                                                      (c-mode . ".cs")
-                                                      (octave-mode . ".m")
-                                                      (haskell-cabal-mode . ".cabal")
-                                                      (markdown-mode . ".md")
-                                                      (markdown-mode . ".page")))
-
-(ignore-errors (progn (load-file "~/.emacs.d/irc.el")
-				   (define-key (current-global-map) (kbd "C-c f") 'freenode)))
-(ignore-errors
-  (progn
-    (require 'smarttabs)
-    (autoload 'smart-tabs-mode "smart-tabs-mode"
-      "Intelligently indent with tabs, align with spaces!")
-    (autoload 'smart-tabs-mode-enable "smart-tabs-mode")
-    (autoload 'smart-tabs-advice "smart-tabs-mode")))
-
-;; This is for kernel work - currently not used
-(defun c-lineup-arglist-tabs-only (ignored)
-  "Line up argument lists by tabs, not spaces"
-  (let* ((anchor (c-langelem-pos c-syntactic-element))
-         (column (c-langelem-2nd-pos c-syntactic-element))
-         (offset (- (1+ column) anchor))
-         (steps (floor offset c-basic-offset)))
-    (* (max steps 1)
-       c-basic-offset)))
-
-(defun tabstop-hook ()
-	(define-key (current-local-map) (kbd "TAB") 'tab-to-tab-stop)
-	(setq tab-width 4
-		indent-tabs-mode t
-		tab-stop-list (number-sequence 4 200 4))
-	)
-(add-hook 'fundamental-mode-hook 'tabstop-hook)
-(add-hook 'text-mode-hook 'tabstop-hook)
-(add-hook 'conf-mode-hook 'tabstop-hook)
-
-(defun my-c-mode-hook ()
-  (setq c-basic-offset 2
-        tab-width 2)
-  (smart-tabs-mode-enable)
-  (smart-tabs-advice c-indent-line c-basic-offset)
-  (smart-tabs-advice c-indent-region c-basic-offset)
-  (c-set-offset 'case-label '+)
-  (setq indent-tabs-mode t)
-  (c-toggle-auto-newline nil)
-  (c-toggle-hungry-state t)
-  (c-toggle-electric-state t)
-  (c-toggle-syntactic-indentation t)
-  (local-set-key (kbd "RET") 'newline-and-indent)
-  (subword-mode t))
-
-(setq c-mode-hook nil)
-(add-hook 'c-mode-hook 'my-c-mode-hook)
-
-(if (try-load 'rust-mode)
-    (progn
-;      (mode-extension 'rust-mode ".rs")
-      (add-hook 'rust-mode-hook
-                (lambda ()
-                  (if nil
-                      (progn
-                        (require 'smarttabs)
-                        (setq indent-tabs-mode t)
-                        (smart-tabs-mode-enable)
-                        (smart-tabs-advice rust-indent rust-indent-unit)))))
-      (add-hook 'compilation-mode-hook
-                (lambda ()
-                  (add-to-list 'compilation-error-regexp-alist 'rust)
-                  (add-to-list 'compilation-error-regexp-alist-alist
-                               '(rust "^\\([.a-zA-Z0-9]+\\):\\([0-9]+\\):\\([0-9]+\\):" 1 2 3))))))
-
-(defun my-python-mode-hook ()
-  (setq python-check-command "pychecker --stdlib -# 0 -xXT")
-  (define-key (current-global-map) (kbd "C-.") 'python-shift-right)
-  (define-key (current-global-map) (kbd "C-,") 'python-shift-left)
-  (setq tab-width 4
-        python-indent 4)
-  (local-set-key (kbd "RET") 'newline-and-indent)
-  (if nil (progn
-            (setq indent-tabs-mode t)
-            (smart-tabs-mode-enable)
-            (smart-tabs-advice python-indent-line python-indent))
-    nil))
-
-(setq python-mode-hook nil)
-(add-hook 'python-mode-hook 'my-python-mode-hook)
-
-(autoload 'ghc-init "ghc" nil t)
-(autoload 'ghc-debug "ghc" nil t)
-
-(add-to-list 'company-backends 'company-ghc)
-
-(defun my-haskell-mode-hook ()
-	(setq indent-tabs-mode nil
-          tab-width 2)
-    (turn-on-haskell-indentation)
-
-    (setq ghc-hlint-options '("--ignore=Use camelCase"))
-    (ghc-init)
-    (define-key haskell-mode-map (kbd "M-s") 'ghc-display-errors)
-
-    (company-mode))
-
-(setq haskell-mode-hook nil)
-(add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
-
-(defun my-haskell-cabal-mode-hook ()
-	(setq indent-tabs-mode nil))
-
-(add-hook 'haskell-cabal-mode-hook 'my-haskell-cabal-mode-hook)
-
-(defun my-matlab-mode-hook ()
-  (auto-fill-mode))
-(add-hook 'matlab-mode-hook 'my-matlab-mode-hook)
-
-(defun my-lisp-hook ()
-  (setq indent-tabs-mode nil
-        lisp-indent-offset 4
-        tab-width 4)
-  (local-set-key (kbd "RET") 'newline-and-indent)
-  )
-(setq lisp-mode-hook nil)
-(add-hook 'lisp-mode-hook 'my-lisp-hook)
-
-(add-hook 'sql-interactive-mode-hook
-	(function (lambda () (setq tab-width 4))))
-
-(setq gdb-non-stop-setting nil)
+(defun backward-kill-line (arg)
+  "Kill chars backward until encountering the end of a line."
+  (interactive "p")
+  (kill-line 0))
 
 (defun diff-region ()
   "Select a region to compare"
@@ -330,8 +116,7 @@
         (erase-buffer))
       (append-to-buffer buf (region-beginning) (region-end)))
     )
-  (message "Now select other region to compare and run `diff-region-now`")
-  )
+  (message "Now select other region to compare and run `diff-region-now`"))
 
 (defun diff-region-now ()
   "Compare current region with region already selected by `diff-region`"
@@ -344,42 +129,203 @@
         (set-buffer bufb)
         (erase-buffer))
       (append-to-buffer bufb (region-beginning) (region-end))
-      (ediff-buffers bufa bufb))
-    )
-  )
+      (ediff-buffers bufa bufb))))
 
-; run perl on the current region, updating the region
-(defun perl-replace-region (start end)
-  "Apply perl command to region"
-  (interactive "r")
-  (shell-command-on-region start end
-                           (read-from-minibuffer "Replace region command: " '("perl -pel \'s///g\'" . 14 ))
-                           t t )
-  (exchange-point-and-mark))
+;; Disable C-z. Normally, this would cause it to be minimised in a graphical environment, but it gets
+;; confused with xmonad
+(global-set-key (kbd "C-z") 'nil)
 
-; run perl on the current buffer, updating the buffer
-(defun perl-replace-buffer ()
-  "Apply perl command to buffer"
+;; Alternate binding for M-x
+(global-set-key (kbd "C-x RET") 'execute-extended-command)
+
+(global-set-key (kbd "C-z x") 'close-and-kill-next-pane)
+(global-set-key (kbd "C-z z") 'close-and-kill-this-pane)
+
+;; Keybindings to the X clipboard
+(global-set-key (kbd "s-u") 'clipboard-yank)
+(global-set-key (kbd "s-e") 'clipboard-kill-ring-save)
+(global-set-key (kbd "C-c v") 'clipboard-yank)
+(global-set-key (kbd "C-c c") 'clipboard-kill-ring-save)
+
+;; Delete trailing whitespace
+(global-set-key (kbd "C-x t") 'delete-trailing-whitespace)
+
+;; Line wrap at right edge of screen
+(global-set-key (kbd "C-c t") 'toggle-truncate-lines)
+
+;; Line numbers at left edge of screen
+(global-set-key (kbd "C-c l") 'linum-mode)
+
+;; Backwards kill line
+(global-set-key (kbd "C-l") 'backward-kill-line)
+
+;; replace buff-menu with bs-show
+(global-set-key (kbd "C-x C-b") 'bs-show)
+
+;; Show-hide menu
+(global-set-key (kbd "C-x y") 'menu-bar-mode)
+
+;; Show whitespace
+(global-set-key (kbd "C-c w") 'whitespace-mode)
+
+;; Jump to the specified line number
+(global-set-key (kbd "C-c a") 'goto-line)
+(global-set-key (kbd "M-g") 'goto-line)
+
+;; Alternate undo which doesn't undo undos like normal undo
+(global-set-key (kbd "C-?") 'undo-only)
+
+;; Trying to get this one to work
+(global-set-key (kbd "C-M-x") '(switch-to-buffer "*scratch*"))
+
+(autoload 'comment-region "newcomment" "")
+(global-set-key (kbd "M-c") 'comment-region)
+(autoload 'uncomment-region "newcomment" "")
+(global-set-key (kbd "M-C") 'uncomment-region)
+
+;; The various modes
+(global-set-key (kbd "C-c p") 'c++-mode)
+(global-set-key (kbd "C-c h") 'haskell-mode)
+(global-set-key (kbd "C-c i") 'haskell-indentation-mode)
+(global-set-key (kbd "C-c m") 'matlab-mode)
+(global-set-key (kbd "C-c y") 'python-mode)
+(global-set-key (kbd "C-c r") 'picture-mode)
+(global-set-key (kbd "C-c x") 'text-mode)
+(global-set-key (kbd "C-c o") 'org-mode)
+
+(global-set-key (kbd "C-c g") 'magit-status)
+
+;; Enable the wip save minor mode for magit. wip-save still needs to be enabled on a
+;; per-repository basis
+(autoload 'global-magit-wip-save-mode "magit-wip" "")
+(global-magit-wip-save-mode 1)
+
+;; Keybinding to insert a fucking tab, rather than doing crazy indent
+(defun command-insert-tab ()
+  "Insert a tab character"
   (interactive)
-  (let ((ptline (count-lines (point-min) (point)))
-        (ptcol (current-column))
-        (markline 0)
-        (markcol  0)
-        (command (read-from-minibuffer "Replace buffer command: " '("perl -pel \'s///g\'" . 14 ))))
-    (exchange-point-and-mark)
-    (setq markline (count-lines (point-min) (point)))
-    (setq markcol  (current-column))
-    (mark-whole-buffer)
-    (let ((new-start (region-beginning))
-          (new-end   (region-end)))
-      (shell-command-on-region  new-start new-end command t t))
-    (goto-line markline)
-    (move-to-column markcol)
-    (exchange-point-and-mark)
-    (goto-line ptline)
-    (move-to-column ptcol)
-    )
-  )
+  (insert "\t"))
+(global-set-key (kbd "<C-tab>") 'command-insert-tab)
 
-(define-key (current-global-map) (kbd "C-M-^") 'perl-replace-region)
-(define-key (current-global-map) (kbd "C-M-&") 'perl-replace-buffer)
+;; Make emacs stop asking silly questions about changed files.
+;; Somewhat unsafe, and a matter of taste.
+(defun ask-user-about-supersession-threat (fn)
+  "blatantly ignore files that changed on disk")
+(defun ask-user-about-lock (file opponent)
+  "always grab lock" t)
+
+(autoload 'smart-tabs-mode "smart-tabs-mode")
+(autoload 'company-mode "company")
+(autoload 'markdown-mode "markdown")
+(autoload 'haskell-mode "haskell")
+(autoload 'haskell-cabal-mode "haskell-cabal")
+(autoload 'haskell-doc-mode "haskell-doc")
+(autoload 'haskell-c-mode "haskell-c")
+
+(defun mode-extension (mode extension)
+  (add-to-list 'auto-mode-alist `(,(concat "\\" extension "$") . ,mode)))
+
+(mapc (lambda (a)
+        (mode-extension (car a) (cdr a)))
+      '((haskell-mode . ".hs")
+        (haskell-mode . ".hs-boot")
+        (c-mode . ".cs")
+        (haskell-cabal-mode . ".cabal")
+        (markdown-mode . ".md")
+        (markdown-mode . ".page")))
+
+(defun tabstop-hook ()
+  (define-key (current-local-map) (kbd "TAB") 'tab-to-tab-stop)
+  (setq tab-width 4
+        indent-tabs-mode t
+        tab-stop-list (number-sequence 4 200 4)))
+
+(add-hook 'fundamental-mode-hook 'tabstop-hook)
+(add-hook 'text-mode-hook 'tabstop-hook)
+(add-hook 'conf-mode-hook 'tabstop-hook)
+(add-hook 'markdown-mode-hook 'tabstop-hook)
+
+(add-hook
+ 'dired-mode-hook
+ '(lambda ()
+    ;; Allow dired to recursive delete without confirmation
+    (setq dired-recursive-deletes 'always)
+    ;; Stop dired from spamming windows as you navigate
+    (put 'dired-find-alternate-file 'disabled nil)))
+
+(add-hook
+ 'c-mode-hook
+ '(lambda ()
+    (setq c-basic-offset 2
+          tab-width 2
+          show-trailing-whitespace t
+          indent-tabs-mode t)
+    (smart-tabs-mode t)
+    (c-set-offset 'case-label '+)
+    (c-toggle-auto-newline nil)
+    (c-toggle-hungry-state t)
+    (c-toggle-electric-state t)
+    (c-toggle-syntactic-indentation t)
+    (local-set-key (kbd "RET") 'newline-and-indent)
+    (subword-mode t)))
+
+(add-hook
+ 'python-mode-hook
+ '(lambda ()
+    (setq python-check-command "pychecker --stdlib -# 0 -xXT"
+          tab-width 4
+          python-indent 4)
+    (global-set-key (kbd "C-.") 'python-shift-right)
+    (global-set-key (kbd "C-,") 'python-shift-left)
+    (local-set-key (kbd "RET") 'newline-and-indent)))
+
+(autoload 'ghc-init "ghc" nil t)
+(autoload 'ghc-debug "ghc" nil t)
+
+(add-hook
+ 'company-mode-hook
+ '(lambda ()
+    (add-to-list 'company-backends 'company-ghc)))
+
+(add-hook
+ 'haskell-mode-hook
+ '(lambda ()
+    (setq indent-tabs-mode nil
+          tab-width 2
+          haskell-indentation-cycle-warn nil
+          ghc-hlint-options '("--ignore=Use camelCase")
+          show-trailing-whitespace t)
+    (ghc-init)
+    (flyspell-prog-mode)
+    (company-mode)
+    (auto-fill-mode 1)
+    (turn-on-haskell-indentation)
+    (set (make-local-variable
+          'fill-nobreak-predicate)
+         (lambda ()
+           (not (eq (get-text-property (point) 'face)
+                    'font-lock-comment-face))))
+    (define-key haskell-mode-map (kbd "M-s") 'ghc-display-errors)))
+
+(add-hook
+ 'haskell-cabal-mode-hook
+ '(lambda ()
+    (setq indent-tabs-mode nil)))
+
+(add-hook
+ 'org-mode-hook
+ '(lambda ()
+    (setq org-startup-indented t)))
+
+(add-hook
+ 'lisp-mode-hook
+ '(lambda ()
+    (setq indent-tabs-mode nil
+          lisp-indent-offset 4
+          tab-width 4)
+    (local-set-key (kbd "RET") 'newline-and-indent)))
+
+(add-hook
+ 'markdown-mode-hook
+ '(lambda ()
+    (flyspell-mode)))
