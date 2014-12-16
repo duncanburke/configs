@@ -172,6 +172,15 @@
 (global-set-key (kbd "C-c a") 'goto-line)
 (global-set-key (kbd "M-g") 'goto-line)
 
+;; replace C-<arrow> bindings
+(global-set-key (kbd "M-N") 'forward-paragraph)
+(global-set-key (kbd "M-P") 'backward-paragraph)
+(global-set-key (kbd "M-F") 'right-word)
+(global-set-key (kbd "M-B") 'left-word)
+
+;; replace C-<backspace> binding
+(global-set-key (kbd "M-D") 'backward-kill-word)
+
 ;; Alternate undo which doesn't undo undos like normal undo
 (global-set-key (kbd "C-?") 'undo-only)
 
