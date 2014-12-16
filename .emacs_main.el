@@ -33,7 +33,8 @@
  'smart-tabs-mode
  'subatomic256-theme
  'gitconfig-mode
- 'gitignore-mode)
+ 'gitignore-mode
+ 'flx-ido)
 
 ;; Alternative: "DejaVu Sans Mono:style=Book:size=12"
 (add-to-list 'default-frame-alist '(font . "Terminus:style=Regular:size=10"))
@@ -58,6 +59,9 @@
  mouse-hilight 1)
 
 (global-linum-mode t)
+
+;; gc tuning
+(setq gc-cons-threshold 20000000)
 
 ;; Show column and line numbers on status bar
 (column-number-mode)
@@ -225,6 +229,8 @@
 (autoload 'haskell-doc-mode "haskell-doc")
 (autoload 'haskell-c-mode "haskell-c")
 (autoload 'ido-mode "ido")
+(autoload 'ido-everywhere "ido")
+(autoload 'flx-ido-mode "flx-ido")
 (autoload 'gitconfig-mode "gitconfig-mode")
 (autoload 'gitignore-mode "gitignore-mode")
 
@@ -299,7 +305,9 @@
           tab-width 2
           haskell-indentation-cycle-warn nil
           ghc-hlint-options '("--ignore=Use camelCase")
-          show-trailing-whitespace t)
+          show-trailing-whitespace t
+          ghc-display-error 'minibuffer
+          ghc-display-hole 'other-buffer)
     (ghc-init)
     (flyspell-prog-mode)
     (company-mode)
@@ -336,9 +344,15 @@
     (flyspell-mode)))
 
 (ido-mode 1)
-(setq ido-enable-flex-matching t
-      ido-everywhere t
-      ido-use-filename-at-point 'guess
-      ido-create-new-buffer 'always
-      ido-default-file-method 'selected-window
-      ido-default-buffer-method 'selected-window)
+(ido-everywhere 1)
+(flx-ido-mode 1)
+(add-hook
+ 'ido-setup-hook
+ '(lambda ()
+    (setq ido-enable-flex-matching t
+          ido-use-filename-at-point 'guess
+          ido-create-new-buffer 'always
+          ido-default-file-method 'selected-window
+          ido-default-buffer-method 'selected-window
+          ido-enable-flex-matching t
+          ido-use-faces nil)))
