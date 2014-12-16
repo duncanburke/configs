@@ -31,7 +31,9 @@
  'magit
  'markdown-mode
  'smart-tabs-mode
- 'subatomic256-theme)
+ 'subatomic256-theme
+ 'gitconfig-mode
+ 'gitignore-mode)
 
 ;; Alternative: "DejaVu Sans Mono:style=Book:size=12"
 (add-to-list 'default-frame-alist '(font . "Terminus:style=Regular:size=10"))
@@ -223,6 +225,8 @@
 (autoload 'haskell-doc-mode "haskell-doc")
 (autoload 'haskell-c-mode "haskell-c")
 (autoload 'ido-mode "ido")
+(autoload 'gitconfig-mode "gitconfig-mode")
+(autoload 'gitignore-mode "gitignore-mode")
 
 (defun mode-extension (mode extension)
   (add-to-list 'auto-mode-alist `(,(concat "\\" extension "$") . ,mode)))
