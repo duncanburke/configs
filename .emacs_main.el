@@ -322,12 +322,10 @@
  '(lambda ()
     (flyspell-mode)))
 
-(add-hook
- 'ido-mode-hook
- '(lambda ()
-    (setq ido-enable-flex-matching t
-          ido-everywhere t
-          ido-use-filename-at-point 'guess
-          ido-create-new-buffer 'always)))
-
 (ido-mode 1)
+(setq ido-enable-flex-matching t
+      ido-everywhere t
+      ido-use-filename-at-point 'guess
+      ido-create-new-buffer 'always
+      ido-default-file-method 'selected-window
+      ido-default-buffer-method 'selected-window)
