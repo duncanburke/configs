@@ -189,12 +189,6 @@
 ;; replace C-<backspace> binding
 (global-set-key (kbd "M-D") 'backward-kill-word)
 
-;; Alternate undo which doesn't undo undos like normal undo
-(global-set-key (kbd "C-?") 'undo-only)
-
-;; Trying to get this one to work
-(global-set-key (kbd "C-M-x") '(switch-to-buffer "*scratch*"))
-
 (autoload 'comment-region "newcomment" "")
 (global-set-key (kbd "M-c") 'comment-region)
 (autoload 'uncomment-region "newcomment" "")
