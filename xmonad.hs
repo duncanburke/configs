@@ -69,8 +69,6 @@ commandBindings conf@(XConfig {XMonad.modMask = modMask'}) =
 
    ((modMask'              , xK_n         ), refresh),
 
-   ((modMask'              , xK_Tab       ), windows W.focusDown),
-   ((modMask' .|. shiftMask, xK_Tab       ), windows W.focusUp),
    ((modMask'              , xK_c         ), windows W.focusDown),
    ((modMask'              , xK_r         ), windows W.focusUp),
    ((modMask'              , xK_s         ), windows W.focusMaster),
