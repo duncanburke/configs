@@ -145,6 +145,13 @@
 ;; Mirror of C-d
 (global-set-key (kbd "C-D") 'backward-delete-char)
 
+;; Bindings for window movement
+(global-set-key (kbd "C-M-h") 'windmove-left)
+(global-set-key (kbd "C-M-t") 'windmove-down)
+(global-set-key (kbd "C-M-n") 'windmove-up)
+(global-set-key (kbd "C-M-s") 'windmove-right)
+(global-unset-key (kbd "C-x o"))
+
 ;; Alternate binding for M-x
 (global-set-key (kbd "C-x RET") 'execute-extended-command)
 (global-unset-key (kbd "M-x"))
