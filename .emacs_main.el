@@ -145,6 +145,7 @@
 
 ;; Alternate binding for M-x
 (global-set-key (kbd "C-x RET") 'execute-extended-command)
+(global-unset-key (kbd "M-x"))
 
 (global-set-key (kbd "C-z x") 'close-and-kill-next-pane)
 (global-set-key (kbd "C-z z") 'close-and-kill-this-pane)
@@ -185,9 +186,14 @@
 (global-set-key (kbd "M-P") 'backward-paragraph)
 (global-set-key (kbd "M-F") 'right-word)
 (global-set-key (kbd "M-B") 'left-word)
+(global-unset-key (kbd "<C-up>"))
+(global-unset-key (kbd "<C-down>"))
+(global-unset-key (kbd "<C-left>"))
+(global-unset-key (kbd "<C-right>"))
 
 ;; replace C-<backspace> binding
 (global-set-key (kbd "M-D") 'backward-kill-word)
+(global-unset-key (kbd "<C-backspace>"))
 
 (autoload 'comment-region "newcomment" "")
 (global-set-key (kbd "M-c") 'comment-region)
