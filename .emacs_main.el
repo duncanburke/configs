@@ -141,7 +141,8 @@
 
 ;; Disable C-z. Normally, this would cause it to be minimised in a graphical environment, but it gets
 ;; confused with xmonad
-(global-set-key (kbd "C-z") 'nil)
+(global-unset-key (kbd "C-z"))
+
 ;; Mirror of C-d
 (global-set-key (kbd "C-D") 'backward-delete-char)
 
