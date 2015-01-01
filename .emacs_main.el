@@ -368,3 +368,8 @@
           ido-default-buffer-method 'selected-window
           ido-enable-flex-matching t
           ido-use-faces nil)))
+
+;; monkey-patch magit to show patch on commit buffer
+(advice-add #'magit-key-mode-popup-committing :after
+            (lambda ()
+              (magit-key-mode-toggle-option (quote committing) "--verbose")))
