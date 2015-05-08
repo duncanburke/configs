@@ -144,7 +144,9 @@
 (global-unset-key (kbd "C-z"))
 
 ;; Mirror of C-d
-(global-set-key (kbd "C-D") 'backward-delete-char)
+(global-set-key (kbd "C-d") 'delete-char)
+;; TODO: get this to work
+;;(global-set-key (kbd "C-S-d") 'backward-delete-char)
 
 ;; Bindings for window movement
 (global-set-key (kbd "C-M-h") 'windmove-left)
