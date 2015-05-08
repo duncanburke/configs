@@ -348,6 +348,7 @@
     (setq indent-tabs-mode nil
           lisp-indent-offset 4
           tab-width 4)
+    (show-paren-mode t)
     (local-set-key (kbd "RET") 'newline-and-indent)))
 
 (add-hook
