@@ -44,3 +44,6 @@ export EDITOR='emacsclient -cnw -a ""'
 # As this in an interactive shell, set GPG_TTY
 export GPG_TTY=`tty`
 
+function hmap { ghc -e "interact ($*)";  }
+function hmapl { hmap  "unlines.($*).lines" ; }
+function hmapw { hmapl "map (unwords.($*).words)" ; }
