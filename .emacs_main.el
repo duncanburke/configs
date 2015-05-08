@@ -340,7 +340,9 @@
 (add-hook
  'org-mode-hook
  '(lambda ()
-    (setq org-startup-indented t)))
+    (setq org-hide-leading-stars t
+          org-startup-indented nil
+          org-todo-keywords '((sequence "TODO" "DOING" "|" "DONE")))))
 
 (add-hook
  'lisp-mode-hook
