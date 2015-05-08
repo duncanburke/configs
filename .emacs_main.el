@@ -274,7 +274,11 @@
     ;; Allow dired to recursive delete without confirmation
     (setq dired-recursive-deletes 'always)
     ;; Stop dired from spamming windows as you navigate
-    (put 'dired-find-alternate-file 'disabled nil)))
+    (put 'dired-find-alternate-file 'disabled nil)
+    (local-unset-key (kbd "C-M-h"))
+    (local-unset-key (kbd "C-M-t"))
+    (local-unset-key (kbd "C-M-n"))
+    (local-unset-key (kbd "C-M-s"))))
 
 (add-hook
  'c-mode-hook
@@ -290,7 +294,11 @@
     (c-toggle-electric-state t)
     (c-toggle-syntactic-indentation t)
     (local-set-key (kbd "RET") 'newline-and-indent)
-    (subword-mode t)))
+    (subword-mode t)
+    (local-unset-key (kbd "C-M-h"))
+    (local-unset-key (kbd "C-M-t"))
+    (local-unset-key (kbd "C-M-n"))
+    (local-unset-key (kbd "C-M-s"))))
 
 (add-hook
  'python-mode-hook
@@ -335,7 +343,11 @@
 (add-hook
  'haskell-cabal-mode-hook
  '(lambda ()
-    (setq indent-tabs-mode nil)))
+    (setq indent-tabs-mode nil)
+    (local-unset-key (kbd "C-M-h"))
+    (local-unset-key (kbd "C-M-t"))
+    (local-unset-key (kbd "C-M-n"))
+    (local-unset-key (kbd "C-M-s"))))
 
 (add-hook
  'org-mode-hook
