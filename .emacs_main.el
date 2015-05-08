@@ -353,7 +353,8 @@
 (add-hook
  'markdown-mode-hook
  '(lambda ()
-    (flyspell-mode)))
+    (flyspell-mode)
+    (visual-line-mode t)))
 
 (ido-mode 1)
 (ido-everywhere 1)
