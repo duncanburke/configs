@@ -24,10 +24,7 @@ PS1="\[$B\]┌─\[$W\][ \[$Y\]\A \[$W\]][ \[$U_COL\]\u\[$G\]@\h:\w \[$W\]]\n\[$
 alias nemacs='emacs -nw'
 alias ls='ls -h --color=auto'
 
-alias cp='cp -i'
-alias mv='mv -i'
 alias rm='rm -I'                    # 'rm -i' prompts for every file
-alias ln='ln -i'
 
 alias ec='emacsclient -cnw -a ""'
 
