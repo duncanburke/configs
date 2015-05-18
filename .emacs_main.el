@@ -139,82 +139,89 @@
       (append-to-buffer bufb (region-beginning) (region-end))
       (ediff-buffers bufa bufb))))
 
+(defvar my-keys-minor-mode-map (make-keymap) "my-keys-minor-mode keymap.")
+
+(defun my-map-set-key (key command)
+  "Give KEY a binding in my-keys-minor-mode  as COMMAND.
+my-keys-minor mode has precedence over any other loaded keymap."
+  (define-key my-keys-minor-mode-map key command))
+
 ;; Disable C-z. Normally, this would cause it to be minimised in a graphical environment, but it gets
 ;; confused with xmonad
 (global-unset-key (kbd "C-z"))
 
 ;; Mirror of C-d
-(global-set-key (kbd "C-d") 'delete-char)
+(my-map-set-key (kbd "C-d") 'delete-char)
 ;; TODO: get this to work
-;;(global-set-key (kbd "C-S-d") 'backward-delete-char)
+;;(my-map-set-key (kbd "C-S-d") 'backward-delete-char)
 
 ;; Bindings for window movement
-(global-set-key (kbd "C-M-h") 'windmove-left)
-(global-set-key (kbd "C-M-t") 'windmove-down)
-(global-set-key (kbd "C-M-n") 'windmove-up)
-(global-set-key (kbd "C-M-s") 'windmove-right)
+(my-map-set-key (kbd "C-M-h") 'windmove-left)
+(my-map-set-key (kbd "C-M-t") 'windmove-down)
+(my-map-set-key (kbd "C-M-n") 'windmove-up)
+(my-map-set-key (kbd "C-M-s") 'windmove-right)
 (global-unset-key (kbd "C-x o"))
 
 ;; Alternate binding for M-x
-(global-set-key (kbd "C-x RET") 'execute-extended-command)
+(my-map-set-key (kbd "C-x RET") 'execute-extended-command)
 (global-unset-key (kbd "M-x"))
 
-(global-set-key (kbd "C-z x") 'close-and-kill-next-pane)
-(global-set-key (kbd "C-z z") 'close-and-kill-this-pane)
+(my-map-set-key (kbd "C-z x") 'close-and-kill-next-pane)
+(my-map-set-key (kbd "C-z z") 'close-and-kill-this-pane)
 
 ;; Keybindings to the X clipboard
-(global-set-key (kbd "s-u") 'clipboard-yank)
-(global-set-key (kbd "s-e") 'clipboard-kill-ring-save)
-(global-set-key (kbd "C-c v") 'clipboard-yank)
-(global-set-key (kbd "C-c c") 'clipboard-kill-ring-save)
+(my-map-set-key (kbd "s-u") 'clipboard-yank)
+(my-map-set-key (kbd "s-e") 'clipboard-kill-ring-save)
+(my-map-set-key (kbd "C-c v") 'clipboard-yank)
+(my-map-set-key (kbd "C-c c") 'clipboard-kill-ring-save)
 
 ;; Delete trailing whitespace
-(global-set-key (kbd "C-x t") 'delete-trailing-whitespace)
+(my-map-set-key (kbd "C-x t") 'delete-trailing-whitespace)
 
 ;; Line wrap at right edge of screen
-(global-set-key (kbd "C-c t") 'toggle-truncate-lines)
+(my-map-set-key (kbd "C-c t") 'toggle-truncate-lines)
 
 ;; Line numbers at left edge of screen
-(global-set-key (kbd "C-c l") 'linum-mode)
+(my-map-set-key (kbd "C-c l") 'linum-mode)
 
 ;; Backwards kill line
-(global-set-key (kbd "C-l") 'backward-kill-line)
+(my-map-set-key (kbd "C-l") 'backward-kill-line)
 
 ;; replace buff-menu with bs-show
-(global-set-key (kbd "C-x C-b") 'bs-show)
+(my-map-set-key (kbd "C-x C-b") 'bs-show)
 
 ;; Show-hide menu
-(global-set-key (kbd "C-x y") 'menu-bar-mode)
+(my-map-set-key (kbd "C-x y") 'menu-bar-mode)
 
 ;; Show whitespace
-(global-set-key (kbd "C-c w") 'whitespace-mode)
+(my-map-set-key (kbd "C-c w") 'whitespace-mode)
 
 ;; Jump to the specified line number
-(global-set-key (kbd "C-c a") 'goto-line)
-(global-set-key (kbd "M-g") 'goto-line)
+(my-map-set-key (kbd "C-c a") 'goto-line)
+(my-map-set-key (kbd "M-g") 'goto-line)
 
 ;; replace C-<arrow> bindings
-(global-set-key (kbd "M-N") 'forward-paragraph)
-(global-set-key (kbd "M-P") 'backward-paragraph)
-(global-set-key (kbd "M-F") 'right-word)
-(global-set-key (kbd "M-B") 'left-word)
+(my-map-set-key (kbd "M-N") 'forward-paragraph)
+(my-map-set-key (kbd "M-P") 'backward-paragraph)
+(my-map-set-key (kbd "M-F") 'right-word)
+(my-map-set-key (kbd "M-B") 'left-word)
 (global-unset-key (kbd "<C-up>"))
 (global-unset-key (kbd "<C-down>"))
 (global-unset-key (kbd "<C-left>"))
 (global-unset-key (kbd "<C-right>"))
 
 ;; replace C-<backspace> binding
-(global-set-key (kbd "M-D") 'backward-kill-word)
+(my-map-set-key (kbd "M-D") 'backward-kill-word)
 (global-unset-key (kbd "<C-backspace>"))
 
 (autoload 'comment-region "newcomment" "")
-(global-set-key (kbd "M-c") 'comment-region)
+(my-map-set-key (kbd "M-c") 'comment-region)
 (autoload 'uncomment-region "newcomment" "")
-(global-set-key (kbd "M-C") 'uncomment-region)
+(my-map-set-key (kbd "M-C") 'uncomment-region)
 
-(global-set-key (kbd "C-c x") 'text-mode)
+(my-map-set-key (kbd "C-c x") 'text-mode)
 
-(global-set-key (kbd "C-c g") 'magit-status)
+(my-map-set-key (kbd "C-c g") 'magit-status)
 
 ;; Enable the wip save minor mode for magit. wip-save still needs to be enabled on a
 ;; per-repository basis
@@ -226,7 +233,22 @@
   "Insert a tab character"
   (interactive)
   (insert "\t"))
-(global-set-key (kbd "<C-tab>") 'command-insert-tab)
+(my-map-set-key (kbd "<C-tab>") 'command-insert-tab)
+
+(define-minor-mode my-keys-minor-mode
+  "A minor mode for providing global keybindings with precedence over
+any other loaded keymap."
+  t " my-keys" 'my-keys-minor-mode-map)
+
+(defadvice load (after give-my-keybindings-priority)
+  "Try to ensure that my keybindings always have priority."
+  (if (not (eq (car (car minor-mode-map-alist)) 'my-keys-minor-mode))
+      (let ((mykeys (assq 'my-keys-minor-mode minor-mode-map-alist)))
+        (assq-delete-all 'my-keys-minor-mode minor-mode-map-alist)
+        (add-to-list 'minor-mode-map-alist mykeys))))
+(ad-activate 'load)
+
+(my-keys-minor-mode 1)
 
 ;; Make emacs stop asking silly questions about changed files.
 ;; Somewhat unsafe, and a matter of taste.
@@ -276,11 +298,7 @@
     ;; Allow dired to recursive delete without confirmation
     (setq dired-recursive-deletes 'always)
     ;; Stop dired from spamming windows as you navigate
-    (put 'dired-find-alternate-file 'disabled nil)
-    (local-unset-key (kbd "C-M-h"))
-    (local-unset-key (kbd "C-M-t"))
-    (local-unset-key (kbd "C-M-n"))
-    (local-unset-key (kbd "C-M-s"))))
+    (put 'dired-find-alternate-file 'disabled nil)))
 
 (add-hook
  'c-mode-hook
@@ -296,11 +314,7 @@
     (c-toggle-electric-state t)
     (c-toggle-syntactic-indentation t)
     (local-set-key (kbd "RET") 'newline-and-indent)
-    (subword-mode t)
-    (local-unset-key (kbd "C-M-h"))
-    (local-unset-key (kbd "C-M-t"))
-    (local-unset-key (kbd "C-M-n"))
-    (local-unset-key (kbd "C-M-s"))))
+    (subword-mode t)))
 
 (add-hook
  'python-mode-hook
@@ -308,8 +322,8 @@
     (setq python-check-command "pychecker --stdlib -# 0 -xXT"
           tab-width 4
           python-indent 4)
-    (global-set-key (kbd "C-.") 'python-shift-right)
-    (global-set-key (kbd "C-,") 'python-shift-left)
+    (local-set-key (kbd "C-.") 'python-shift-right)
+    (local-set-key (kbd "C-,") 'python-shift-left)
     (local-set-key (kbd "RET") 'newline-and-indent)))
 
 (autoload 'ghc-init "ghc" nil t)
@@ -345,11 +359,7 @@
 (add-hook
  'haskell-cabal-mode-hook
  '(lambda ()
-    (setq indent-tabs-mode nil)
-    (local-unset-key (kbd "C-M-h"))
-    (local-unset-key (kbd "C-M-t"))
-    (local-unset-key (kbd "C-M-n"))
-    (local-unset-key (kbd "C-M-s"))))
+    (setq indent-tabs-mode nil)))
 
 (add-hook
  'org-mode-hook
