@@ -390,7 +390,7 @@ any other loaded keymap."
  'ido-setup-hook
  '(lambda ()
     (setq ido-enable-flex-matching t
-          ido-use-filename-at-point 'guess
+          ido-use-filename-at-point nil
           ido-create-new-buffer 'always
           ido-default-file-method 'selected-window
           ido-default-buffer-method 'selected-window
