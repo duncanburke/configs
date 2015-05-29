@@ -5,6 +5,9 @@
   (interactive)
   (load-file "~/.emacs"))
 
+(setq debug-on-error t)
+(setq edebug-all-defs t)
+
 (require 'package)
 (setq package-archives '(("melpa" . "http://melpa.org/packages")
                           ("gnu" . "http://elpa.gnu.org/packages/")))
@@ -159,119 +162,130 @@
 
 (defconst original-global-map (copy-keymap global-map))
 
-(defvar my-key-bindings nil)
-(defvar my-key-remaps nil)
+(defvar my-keys-bindings nil "alist of defined key->command bindings")
+(defvar my-keys-remaps nil "alist of defined old->new remaps")
+(defvar my-keys-calc-remaps nil "alist of defined and inferred old->new remaps")
+(defvar my-keys-calc-shadowed nil "alist of shadowed global bindings")
+
+(setq my-keys-bindings nil)
+(setq my-keys-remaps nil)
 
 (defvar my-keys-minor-mode-map (make-keymap))
 
 (defun my-map-set-key (key command)
   (define-key my-keys-minor-mode-map key command))
 
-;; (defun my-map-bind-key (key command)
-;;   (setq my-key-bindings ((key . command) my-key-bindings)))
-;; (defun my-map-remap-key (old new)
-;;   (setq my-key-remaps ((old . new) my-key-remaps))
+(defun my-map-bind-key (key command)
+  (push (cons key command) my-keys-bindings))
+(defun my-map-remap-key (old new)
+  (push (cons old new) my-keys-remaps))
 
 ;; Disable C-z. Normally, this would cause it to be minimised in a graphical environment, but it gets
 ;; confused with xmonad
 (global-unset-key (kbd "C-z"))
 
 ;; Rebind key prefixes we're going to use
-(my-map-set-key (kbd "C-.") (lookup-key global-map (kbd "C-h")))
-(my-map-set-key (kbd "C-p") (lookup-key global-map (kbd "C-u")))
-(my-map-set-key (kbd "C-u") (lookup-key global-map (kbd "C-c")))
-(my-map-set-key (kbd "C-e") (lookup-key global-map (kbd "C-q")))
-(my-map-set-key (kbd "C-,") (lookup-key global-map (kbd "C-g")))
-(my-map-set-key (kbd "C-b") (lookup-key global-map (kbd "C-z")))
-(my-map-set-key (kbd "M-'") (lookup-key global-map (kbd "M-o")))
+(my-map-remap-key (kbd "C-h") (kbd "C-."))
+(my-map-remap-key (kbd "C-u") (kbd "C-p"))
+(my-map-remap-key (kbd "C-c") (kbd "C-u"))
+(my-map-remap-key (kbd "C-q") (kbd "C-e"))
+(my-map-remap-key (kbd "C-g") (kbd "C-,"))
+(my-map-remap-key (kbd "C-z") (kbd "C-b"))
+(my-map-remap-key (kbd "M-o") (kbd "M-'"))
+(my-map-remap-key (kbd "M-p") (kbd "M-t"))
+;; This is just a funny coincidence...
+(my-map-remap-key (kbd "M-n") (kbd "M-n"))
 
-(global-unset-key (kbd "C-n"))
-(global-unset-key (kbd "C-p"))
-(global-unset-key (kbd "C-f"))
-(global-unset-key (kbd "C-b"))
-(global-unset-key (kbd "C-a"))
-(global-unset-key (kbd "C-e"))
+;; (global-unset-key (kbd "C-n"))
+;; (global-unset-key (kbd "C-p"))
+;; (global-unset-key (kbd "C-f"))
+;; (global-unset-key (kbd "C-b"))
+;; (global-unset-key (kbd "C-a"))
+;; (global-unset-key (kbd "C-e"))
 
-(global-unset-key (kbd "<up>"))
-(global-unset-key (kbd "<down>"))
-(global-unset-key (kbd "<left>"))
-(global-unset-key (kbd "<right>"))
-(global-unset-key (kbd "<prior>"))
-(global-unset-key (kbd "<next>"))
+;; (global-unset-key (kbd "<up>"))
+;; (global-unset-key (kbd "<down>"))
+;; (global-unset-key (kbd "<left>"))
+;; (global-unset-key (kbd "<right>"))
+;; (global-unset-key (kbd "<prior>"))
+;; (global-unset-key (kbd "<next>"))
 
-(global-unset-key (kbd "M-n"))
-(global-unset-key (kbd "M-p"))
-(global-unset-key (kbd "M-f"))
-(global-unset-key (kbd "M-b"))
-(global-unset-key (kbd "M-a"))
-(global-unset-key (kbd "M-e"))
+;; (global-unset-key (kbd "M-n"))
+;; (global-unset-key (kbd "M-p"))
+;; (global-unset-key (kbd "M-f"))
+;; (global-unset-key (kbd "M-b"))
+;; (global-unset-key (kbd "M-a"))
+;; (global-unset-key (kbd "M-e"))
 
-(global-unset-key (kbd "<C-up>"))
-(global-unset-key (kbd "<C-down>"))
-(global-unset-key (kbd "<C-left>"))
-(global-unset-key (kbd "<C-right>"))
+;; (global-unset-key (kbd "<C-up>"))
+;; (global-unset-key (kbd "<C-down>"))
+;; (global-unset-key (kbd "<C-left>"))
+;; (global-unset-key (kbd "<C-right>"))
 
-(global-unset-key (kbd "<M-up>"))
-(global-unset-key (kbd "<M-down>"))
-(global-unset-key (kbd "<M-left>"))
-(global-unset-key (kbd "<M-right>"))
+;; (global-unset-key (kbd "<M-up>"))
+;; (global-unset-key (kbd "<M-down>"))
+;; (global-unset-key (kbd "<M-left>"))
+;; (global-unset-key (kbd "<M-right>"))
 
-(global-unset-key (kbd "<backspace>"))
-(global-unset-key (kbd "DEL"))
-(global-unset-key (kbd "<deletechar>"))
-(global-unset-key (kbd "<C-backspace>"))
-(global-unset-key (kbd "<M-backspace>"))
+;; (global-unset-key (kbd "<backspace>"))
+;; (global-unset-key (kbd "DEL"))
+;; (global-unset-key (kbd "<deletechar>"))
+;; (global-unset-key (kbd "<C-backspace>"))
+;; (global-unset-key (kbd "<M-backspace>"))
+
+;; (global-unset-key (kbd "C-x o"))
+;; (global-unset-key (kbd "M-x"))
 
 ;; Cursor Movement Bindings
-(my-map-set-key (kbd "C-h") 'backward-char)
-(my-map-set-key (kbd "C-t") 'previous-line)
-(my-map-set-key (kbd "C-n") 'next-line)
-(my-map-set-key (kbd "C-s") 'forward-char)
+(my-map-bind-key (kbd "C-h") 'backward-char)
+(my-map-bind-key (kbd "C-t") 'previous-line)
+(my-map-bind-key (kbd "C-n") 'next-line)
+(my-map-bind-key (kbd "C-s") 'forward-char)
 
-(my-map-set-key (kbd "M-h") 'left-word)
-(my-map-set-key (kbd "M-t") 'backward-paragraph)
-(my-map-set-key (kbd "M-n") 'forward-paragraph)
-(my-map-set-key (kbd "M-s") 'right-word)
+(my-map-bind-key (kbd "M-h") 'left-word)
+(my-map-bind-key (kbd "M-t") 'backward-paragraph)
+(my-map-bind-key (kbd "M-n") 'forward-paragraph)
+(my-map-bind-key (kbd "M-s") 'right-word)
 
-(my-map-set-key (kbd "M-H") 'beginning-of-line)
-(my-map-set-key (kbd "M-T") 'scroll-down-command)
-(my-map-set-key (kbd "M-N") 'scroll-up-command)
-(my-map-set-key (kbd "M-S") 'end-of-line)
+(my-map-bind-key (kbd "M-H") 'beginning-of-line)
+(my-map-bind-key (kbd "M-T") 'scroll-down-command)
+(my-map-bind-key (kbd "M-N") 'scroll-up-command)
+(my-map-bind-key (kbd "M-S") 'end-of-line)
 
 ;; (my-map-set-key (kbd "C-v") 'beginning-of-line)
 ;; (my-map-set-key (kbd "C-z") 'end-of-line)
 
 ;; Kill Bindings
-(my-map-set-key (kbd "C-g") 'backward-delete-char)
-(my-map-set-key (kbd "C-c") 'nil)
-(my-map-set-key (kbd "C-r") 'nil)
-(my-map-set-key (kbd "C-l") 'delete-char)
+(my-map-bind-key (kbd "C-g") 'backward-delete-char)
+(my-map-bind-key (kbd "C-c") 'nil)
+(my-map-bind-key (kbd "C-r") 'nil)
+(my-map-bind-key (kbd "C-l") 'delete-char)
 
-(my-map-set-key (kbd "M-g") 'backward-kill-word)
-(my-map-set-key (kbd "M-c") 'backward-kill-paragraph)
-(my-map-set-key (kbd "M-r") 'kill-paragraph)
-(my-map-set-key (kbd "M-l") 'kill-word)
+(my-map-bind-key (kbd "M-g") 'backward-kill-word)
+(my-map-bind-key (kbd "M-c") 'backward-kill-paragraph)
+(my-map-bind-key (kbd "M-r") 'kill-paragraph)
+(my-map-bind-key (kbd "M-l") 'kill-word)
 
-(my-map-set-key (kbd "M-G") 'backward-kill-line)
-(my-map-set-key (kbd "M-C") 'nil)
-(my-map-set-key (kbd "M-R") 'nil)
-(my-map-set-key (kbd "M-L") 'kill-line)
+(my-map-bind-key (kbd "M-G") 'backward-kill-line)
+(my-map-bind-key (kbd "M-C") 'nil)
+(my-map-bind-key (kbd "M-R") 'nil)
+(my-map-bind-key (kbd "M-L") 'kill-line)
 
 ;; Bindings for window movement
-(my-map-set-key (kbd "C-M-h") 'windmove-left)
-(my-map-set-key (kbd "C-M-t") 'windmove-up)
-(my-map-set-key (kbd "C-M-n") 'windmove-down)
-(my-map-set-key (kbd "C-M-s") 'windmove-right)
-(global-unset-key (kbd "C-x o"))
+(my-map-bind-key (kbd "C-M-h") 'windmove-left)
+(my-map-bind-key (kbd "C-M-t") 'windmove-up)
+(my-map-bind-key (kbd "C-M-n") 'windmove-down)
+(my-map-bind-key (kbd "C-M-s") 'windmove-right)
 
-(my-map-set-key (kbd "C-a") 'isearch-backward)
-(my-map-set-key (kbd "C-o") 'isearch-forward)
-(my-map-set-key (kbd "M-a") 'isearch-backward-regexp)
-(my-map-set-key (kbd "M-o") 'isearch-forward-regexp)
-(my-map-set-key (kbd "C-;") 'query-replace-string)
-(my-map-set-key (kbd "C-q") 'query-replace-regexp)
-(my-map-set-key (kbd "M-;") 'replace-string)
-(my-map-set-key (kbd "M-q") 'replace-regexp)
+
+(my-map-bind-key (kbd "C-a") 'isearch-backward)
+(my-map-bind-key (kbd "C-o") 'isearch-forward)
+(my-map-bind-key (kbd "M-a") 'isearch-backward-regexp)
+(my-map-bind-key (kbd "M-o") 'isearch-forward-regexp)
+(my-map-bind-key (kbd "C-;") 'query-replace)
+(my-map-bind-key (kbd "C-q") 'query-replace-regexp)
+(my-map-bind-key (kbd "M-;") 'replace-string)
+(my-map-bind-key (kbd "M-q") 'replace-regexp)
 
 (define-key isearch-mode-map (kbd "C-a") 'isearch-repeat-backward)
 (define-key isearch-mode-map (kbd "C-o") 'isearch-repeat-forward)
@@ -284,74 +298,140 @@
 
 
 ;; Alternate binding for M-x
-(my-map-set-key (kbd "C-x RET") 'execute-extended-command)
-(global-unset-key (kbd "M-x"))
+(my-map-bind-key (kbd "C-x RET") 'execute-extended-command)
 
-(my-map-set-key (kbd "C-b x") 'close-and-kill-next-pane)
-(my-map-set-key (kbd "C-b z") 'close-and-kill-this-pane)
-t
+(my-map-bind-key (kbd "C-b x") 'close-and-kill-next-pane)
+(my-map-bind-key (kbd "C-b z") 'close-and-kill-this-pane)
+
 ;; Keybindings to the X clipboard
-(my-map-set-key (kbd "s-u") 'clipboard-yank)
-(my-map-set-key (kbd "s-e") 'clipboard-kill-ring-save)
-(my-map-set-key (kbd "C-u v") 'clipboard-yank)
-(my-map-set-key (kbd "C-u c") 'clipboard-kill-ring-save)
+(my-map-bind-key (kbd "s-u") 'clipboard-yank)
+(my-map-bind-key (kbd "s-e") 'clipboard-kill-ring-save)
+(my-map-bind-key (kbd "C-u v") 'clipboard-yank)
+(my-map-bind-key (kbd "C-u c") 'clipboard-kill-ring-save)
 
 ;; Delete trailing whitespace
-(my-map-set-key (kbd "C-x t") 'delete-trailing-whitespace)
+(my-map-bind-key (kbd "C-x t") 'delete-trailing-whitespace)
 
 ;; Line wrap at right edge of screen
-(my-map-set-key (kbd "C-u t") 'toggle-truncate-lines)
+(my-map-bind-key (kbd "C-u t") 'toggle-truncate-lines)
 
 ;; Line numbers at left edge of screen
-(my-map-set-key (kbd "C-u l") 'linum-mode)
+(my-map-bind-key (kbd "C-u l") 'linum-mode)
 
 ;; replace buff-menu with bs-show
-(my-map-set-key (kbd "C-x C-b") 'bs-show)
+(my-map-bind-key (kbd "C-x C-b") 'bs-show)
 
 ;; Show-hide menu
-(my-map-set-key (kbd "C-x y") 'menu-bar-mode)
+(my-map-bind-key (kbd "C-x y") 'menu-bar-mode)
 
 ;; Show whitespace
-(my-map-set-key (kbd "C-u w") 'whitespace-mode)
+(my-map-bind-key (kbd "C-u w") 'whitespace-mode)
 
 ;; Jump to the specified line number
-(my-map-set-key (kbd "C-u a") 'goto-line)
+(my-map-bind-key (kbd "C-u a") 'goto-line)
 
 (autoload 'comment-region "newcomment" "")
-(my-map-set-key (kbd "C-'") 'comment-region)
+(my-map-bind-key (kbd "C-'") 'comment-region)
 (autoload 'uncomment-region "newcomment" "")
-(my-map-set-key (kbd "M-'") 'uncomment-region)
+(my-map-bind-key (kbd "M-'") 'uncomment-region)
 
-(my-map-set-key (kbd "C-u x") 'text-mode)
+(my-map-bind-key (kbd "C-u x") 'text-mode)
 
-(my-map-set-key (kbd "C-u g") 'magit-status)
+(my-map-bind-key (kbd "C-u g") 'magit-status)
 
-;; Enable the wip save minor mode for magit. wip-save still needs to be enabled on a
-;; per-repository basis
-(autoload 'global-magit-wip-save-mode "magit-wip" "")
-(global-magit-wip-save-mode 1)
+(defun my-keys-process-bindings ()
+  (setq my-keys-calc-remaps my-keys-remaps)
+  (setq my-keys-calc-shadowed nil)
+  ;; For each binding in my-keys-bindings, see if it already has a binding in global-map
+  ;; If so, save this as a remap association.
+  (dolist (b my-keys-bindings)
+    (if (cdr b)
+        (dolist (k (where-is-internal (cdr b) original-global-map))
+          (if (not (assoc k my-keys-calc-remaps))
+              (push (cons k (car b)) my-keys-calc-remaps)))))
+  ;; For each binding in my-keys-bindings, see what existing global binding (if any) it overrides.
+  ;; If a overriden binding is not rebound, add it to my-keys-calc-shadowed
+  (dolist (b my-keys-bindings)
+    (let ((f (lookup-key original-global-map (car b))))
+      (cond
+       ;; It didn't shadow an existing binding
+       ((not f) nil)
+       ;; We've rebound it explicitly
+       ((rassoc f my-keys-bindings) nil)
+       ;; It's been remapped
+       ((assoc (car b) my-keys-calc-remaps) nil)
+       ;; It's been shadowed
+       (t (push (cons (car b) f) my-keys-calc-shadowed))))))
 
-;; Keybinding to insert a fucking tab, rather than doing crazy indent
-(defun command-insert-tab ()
-  "Insert a tab character"
-  (interactive)
-  (insert "\t"))
-(my-map-set-key (kbd "<C-tab>") 'command-insert-tab)
+(defun my-keys-remap-keymap (m)
+  (if m
+      (let ((rebound))
+        (dolist (b my-keys-calc-remaps)
+          (let ((f (lookup-key m (car b))))
+            (if f (progn
+                    (push (cons (cdr b) f) rebound)
+                    (define-key m (car b) nil)))))
+        (dolist (b my-keys-bindings)
+          (define-key m (car b) nil))
+        (dolist (b rebound)
+          (define-key m (car b) (cdr b))))))
 
-(define-minor-mode my-keys-minor-mode
-  "A minor mode for providing global keybindings with precedence over
-any other loaded keymap."
-  t " my-keys" 'my-keys-minor-mode-map)
+(defun my-keys-apply-global ()
+  (my-keys-remap-keymap global-map)
+  (dolist (b my-keys-bindings)
+    (define-key global-map (car b) (cdr b))))
 
-(defadvice load (after give-my-keybindings-priority)
-  "Try to ensure that my keybindings always have priority."
-  (if (not (eq (car (car minor-mode-map-alist)) 'my-keys-minor-mode))
-      (let ((mykeys (assq 'my-keys-minor-mode minor-mode-map-alist)))
-        (assq-delete-all 'my-keys-minor-mode minor-mode-map-alist)
-        (add-to-list 'minor-mode-map-alist mykeys))))
-(ad-activate 'load)
+(defun my-keys-remap-minor-modes ()
+  (princ "my-keys-remap-minor-modes\n")
+  (dolist (a minor-mode-map-alist)
+    (princ (car a))
+    (princ "\n")
+    (if (not (get (car a) 'my-keys-remapped))
+        (progn
+          (my-keys-remap-keymap (cdr a))
+          (put (car a) 'my-keys-remapped t))))
+  (princ "my-keys-remap-minor-modes done\n"))
 
-(my-keys-minor-mode 1)
+(defun my-keys-remap-current-major-mode ()
+  (princ "my-keys-remap-current-major-mode: ")
+  (princ major-mode)
+  (princ "\n")
+  (if (not (get major-mode 'my-keys-remapped))
+      (progn
+        (my-keys-remap-keymap (current-local-map))
+        (put major-mode 'my-keys-remapped t)))
+  (princ "my-keys-remap-current-major-mode done\n"))
+
+(my-keys-process-bindings)
+(my-keys-apply-global)
+
+(add-hook 'after-change-major-mode-hook #'my-keys-remap-current-major-mode)
+(advice-add #'load :after (lambda (foo bar baz) (my-keys-remap-minor-modes)))
+
+;; ;; Keybinding to insert a fucking tab, rather than doing crazy indent
+;; (defun command-insert-tab ()
+;;   "Insert a tab character"
+;;   (interactive)
+;;   (insert "\t"))
+;; (my-map-bind-key (kbd "<C-tab>") 'command-insert-tab)
+
+
+
+;; (define-minor-mode my-keys-minor-mode
+;;   "A minor mode for providing global keybindings with precedence over
+;; any other loaded keymap."
+;;   t " my-keys" 'my-keys-minor-mode-map)
+
+;; (advice-add #'load :after
+;;             (lambda ()
+;;               (if (not (eq (car (car minor-mode-map-alist)) 'my-keys-minor-mode))
+;;                   (let ((mykeys (assq 'my-keys-minor-mode minor-mode-map-alist)))
+;;                     (assq-delete-all 'my-keys-minor-mode minor-mode-map-alist)
+;;                     (add-to-list 'minor-mode-map-alist mykeys)))))
+
+;; (my-keys-minor-mode 1)
+
+
 
 ;; Make emacs stop asking silly questions about changed files.
 ;; Somewhat unsafe, and a matter of taste.
@@ -383,6 +463,9 @@ any other loaded keymap."
         (haskell-cabal-mode . ".cabal")
         (markdown-mode . ".md")
         (markdown-mode . ".page")))
+
+(setq magic-mode-alist
+      '(("^format:\s-*org" . org-mode)))
 
 (defun tabstop-hook ()
   (define-key (current-local-map) (kbd "TAB") 'tab-to-tab-stop)
@@ -499,6 +582,12 @@ any other loaded keymap."
           ido-default-buffer-method 'selected-window
           ido-enable-flex-matching t
           ido-use-faces nil)))
+
+
+(global-magit-wip-save-mode 1)
+;; Enable the wip save minor mode for magit. wip-save still needs to be enabled on a
+;; per-repository basis
+(autoload 'global-magit-wip-save-mode "magit-wip" "")
 
 ;; monkey-patch magit to show patch on commit buffer
 (advice-add #'magit-key-mode-popup-committing :after
