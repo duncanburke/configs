@@ -150,10 +150,10 @@ my-keys-minor mode has precedence over any other loaded keymap."
 ;; confused with xmonad
 (global-unset-key (kbd "C-z"))
 
-;; Mirror of C-d
 (my-map-set-key (kbd "C-d") 'delete-char)
-;; TODO: get this to work
-;;(my-map-set-key (kbd "C-S-d") 'backward-delete-char)
+(my-map-set-key (kbd "M-d") 'delete-word)
+(my-map-set-key (kbd "C-h") 'backward-delete-char)
+(my-map-set-key (kbd "M-h") 'backward-delete-word)
 
 ;; Bindings for window movement
 (my-map-set-key (kbd "C-M-h") 'windmove-left)
