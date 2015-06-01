@@ -80,14 +80,53 @@
 
 ;; fundamental-mode
 
+;; help-mode
+
+(with-eval-after-load "help-mode"
+  (my-keys-remap-mode 'help-mode-map))
 
 ;; ido
+(defvar saved-ido-common-completion-map nil)
+(defvar saved-ido-file-dir-completion-map nil)
+(defvar saved-ido-file-completion-map nil)
+(defvar saved-ido-buffer-completion-map nil)
+(defvar saved-ido-completion-map nil)
+
 (add-hook-anon 'ido-setup-hook
-               (my-keys-remap-mode 'ido-completion-map)
-               (my-keys-remap-mode 'ido-common-completion-map)
-               (my-keys-remap-mode 'ido-file-dir-completion-map)
-               (my-keys-remap-mode 'ido-file-completion-map)
-               (my-keys-remap-mode 'ido-buffer-completion-map)
+               (if saved-ido-common-completion-map
+                   (progn
+                     (setq ido-common-completion-map saved-ido-common-completion-map
+                           ido-file-dir-completion-map saved-ido-file-dir-completion-map
+                           ido-file-completion-map saved-ido-file-completion-map
+                           ido-completion-map saved-ido-completion-map))
+                 (progn
+                   (my-keys-remap-mode 'ido-common-completion-map
+                                       `((,(kbd "C-h") . ido-magic-backward-char)
+                                         (,(kbd "C-s") . ido-magic-forward-char)
+                                         (,(kbd "C-l") . ido-magic-delete-char)
+                                         (,(kbd "C-,") . exit-minibuffer)
+                                         (,(kbd "C-.") . nil)
+                                         (,(kbd "C-g") . delete-backward-char)
+                                         (,(kbd "M-g") . backward-kill-word)
+                                         (,(kbd "M-h") . ido-prev-match)
+                                         (,(kbd "M-s") . ido-next-match)))
+                   (my-keys-remap-mode 'ido-file-dir-completion-map
+                                       `((,(kbd "C-c") . ido-delete-backward-updir)
+                                         (,(kbd "M-c") . ido-delete-backward-word-updir)
+                                         (,(kbd "C-t") . ido-prev-match-dir)
+                                         (,(kbd "C-n") . ido-next-match-dir)
+                                         (,(kbd "M-t") . ido-prev-work-directory)
+                                         (,(kbd "M-n") . ido-next-work-directory)
+                                         (,(kbd "C-f") . ido-fallback-command)
+                                         (,(kbd "C-b") . ido-enter-dired)))
+                   (my-keys-remap-mode 'ido-file-completion-map)
+                   (my-keys-remap-mode 'ido-buffer-completion-map)
+                   (my-keys-remap-mode 'ido-completion-map)
+                   (setq saved-ido-common-completion-map ido-common-completion-map
+                         saved-ido-file-dir-completion-map ido-file-dir-completion-map
+                         saved-ido-file-completion-map ido-file-completion-map
+                         saved-ido-buffer-completion-map ido-buffer-completion-map
+                         saved-ido-completion-map ido-completion-map)))
                (setq ido-enable-flex-matching t
                      ido-use-filename-at-point nil
                      ido-create-new-buffer 'always
@@ -107,21 +146,22 @@
 (with-eval-after-load "isearch"
   (my-keys-remap-mode
    'isearch-mode-map
-   `((,(kbd "C-a") . 'isearch-repeat-backward)
-     (,(kbd "C-o") . 'isearch-repeat-forward)
-     (,(kbd "M-a") . 'isearch-repeat-backward)
-     (,(kbd "M-o") . 'isearch-repeat-forward)
-     (,(kbd "C-,") . 'isearch-abort)
-     (,(kbd "C-e") . 'isearch-quote-char)
-     (,(kbd "M-p") . 'isearch-ring-retreat)
-     (,(kbd "M-t") . 'isearch-ring-advance)))
+   `((,(kbd "C-a") . isearch-repeat-backward)
+     (,(kbd "C-o") . isearch-repeat-forward)
+     (,(kbd "M-a") . isearch-repeat-backward)
+     (,(kbd "M-o") . isearch-repeat-forward)
+     (,(kbd "C-,") . isearch-abort)
+     (,(kbd "C-e") . isearch-quote-char)
+     (,(kbd "M-p") . isearch-ring-retreat)
+     (,(kbd "M-t") . isearch-ring-advance)
+     (,(kbd "C-g") . isearch-delete-char)))
   (my-keys-remap-mode
    'minibuffer-local-isearch-map
-   `((,(kbd "TAB") . 'isearch-complete-edit)
-     (,(kbd "C-a") . 'isearch-reverse-exit-minibuffer)
-     (,(kbd "C-o") . 'isearch-forward-exit-minibuffer)
-     (,(kbd "M-a") . 'isearch-reverse-exit-minibuffer)
-     (,(kbd "M-o") . 'isearch-forward-exit-minibuffer))))
+   `((,(kbd "TAB") . isearch-complete-edit)
+     (,(kbd "C-a") . isearch-reverse-exit-minibuffer)
+     (,(kbd "C-o") . isearch-forward-exit-minibuffer)
+     (,(kbd "M-a") . isearch-reverse-exit-minibuffer)
+     (,(kbd "M-o") . isearch-forward-exit-minibuffer))))
 
 
 ;; lisp-mode
@@ -290,7 +330,7 @@
  (flyspell-mode)
  (visual-line-mode))
 
-(push '("format:\s-*markdown" . org-mode) magic-mode-alist)
+(push '("\\(.\\|\n\\)*format:\\s-*markdown" . markdown-mode) magic-mode-alist)
 (mode-extension #'markdown-mode ".md")
 
 ;; org
@@ -305,7 +345,7 @@
        org-startup-indented nil
        org-todo-keywords '((sequence "TODO" "DOING" "|" "DONE"))))
 
-(push '("format:\s-*org" . org-mode) magic-mode-alist)
+(push '("\\(.\\|\n\\)*format:\\s-*org" . org-mode) magic-mode-alist)
 
 ;; rainbow-blocks-mode
 
