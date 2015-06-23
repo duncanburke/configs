@@ -1,6 +1,3 @@
-
-(enable-debug)
-
 (let ((minibuffer-bindings
        `((,(kbd "C-n") . next-history-element)
          (,(kbd "C-t") . previous-history-element)
@@ -12,6 +9,9 @@
                       minibuffer-bindings)
   (my-keys-remap-mode 'minibuffer-local-completion-map
                       minibuffer-bindings))
+
+(my-keys-remap-mode 'multi-query-replace-map)
+(my-keys-remap-mode 'query-replace-map)
 
 ;; Inbuilt Modes
 ;; -------------
@@ -74,6 +74,10 @@
 (with-eval-after-load "edmacro"
   (my-keys-remap-mode 'edmacro-mode-map))
 
+;; eshell
+(with-eval-after-load "eshell"
+  (my-keys-remap-mode 'eshell-mode-map))
+
 ;; flyspell-mode
 (with-eval-after-load "flyspell"
   (my-keys-remap-mode 'flyspell-mode-map))
@@ -101,22 +105,20 @@
                            ido-completion-map saved-ido-completion-map))
                  (progn
                    (my-keys-remap-mode 'ido-common-completion-map
-                                       `((,(kbd "C-h") . ido-magic-backward-char)
-                                         (,(kbd "C-s") . ido-magic-forward-char)
-                                         (,(kbd "C-l") . ido-magic-delete-char)
-                                         (,(kbd "C-,") . exit-minibuffer)
+                                       `((,(kbd "C-h") . nil)
+                                         (,(kbd "C-s") . nil)
+                                         (,(kbd "C-l") . nil)
+                                         (,(kbd "C-,") . ido-exit-minibuffer)
                                          (,(kbd "C-.") . nil)
-                                         (,(kbd "C-g") . delete-backward-char)
-                                         (,(kbd "M-g") . backward-kill-word)
-                                         (,(kbd "M-h") . ido-prev-match)
-                                         (,(kbd "M-s") . ido-next-match)))
+                                         (,(kbd "C-g") . nil)
+                                         (,(kbd "M-g") . nil)
+                                         (,(kbd "C-t") . ido-prev-match)
+                                         (,(kbd "C-n") . ido-next-match)))
                    (my-keys-remap-mode 'ido-file-dir-completion-map
-                                       `((,(kbd "C-c") . ido-delete-backward-updir)
+                                       `((,(kbd "C-g") . ido-delete-backward-updir)
                                          (,(kbd "M-c") . ido-delete-backward-word-updir)
                                          (,(kbd "C-t") . ido-prev-match-dir)
                                          (,(kbd "C-n") . ido-next-match-dir)
-                                         (,(kbd "M-t") . ido-prev-work-directory)
-                                         (,(kbd "M-n") . ido-next-work-directory)
                                          (,(kbd "C-f") . ido-fallback-command)
                                          (,(kbd "C-b") . ido-enter-dired)))
                    (my-keys-remap-mode 'ido-file-completion-map)
@@ -133,7 +135,8 @@
                      ido-default-file-method 'selected-window
                      ido-default-buffer-method 'selected-window
                      ido-enable-flex-matching t
-                     ido-use-faces nil))
+                     ido-use-faces nil
+                     ido-auto-merge-work-directories-length -1))
 
 (ido-mode 1)
 (ido-everywhere 1)
@@ -198,6 +201,10 @@
   (define-key tabulated-list-mode-map "p" nil)
   (define-key tabulated-list-mode-map "t" 'previous-line))
 
+;; term
+(with-eval-after-load "term"
+  (my-keys-remap-mode 'term-mode-map))
+
 ;; text-mode
 (with-eval-after-load "text-mode"
   (my-keys-remap-mode 'text-mode-map))
@@ -206,6 +213,7 @@
 
 ;; Packages
 ;; --------
+(add-to-list 'load-path "/home/duncan/.emacs.d/ghc-mod/")
 
 ;; company
 ;; hooks: company-completion-(started|cancelled|finished)-hook
@@ -231,8 +239,12 @@
   (flx-ido-mode 1))
 
 ;; ghc
-(use-package ghc
-  :ensure t)
+;; (use-package ghc
+;;   :ensure t)
+
+(setq ghc-interactive-command "ghc-modi")
+(autoload 'ghc-init "ghc" nil t)
+(autoload 'ghc-debug "ghc" nil t)
 
 ;; git-commit-mode
 (use-package git-commit-mode
@@ -317,20 +329,30 @@
   (my-keys-remap-mode 'magit-process-mode-map)
   (my-keys-remap-mode 'magit-section-jump-map))
 
+;; monkey-patch magit to show patch on commit buffer
+(advice-add #'magit-key-mode-popup-committing :after
+            (lambda ()
+              (magit-key-mode-toggle-option (quote committing) "--verbose")))
+
 ;; markdown-mode
 (use-package markdown-mode
   :ensure t
   :init
   (setq magit-last-seen-setup-instructions "1.4.0")
   :config
-  (my-keys-remap-mode 'markdown-mode-map))
+  (my-keys-remap-mode
+   'markdown-mode-map
+   `((,(kbd "M-h") . nil)
+     (,(kbd "M-t") . nil)
+     (,(kbd "M-n") . nil)
+     (,(kbd "M-s") . nil))))
 
 (add-hook-anon
  'markdown-mode-hook
  (flyspell-mode)
  (visual-line-mode))
 
-(push '("\\(.\\|\n\\)*format:\\s-*markdown" . markdown-mode) magic-mode-alist)
+(push '("---\\(.\\|\n\\)*format:\\s-*markdown" . markdown-mode) magic-mode-alist)
 (mode-extension #'markdown-mode ".md")
 
 ;; org
@@ -345,7 +367,7 @@
        org-startup-indented nil
        org-todo-keywords '((sequence "TODO" "DOING" "|" "DONE"))))
 
-(push '("\\(.\\|\n\\)*format:\\s-*org" . org-mode) magic-mode-alist)
+(push '("---\\(.\\|\n\\)*format:\\s-*org" . org-mode) magic-mode-alist)
 
 ;; rainbow-blocks-mode
 
