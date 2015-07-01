@@ -104,8 +104,11 @@
 (defun safe-undefine-key (m k)
   (let ((l (lookup-key m k)))
     (cond
+     ;; key is too long, undefine the appropriate prefix
      ((numberp l) (define-key m (substring k 0 l) nil))
+     ;; key is already undefined
      ((not l))
+     ;; undefine the key
      (t (define-key m k nil)))))
 
 (defun my-keys-remap-mode (m &optional defb)
