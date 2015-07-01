@@ -353,7 +353,8 @@
 (add-hook-anon
  'markdown-mode-hook
  (flyspell-mode)
- (visual-line-mode))
+ (visual-line-mode)
+ (wc-mode))
 
 (push '("---\\(.\\|\n\\)*format:\\s-*markdown" . markdown-mode) magic-mode-alist)
 (mode-extension #'markdown-mode ".md")
@@ -382,6 +383,11 @@
   :ensure t)
 
 (provide 'my-modes)
+
+;; wc-mode
+
+(use-package wc-mode
+  :ensure t)
 
 ;; yaml-mode
 (use-package yaml-mode
