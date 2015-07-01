@@ -398,3 +398,16 @@
 (use-package yaml-mode
   :ensure t)
 (mode-extension #'yaml-mode ".yaml")
+
+
+;; Custom Modes
+
+(define-derived-mode writing-mode
+  markdown-mode "Writing"
+  "Major mode for writing large bodies of text."
+  (interactive)
+  (visual-line-mode)
+  (setq visual-fill-column-width 95)
+  (visual-fill-column-mode)
+  (flyspell-mode)
+  (wc-mode))
