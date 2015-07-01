@@ -384,6 +384,11 @@
 
 (provide 'my-modes)
 
+;; visual-fill-column
+
+(use-package visual-fill-column
+  :ensure t)
+
 ;; wc-mode
 
 (use-package wc-mode
