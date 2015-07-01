@@ -185,6 +185,8 @@
 (with-eval-after-load "prog-mode"
   (my-keys-remap-mode 'prog-mode-map))
 
+(add-hook 'prog-mode-hook #'linum-hook)
+
 ;; python-mode
 (with-eval-after-load "python"
   (my-keys-remap-mode 'python-mode-map
@@ -210,6 +212,7 @@
   (my-keys-remap-mode 'text-mode-map))
 
 (add-hook 'text-mode-hook #'tabstop-hook)
+(add-hook 'text-mode-hook #'linum-hook)
 
 ;; Packages
 ;; --------

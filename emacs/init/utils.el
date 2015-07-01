@@ -80,6 +80,9 @@
         indent-tabs-mode t
         tab-stop-list (number-sequence 4 200 4)))
 
+(defun linum-hook ()
+  (linum-mode))
+
 (defun mode-extension (mode extension)
   (add-to-list 'auto-mode-alist `(,(concat "\\" extension "$") . ,mode)))
 

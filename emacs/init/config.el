@@ -16,7 +16,6 @@
 (menu-bar-mode -1)
 (fringe-mode 0)
 (scroll-bar-mode -1)
-(global-linum-mode)
 (column-number-mode)
 
 (setq-default
