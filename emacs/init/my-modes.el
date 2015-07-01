@@ -382,3 +382,8 @@
   :ensure t)
 
 (provide 'my-modes)
+
+;; yaml-mode
+(use-package yaml-mode
+  :ensure t)
+(mode-extension #'yaml-mode ".yaml")
