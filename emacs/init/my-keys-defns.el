@@ -111,7 +111,7 @@
      ;; undefine the key
      (t (define-key m k nil)))))
 
-(defun my-keys-remap-mode (m &optional defb)
+(defun my-keys-remap-mode-internal (m &optional defb)
   (let* ((rebound)
          (conflicts)
          (mv (symbol-value m))
@@ -157,5 +157,10 @@
       (define-key mv (car b) (cdr b)))
     (put m 'my-keys-rebound (push rebound (get m 'my-keys-rebound)))
     (put m 'my-keys-conflicts conflicts)))
+
+(defmacro my-keys-remap-mode (m &optional defb)
+  `(my-keys-remap-mode-internal ,m
+                                (mapcar (lambda (b) (cons (kbd (car b)) (cdr b)))
+                                        ,defb)))
 
 (provide 'my-keys-defns)

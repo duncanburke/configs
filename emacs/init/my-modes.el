@@ -2,10 +2,10 @@
 (require 'utils)
 
 (let ((minibuffer-bindings
-       `((,(kbd "C-n") . next-history-element)
-         (,(kbd "C-t") . previous-history-element)
-         (,(kbd "M-n") . next-matching-history-element)
-         (,(kbd "C-t") . previous-matching-history-element))))
+       '(("C-n" . next-history-element)
+         ("C-t" . previous-history-element)
+         ("M-n" . next-matching-history-element)
+         ("C-t" . previous-matching-history-element))))
   (my-keys-remap-mode 'minibuffer-local-map
                       minibuffer-bindings)
   (my-keys-remap-mode 'minibuffer-local-ns-map
@@ -22,10 +22,10 @@
 ;; bs
 (with-eval-after-load "bs"
   (my-keys-remap-mode 'bs-mode-map
-                      `((,(kbd "M-s") . scroll-right)
-                        (,(kbd "M-h") . scroll-left)
-                        (,(kbd "C-t") . bs-up)
-                        (,(kbd "C-n") . bs-down))))
+                      '(("M-s" . scroll-right)
+                        ("M-h" . scroll-left)
+                        ("C-t" . bs-up)
+                        ("C-n" . bs-down))))
 
 ;; cc-mode
 (with-eval-after-load "cc-mode"
@@ -56,7 +56,7 @@
 (with-eval-after-load "comint"
   (my-keys-remap-mode
    'comint-mode-map
-   `((,(kbd "M-a") . comint-history-isearch-backward-regexp))))
+   '(("M-a" . comint-history-isearch-backward-regexp))))
 
 ;; conf-mode
 ;; conf-unix-mode, conf-windows-mode, conf-space-mode, conf-colon-mode
@@ -108,22 +108,22 @@
                            ido-completion-map saved-ido-completion-map))
                  (progn
                    (my-keys-remap-mode 'ido-common-completion-map
-                                       `((,(kbd "C-h") . nil)
-                                         (,(kbd "C-s") . nil)
-                                         (,(kbd "C-l") . nil)
-                                         (,(kbd "C-,") . ido-exit-minibuffer)
-                                         (,(kbd "C-.") . nil)
-                                         (,(kbd "C-g") . nil)
-                                         (,(kbd "M-g") . nil)
-                                         (,(kbd "C-t") . ido-prev-match)
-                                         (,(kbd "C-n") . ido-next-match)))
+                                       '(("C-h" . nil)
+                                         ("C-s" . nil)
+                                         ("C-l" . nil)
+                                         ("C-," . ido-exit-minibuffer)
+                                         ("C-." . nil)
+                                         ("C-g" . nil)
+                                         ("M-g" . nil)
+                                         ("C-t" . ido-prev-match)
+                                         ("C-n" . ido-next-match)))
                    (my-keys-remap-mode 'ido-file-dir-completion-map
-                                       `((,(kbd "C-g") . ido-delete-backward-updir)
-                                         (,(kbd "M-c") . ido-delete-backward-word-updir)
-                                         (,(kbd "C-t") . ido-prev-match-dir)
-                                         (,(kbd "C-n") . ido-next-match-dir)
-                                         (,(kbd "C-f") . ido-fallback-command)
-                                         (,(kbd "C-b") . ido-enter-dired)))
+                                       '(("C-g" . ido-delete-backward-updir)
+                                         ("M-c" . ido-delete-backward-word-updir)
+                                         ("C-t" . ido-prev-match-dir)
+                                         ("C-n" . ido-next-match-dir)
+                                         ("C-f" . ido-fallback-command)
+                                         ("C-b" . ido-enter-dired)))
                    (my-keys-remap-mode 'ido-file-completion-map)
                    (my-keys-remap-mode 'ido-buffer-completion-map)
                    (my-keys-remap-mode 'ido-completion-map)
@@ -152,22 +152,22 @@
 (with-eval-after-load "isearch"
   (my-keys-remap-mode
    'isearch-mode-map
-   `((,(kbd "C-a") . isearch-repeat-backward)
-     (,(kbd "C-o") . isearch-repeat-forward)
-     (,(kbd "M-a") . isearch-repeat-backward)
-     (,(kbd "M-o") . isearch-repeat-forward)
-     (,(kbd "C-,") . isearch-abort)
-     (,(kbd "C-e") . isearch-quote-char)
-     (,(kbd "M-p") . isearch-ring-retreat)
-     (,(kbd "M-t") . isearch-ring-advance)
-     (,(kbd "C-g") . isearch-delete-char)))
+   '(("C-a" . isearch-repeat-backward)
+     ("C-o" . isearch-repeat-forward)
+     ("M-a" . isearch-repeat-backward)
+     ("M-o" . isearch-repeat-forward)
+     ("C-," . isearch-abort)
+     ("C-e" . isearch-quote-char)
+     ("M-p" . isearch-ring-retreat)
+     ("M-t" . isearch-ring-advance)
+     ("C-g" . isearch-delete-char)))
   (my-keys-remap-mode
    'minibuffer-local-isearch-map
-   `((,(kbd "TAB") . isearch-complete-edit)
-     (,(kbd "C-a") . isearch-reverse-exit-minibuffer)
-     (,(kbd "C-o") . isearch-forward-exit-minibuffer)
-     (,(kbd "M-a") . isearch-reverse-exit-minibuffer)
-     (,(kbd "M-o") . isearch-forward-exit-minibuffer))))
+   '(("TAB" . isearch-complete-edit)
+     ("C-a" . isearch-reverse-exit-minibuffer)
+     ("C-o" . isearch-forward-exit-minibuffer)
+     ("M-a" . isearch-reverse-exit-minibuffer)
+     ("M-o" . isearch-forward-exit-minibuffer))))
 
 
 ;; lisp-mode
@@ -193,7 +193,7 @@
 ;; python-mode
 (with-eval-after-load "python"
   (my-keys-remap-mode 'python-mode-map
-                      '(,(kbd "RET") . 'newline-and-indent))
+                      '("RET" . 'newline-and-indent))
   (my-keys-remap-mode 'inferior-python-mode-map))
 
 (add-hook-anon 'python-mode-hook
@@ -363,10 +363,10 @@
    (require 'markdown-mode)
    (my-keys-remap-mode
     'markdown-mode-map
-    `((,(kbd "M-h") . nil)
-      (,(kbd "M-t") . nil)
-      (,(kbd "M-n") . nil)
-      (,(kbd "M-s") . nil)))))
+    '(("M-h" . nil)
+      ("M-t" . nil)
+      ("M-n" . nil)
+      ("M-s" . nil)))))
 
 (add-hook-anon
  'markdown-mode-hook
