@@ -1,3 +1,6 @@
+(require 'el-helper)
+(require 'utils)
+
 (let ((minibuffer-bindings
        `((,(kbd "C-n") . next-history-element)
          (,(kbd "C-t") . previous-history-element)
@@ -216,64 +219,73 @@
 
 ;; Packages
 ;; --------
-(add-to-list 'load-path "/home/duncan/.emacs.d/ghc-mod/")
 
 ;; company
 ;; hooks: company-completion-(started|cancelled|finished)-hook
-(use-package company
-  :ensure t
-  :config
-  (my-keys-remap-mode 'company-mode-map)
-  (my-keys-remap-mode 'company-active-map)
-  (add-to-list 'company-backends 'company-ghc))
+(el-register-package
+ :name company
+ :type elpa
+ :after
+ (progn
+   (require 'company)
+   (my-keys-remap-mode 'company-mode-map)
+   (my-keys-remap-mode 'company-active-map)
+   (add-to-list 'company-backends 'company-ghc)))
 
 ;; company-ghc
-(use-package company-ghc
-  :ensure t)
+(el-register-package
+ :name company-ghc
+ :type elpa)
 
 ;; flx
-(use-package flx
-  :ensure t)
+(el-register-package
+ :name flx
+ :type elpa)
 
 ;; flx-ido
-(use-package flx-ido
-  :ensure t
-  :config
-  (flx-ido-mode 1))
+(el-register-package
+ :name flx-ido
+ :type elpa
+ :after
+ (flx-ido-mode))
 
 ;; ghc
-;; (use-package ghc
-;;   :ensure t)
+(el-use-package "ac-ghc-mod")
+(el-register-package
+ :name ghc-mod
+ :type github
+ :pkgname "kazu-yamamoto/ghc-mod"
+ :load-path "elisp")
 
 (setq ghc-interactive-command "ghc-modi")
 (autoload 'ghc-init "ghc" nil t)
 (autoload 'ghc-debug "ghc" nil t)
 
 ;; git-commit-mode
-(use-package git-commit-mode
-  :ensure t
-  ;; magit modifies git-commit-mode-map so we defer the
-  ;; remapping to after magit
-  )
+(el-register-package
+ :name git-commit-mode
+ :type elpa)
 
 ;; git-rebase-mode
-(use-package git-rebase-mode
-  :ensure t
-  :config
-  (my-keys-remap-mode 'git-rebase-mode-map))
+(el-register-package
+ :name git-rebase-mode
+ :type elpa)
 
 ;; gitconfig-mode
-(use-package gitconfig-mode
-  :ensure t)
+(el-register-package
+ :name gitconfig-mode
+ :type elpa)
 
 ;; gitignore-mode
-(use-package gitignore-mode
-  :ensure t)
+(el-register-package
+ :name gitignore-mode
+ :type elpa)
 
 ;; haskell-mode
 (defvar haskell-mode-remapped nil)
-(use-package haskell-mode
-  :ensure t)
+(el-register-package
+ :name haskell-mode
+ :type elpa)
 
 (with-eval-after-load "haskell-cabal"
   (my-keys-remap-mode 'haskell-cabal-mode-map))
@@ -310,27 +322,32 @@
 (mode-extension #'haskell-mode ".hs-boot")
 (mode-extension #'haskell-cabal-mode ".cabal")
 
-
 ;; help-fns+
-(use-package help-fns+
-  :ensure t)
+(el-register-package
+ :name help-fns+
+ :type elpa)
 
 ;; magit
-(use-package magit
-  :ensure t
-  :config
-  (my-keys-remap-mode 'git-commit-mode-map)
-  (my-keys-remap-mode 'magit-mode-map)
-  (my-keys-remap-mode 'magit-commit-mode-map)
-  (my-keys-remap-mode 'magit-status-mode-map)
-  (my-keys-remap-mode 'magit-log-mode-map)
-  (my-keys-remap-mode 'magit-cherry-mode-map)
-  (my-keys-remap-mode 'magit-reflog-mode-map)
-  (my-keys-remap-mode 'magit-diff-mode-map)
-  (my-keys-remap-mode 'magit-wazzup-mode-map)
-  (my-keys-remap-mode 'magit-branch-manager-mode-map)
-  (my-keys-remap-mode 'magit-process-mode-map)
-  (my-keys-remap-mode 'magit-section-jump-map))
+(el-register-package
+ :name magit
+ :type elpa
+ :after
+ (progn
+   (require 'magit)
+   (setq magit-last-seen-setup-instructions "1.4.0")
+   (my-keys-remap-mode 'git-commit-mode-map)
+   (my-keys-remap-mode 'git-rebase-mode-map)
+   (my-keys-remap-mode 'magit-mode-map)
+   (my-keys-remap-mode 'magit-commit-mode-map)
+   (my-keys-remap-mode 'magit-status-mode-map)
+   (my-keys-remap-mode 'magit-log-mode-map)
+   (my-keys-remap-mode 'magit-cherry-mode-map)
+   (my-keys-remap-mode 'magit-reflog-mode-map)
+   (my-keys-remap-mode 'magit-diff-mode-map)
+   (my-keys-remap-mode 'magit-wazzup-mode-map)
+   (my-keys-remap-mode 'magit-branch-manager-mode-map)
+   (my-keys-remap-mode 'magit-process-mode-map)
+   (my-keys-remap-mode 'magit-section-jump-map)))
 
 ;; monkey-patch magit to show patch on commit buffer
 (advice-add #'magit-key-mode-popup-committing :after
@@ -338,17 +355,18 @@
               (magit-key-mode-toggle-option (quote committing) "--verbose")))
 
 ;; markdown-mode
-(use-package markdown-mode
-  :ensure t
-  :init
-  (setq magit-last-seen-setup-instructions "1.4.0")
-  :config
-  (my-keys-remap-mode
-   'markdown-mode-map
-   `((,(kbd "M-h") . nil)
-     (,(kbd "M-t") . nil)
-     (,(kbd "M-n") . nil)
-     (,(kbd "M-s") . nil))))
+(el-register-package
+ :name markdown-mode
+ :type elpa
+ :after
+ (progn
+   (require 'markdown-mode)
+   (my-keys-remap-mode
+    'markdown-mode-map
+    `((,(kbd "M-h") . nil)
+      (,(kbd "M-t") . nil)
+      (,(kbd "M-n") . nil)
+      (,(kbd "M-s") . nil)))))
 
 (add-hook-anon
  'markdown-mode-hook
@@ -360,10 +378,13 @@
 (mode-extension #'markdown-mode ".md")
 
 ;; org
-(use-package org
-  :ensure t
-  :config
-  (my-keys-remap-mode 'org-mode-map))
+(el-register-package
+ :name org
+ :type elpa
+ :after
+ (progn
+   (require 'org)
+   (my-keys-remap-mode 'org-mode-map)))
 
 (add-hook-anon
  'org-mode-hook
@@ -374,31 +395,41 @@
 (push '("---\\(.\\|\n\\)*format:\\s-*org" . org-mode) magic-mode-alist)
 
 ;; rainbow-blocks-mode
-
-(use-package rainbow-blocks
-  :ensure t)
+(el-register-package
+ :name rainbow-blocks
+ :type elpa)
 
 ;; smart-tabs-mode
-(use-package smart-tabs-mode
-  :ensure t)
+(el-register-package
+ :name smart-tabs-mode
+ :type elpa)
 
-(provide 'my-modes)
+;; subatomic256
+(el-register-package
+ :name subatomic256-theme
+ :type github
+ :pkgname "duncanburke/subatomic256"
+ :after
+ (progn
+   (load-file "subatomic256-theme.el")
+   (load-theme 'subatomic256 t)))
 
 ;; visual-fill-column
-
-(use-package visual-fill-column
-  :ensure t)
+(el-register-package
+ :name visual-fill-column
+ :type github
+ :pkgname "duncanburke/visual-fill-column")
 
 ;; wc-mode
-
-(use-package wc-mode
-  :ensure t)
+(el-register-package
+ :name wc-mode
+ :type elpa)
 
 ;; yaml-mode
-(use-package yaml-mode
-  :ensure t)
+(el-register-package
+ :name yaml-mode
+ :type elpa)
 (mode-extension #'yaml-mode ".yaml")
-
 
 ;; Custom Modes
 
@@ -411,3 +442,5 @@
   (visual-fill-column-mode)
   (flyspell-mode)
   (wc-mode))
+
+(provide 'my-modes)
