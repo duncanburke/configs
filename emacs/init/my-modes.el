@@ -233,9 +233,7 @@
    (add-to-list 'company-backends 'company-ghc)))
 
 ;; company-ghc
-(el-register-package
- :name company-ghc
- :type elpa)
+(el-use-package "company-ghc")
 
 ;; flx
 (el-register-package
@@ -261,31 +259,19 @@
 (autoload 'ghc-init "ghc" nil t)
 (autoload 'ghc-debug "ghc" nil t)
 
-;; git-commit-mode
-(el-register-package
- :name git-commit-mode
- :type elpa)
-
-;; git-rebase-mode
-(el-register-package
- :name git-rebase-mode
- :type elpa)
-
-;; gitconfig-mode
-(el-register-package
- :name gitconfig-mode
- :type elpa)
-
-;; gitignore-mode
-(el-register-package
- :name gitignore-mode
- :type elpa)
+;; git modes
+;; commit, rebase, config, ignore
+(el-use-package "git-modes")
 
 ;; haskell-mode
 (defvar haskell-mode-remapped nil)
 (el-register-package
  :name haskell-mode
- :type elpa)
+ :type github
+ :pkgname "haskell/haskell-mode"
+ :info "."
+ :build `(("make" ,(format "EMACS=%s" el-get-emacs) "all"))
+ :post-init (require 'haskell-mode-autoloads))
 
 (with-eval-after-load "haskell-cabal"
   (my-keys-remap-mode 'haskell-cabal-mode-map))
@@ -323,9 +309,7 @@
 (mode-extension #'haskell-cabal-mode ".cabal")
 
 ;; help-fns+
-(el-register-package
- :name help-fns+
- :type elpa)
+(el-use-package "help-fns+")
 
 ;; magit
 (el-register-package
@@ -376,6 +360,8 @@
 
 (push '("---\\(.\\|\n\\)*format:\\s-*markdown" . markdown-mode) magic-mode-alist)
 (mode-extension #'markdown-mode ".md")
+(mode-extension #'markdown-mode ".mdown")
+(mode-extension #'markdown-mode ".markdown")
 
 ;; org
 (el-register-package
@@ -400,9 +386,7 @@
  :type elpa)
 
 ;; smart-tabs-mode
-(el-register-package
- :name smart-tabs-mode
- :type elpa)
+(el-use-package "smarttabs")
 
 ;; subatomic256
 (el-register-package
@@ -421,14 +405,10 @@
  :pkgname "duncanburke/visual-fill-column")
 
 ;; wc-mode
-(el-register-package
- :name wc-mode
- :type elpa)
+(el-use-package "wc-mode")
 
 ;; yaml-mode
-(el-register-package
- :name yaml-mode
- :type elpa)
+(el-use-package "yaml-mode")
 (mode-extension #'yaml-mode ".yaml")
 
 ;; Custom Modes
