@@ -16,9 +16,11 @@
   (define-key my-keys-minor-mode-map key command))
 
 (defun my-map-bind-key (key command)
-  (push (cons key command) my-keys-bindings))
+  (push (cons (kbd key) command) my-keys-bindings))
 (defun my-map-remap-key (old new)
-  (push (cons old new) my-keys-remaps))
+  (push (cons (kbd old) (kbd new)) my-keys-remaps))
+(defun my-map-unbind-key (key)
+  (push (kbd key) my-keys-undefs))
 
 (defun debug-princ (x) nil)
 
