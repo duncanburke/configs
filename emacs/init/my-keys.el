@@ -1,5 +1,7 @@
 (require 'my-keys-defns)
 
+(my-map-reset-bindings)
+
 ;; Rebind key prefixes we're going to use
 (my-map-remap-key "C-h" "C-.")
 (my-map-remap-key "C-u" "C-p")

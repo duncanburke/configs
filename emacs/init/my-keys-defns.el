@@ -1,19 +1,18 @@
 (defconst original-global-map (copy-keymap global-map))
 
-(defvar my-keys-bindings nil "alist of defined key->command bindings")
-(defvar my-keys-remaps nil "alist of defined old->new remaps")
-(defvar my-keys-calc-remaps nil "alist of defined and inferred old->new remaps")
-(defvar my-keys-calc-shadowed nil "alist of shadowed global bindings")
-(defvar my-keys-calc-bindings nil "alist of defined and inferred global bindings")
+(defvar my-keys-bindings nil "alist of defined key->command bindings.")
+(defvar my-keys-remaps nil "alist of defined old->new remaps.
+old must be a single key combination, that is, if foo is a prefix of old then foo=old.")
+(defvar my-keys-undefs nil "list of explicitly undefined keys in the global map.")
+(defvar my-keys-calc-remaps nil "alist of defined and inferred old->new remaps.")
+(defvar my-keys-calc-shadowed nil "alist of shadowed global bindings. This is for informational purposes.")
+(defvar my-keys-calc-bindings nil "alist of defined and inferred global bindings.")
 (defvar my-keys-remapped-hash (make-hash-table :test 'equal))
 
-(setq my-keys-bindings nil)
-(setq my-keys-remaps nil)
-
-(defvar my-keys-minor-mode-map (make-keymap))
-
-(defun my-map-set-key (key command)
-  (define-key my-keys-minor-mode-map key command))
+(defun my-map-reset-bindings ()
+  (setq my-keys-bindings nil
+        my-keys-remaps nil
+        my-keys-undefs nil))
 
 (defun my-map-bind-key (key command)
   (push (cons (kbd key) command) my-keys-bindings))
@@ -33,6 +32,8 @@
   (dolist (b my-keys-bindings)
     (if (cdr b)
         (dolist (k (where-is-internal (cdr b) original-global-map))
+          ;; if there's already a remap, we don't overwrite it
+          ;; TODO: warn when there's a remap conflict
           (if (not (assoc k my-keys-calc-remaps))
               (push (cons k (car b)) my-keys-calc-remaps)))))
   ;; For each binding in my-keys-bindings, see what existing global binding (if any) it overrides.
