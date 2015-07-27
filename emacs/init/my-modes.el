@@ -78,8 +78,8 @@
   (my-keys-remap-mode 'edmacro-mode-map))
 
 ;; eshell
-(with-eval-after-load "eshell"
-  (my-keys-remap-mode 'eshell-mode-map))
+;; (with-eval-after-load "esh-mode"
+;;   (my-keys-remap-mode 'eshell-mode-map))
 
 ;; flyspell-mode
 (with-eval-after-load "flyspell"
