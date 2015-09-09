@@ -248,7 +248,7 @@
  (flx-ido-mode))
 
 ;; ghc
-(el-use-package "ac-ghc-mod")
+;; (el-use-package "ac-ghc-mod")
 (el-register-package
  :name ghc-mod
  :type github
@@ -256,8 +256,8 @@
  :load-path "elisp")
 
 (setq ghc-interactive-command "ghc-modi")
-(autoload 'ghc-init "ghc" nil t)
-(autoload 'ghc-debug "ghc" nil t)
+;; (autoload 'ghc-init "ghc" nil t)
+;; (autoload 'ghc-debug "ghc" nil t)
 
 ;; git modes
 ;; commit, rebase, config, ignore
@@ -279,6 +279,9 @@
 (with-eval-after-load "haskell-interactive-mode"
   (my-keys-remap-mode 'haskell-interactive-mode-map))
 
+(with-eval-after-load "haskell-mode"
+  (my-keys-remap-mode 'haskell-mode-map))
+
 (add-hook-anon
  'haskell-mode-hook
  (setq indent-tabs-mode nil
@@ -288,12 +291,12 @@
        show-trailing-whitespace t
        ghc-display-error 'minibuffer
        ghc-display-hole 'other-buffer)
- (ghc-init)
- (unless haskell-mode-remapped
-   ;; ghc-mode edits `haskell-mode-map`, so we need to defer the
-   ;; remapping until ghc has been loaded for the first time
-   (my-keys-remap-mode 'haskell-mode-map)
-   (setq haskell-mode-remapped t))
+ ;; (ghc-init)
+ ;; (unless haskell-mode-remapped
+ ;;   ;; ghc-mode edits `haskell-mode-map`, so we need to defer the
+ ;;   ;; remapping until ghc has been loaded for the first time
+ ;;   (my-keys-remap-mode 'haskell-mode-map)
+ ;;   (setq haskell-mode-remapped t))
  (flyspell-prog-mode)
  (company-mode)
  (auto-fill-mode 1)
