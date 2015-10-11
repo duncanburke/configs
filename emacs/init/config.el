@@ -44,4 +44,6 @@
 (defun ask-user-about-lock (file opponent)
   "always grab lock" t)
 
+(setq source-directory "~/src/emacs")
+
 (provide 'config)
