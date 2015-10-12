@@ -338,7 +338,8 @@
    (my-keys-remap-mode 'magit-wazzup-mode-map)
    (my-keys-remap-mode 'magit-branch-manager-mode-map)
    (my-keys-remap-mode 'magit-process-mode-map)
-   (my-keys-remap-mode 'magit-section-jump-map)))
+   (my-keys-remap-mode 'magit-section-jump-map)
+   (my-keys-remap-mode 'magit-popup-mode-map)))
 
 ;; monkey-patch magit to show patch on commit buffer
 (advice-add #'magit-key-mode-popup-committing :after
