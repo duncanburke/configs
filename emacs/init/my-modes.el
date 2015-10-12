@@ -73,6 +73,10 @@
   ;; Stop dired from spamming windows as you navigate
   (put 'dired-find-alternate-file 'disabled nil))
 
+;; wdired
+(with-eval-after-load "wdired"
+  (my-keys-remap-mode 'wdired-mode-map))
+
 ;; edmacro-mode
 (with-eval-after-load "edmacro"
   (my-keys-remap-mode 'edmacro-mode-map))
