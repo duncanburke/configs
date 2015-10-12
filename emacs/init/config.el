@@ -46,4 +46,9 @@
 
 (setq source-directory "~/src/emacs")
 
+(setq
+ backup-directory-alist '((".*" . "~/.emacs.d/backups/"))
+ auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-saves" t))
+ create-lockfiles nil)
+
 (provide 'config)
