@@ -61,7 +61,7 @@ commandBindings conf@(XConfig {XMonad.modMask = modMask'}) =
    ((modMask'              , xK_o         ), spawn "mpc random"),
    ((modMask'              , xK_a         ), spawn "mpc repeat"),
    ((modMask' .|. shiftMask, xK_a         ), spawn "mpc single"),
-   ((modMask'              , xK_e         ), spawn "toggle_mpdscribble"),
+   ((modMask'              , xK_comma     ), spawn "toggle_mpdscribble"),
    ((modMask' .|. shiftMask, xK_j         ), kill),
    ((modMask'              , xK_space     ), sendMessage NextLayout),
    ((modMask' .|. shiftMask, xK_space     ), setLayout $ layoutHook conf),
