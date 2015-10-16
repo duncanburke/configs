@@ -205,6 +205,13 @@
                      tab-width 4
                      python-indent 4))
 
+;;sh-mode
+(with-eval-after-load "sh-script"
+  (my-keys-remap-mode 'sh-mode-map))
+
+(add-hook-anon 'sh-mode-hook
+               (sh-electric-here-document-mode -1))
+
 ;; tabulated-list
 (with-eval-after-load "tabulated-list"
   (define-key tabulated-list-mode-map "p" nil)
