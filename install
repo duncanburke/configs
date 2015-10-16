@@ -1,0 +1,311 @@
+#!/bin/bash
+
+# Copyright (c) 2015 Duncan Burke <duncankburke@gmail.com>
+
+# Permission is hereby granted, free of charge, to any person obtaining
+# a copy of this software and associated documentation files (the
+# "Software"), to deal in the Software without restriction, including
+# without limitation the rights to use, copy, modify, merge, publish,
+# distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so, subject to
+# the following conditions:
+
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+# IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+# CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+# TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+# SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+set -eufC -o pipefail +o posix
+
+declare manifest_file
+declare base_dir
+declare operation # "hardlink", "softlink", "copy", "list"
+declare -i force=0 backup=0 verbose=0 pretend=0
+declare -a labels
+
+declare -A manifest
+
+declare -i soft_error_occurred=0
+
+print_usage(){
+    cat >&2 <<EOF
+usage: $0 [-m <manifest>] (-l [-v] | [(-s | -c)] [-f] [-b] [-p | -v]) [<label>...]
+description:
+  Installs files from a manifest to target paths in a flexible manner.
+  If <manifest> is not provided, it is assumed to be in the same directory
+  as this script and called "manifest". Paths in the manifest are relative to
+  the manifest directory.
+
+  A manifest is a file containing one or more lines in the format:
+
+    <from>:<label>:<to>
+
+  <label> is a word which allows the installation to be restrictied to a
+  particular subset.
+
+  Unless --symbolic or --copy is specified, files are installed as hard links.
+options:
+  -m, --manifest=<manifest>  specify the location of the manifest
+  -l, --list                 output the labels found in <manifest>
+  -s, --symbolic             install files as symbolic links
+  -c, --copy                 install files as copies
+  -f, --force                install even if destination already exists
+  -b, --backup               copy destination to destination~
+  -v, --verbose              output operations performed
+  -p, --pretend              output operations without performing them
+  -h, --help                 display this message and exit
+EOF
+}
+
+error(){
+    echo "error: $1" >&2
+    exit 1
+}
+
+
+soft_error(){
+    echo "error: $1" >&2
+    soft_error_occurred=1
+}
+
+debug(){
+    if [[ -v DEBUG ]] && (( ${DEBUG} )); then
+        echo "${1}" >&2
+    fi
+}
+
+parse_options(){
+    TEMP=$(getopt -o m:lscfbvph --long manifest:,list,symbolic,copy,force,backup,verbose,pretend,help -- "$@")
+
+    if [ $? != 0 ] ; then
+        print_usage; exit 1
+    fi
+
+    eval set -- "$TEMP"
+
+    fail(){ print_usage; exit 1; }
+
+    while true ; do
+        case "$1" in
+            -m|--manifest) manifest_file=${2}; shift 2;;
+            -l|--list) ! [[ -v operation ]] || fail;  operation="list"; shift ;;
+            -s|--symbolic) ! [[ -v operation ]] || fail; operation="softlink"; shift ;;
+            -c|--copy) ! [[ -v operation ]] || fail; operation="copy"; shift ;;
+            -f|--force) force=1; shift ;;
+            -b|--backup) backup=1; shift ;;
+            -v|--verbose) verbose=1; shift ;;
+            -p|--pretend) pretend=1; shift ;;
+            -h|--help) fail ;;
+            --) shift ; break ;;
+            *) fail ;;
+        esac
+    done
+
+    labels=($@)
+
+    if ! [[ -v operation ]]; then
+        operation="hardlink"
+    fi
+
+    if [[ ${operation} = "list" ]] && { ((force)) || ((backup)) || ((pretend)); } then
+       fail
+    fi
+
+    if ! [[ -v manifest_file ]]; then
+        base_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+        manifest_file="${base_dir%/}/manifest"
+    else
+        base_dir="$(dirname "${manifest_file}")"
+    fi
+
+}
+
+parse_manifest(){
+    if ! [[ -f ${manifest_file} ]]; then
+        error "manifest \"${manifest_file}\" not found"
+    fi
+
+    while read -r line; do
+        IFS=":" read from label to <<< ${line} || error "parsing \"${line}\""
+        if [[ -z ${from} || -z ${label} || -z ${to} ]]; then
+            error "invalid manifest entry \"${line}\""
+        fi
+        # Also check there aren't any spaces in the label
+        if [[ ${label} != $(tr -d '[:space:]' <<< ${label}) ]]; then
+            error "invalid label \"${label}\""
+        fi
+
+        from=$(realpath -e "${base_dir%/}/${from}")
+        to=$(eval echo "${to}")
+
+        manifest[${label}]="${manifest[${label}]:-}${manifest[${label}]+;}${from}:${to}"
+    done < <(sed -r "s/^[:space:]*(#.*)?$//;Tx;d;:x" < "${manifest_file}")
+}
+
+over_label(){
+    IFS=";" read -a entries <<< "${manifest[$2]}"
+    for entry in "${entries[@]}"; do
+        IFS=":" read from to <<< ${entry}
+        $1 ${from} ${to}
+    done
+}
+
+over_labels(){
+    if ((${#labels[@]})); then
+        for label in "${labels[@]}"; do
+            if [[ -z ${manifest[${label}]} ]]; then
+                error "invalid label \"${label}\""
+            fi
+            $1 ${label}
+        done
+    else
+        for label in "${!manifest[@]}"; do
+            $1 ${label}
+        done
+    fi
+}
+
+over_entries(){
+    declare -r f="$1"
+    do_label(){
+        label="$1"
+        over_label "${f}" "${label}"
+    }
+    over_labels do_label
+}
+
+print_label(){
+    echo "${label}"
+    echo_label(){
+        echo -e "\t$1 $2"
+    }
+    over_label echo_label "${label}"
+}
+
+install_entry(){
+    declare -r from="$1" to="$2"
+
+    log(){
+        if ((verbose)) || ((pretend)); then
+            echo $1 >&2
+        fi
+    }
+
+    safe_rm(){
+        declare target="$1" message="$2" no_backup="$3"
+        debug "safe_rm ${target}"
+        if ((force)); then
+            if ((backup)) && ! ((no_backup)); then
+                log "cp -f ${target} ${target}~"
+                if ! ((pretend)); then
+                    cp -f "${target}" "${target}~"
+                fi
+            fi
+            if ! ((soft_error_occurred)); then
+                log "rm ${target}"
+                if ! ((pretend)); then
+                    rm "${target}"
+                fi
+            fi
+        else
+            soft_error "${message}"
+            return 1
+        fi
+    }
+
+    debug "install_entry ${from} ${to}"
+
+    # Firstly ensure the destination directory exists
+    declare to_dir
+    if [[ -d ${from} ]]; then
+        to_dir="${to}"
+    else
+        to_dir="$(dirname "${to}")"
+    fi
+    if ! [[ -d ${to_dir} ]]; then
+        # If it isn't a directory, find the longest prefix which exists
+        to_base="${to_dir}"
+        while ! [[ -e ${to_base} ]]; do
+            to_base="$(dirname to_base)"
+        done
+
+        debug "to_base: ${to_base}"
+        # If the prefix isn't a directory, remove it
+        if ! [[ -d ${to_base} ]]; then
+            safe_rm "${to_base}" "\"${to_base}\" already exists but is not a directory" || return 0
+        fi
+
+        # Create the destination directory
+        if ! [[ -d ${to_dir} ]]; then
+            log "mkdir -p ${to_dir}"
+            if ! ((pretend)); then
+                mkdir -p "${to_dir}"
+            fi
+        fi
+    fi
+
+    install_entry_inner(){
+        declare -r from="$1" to="$2"
+        debug "install_entry_inner ${from} ${to}"
+        # If we're dealing with a directory, recurse into it
+        if [[ -d ${from} ]]; then
+            for child in $(ls ${from}); do
+                install_entry_inner "${from%/}/${child}" "${to%/}/${child}"
+            done
+            return 0
+        else
+            # It's a regular file, check if the destination exists
+            if [[ -e ${to} ]]; then
+                # It exists, see if we have to remove it
+                if [[ ${operation} = "hardlink" && ${from} -ef ${to} && ! -h ${to} ]]; then
+                    log "\"${to}\" and \"${from}\" are the same file"
+                    return 0
+                elif [[ ${operation} = "softlink" && ${from} -ef $(realpath ${to}) && -h ${to} ]]; then
+                    log "\"${to}\" is already a symlink to \"${from}\""
+                    return 0
+                else
+                    # Don't backup if the destination is the same file by symlink or hardlink
+                    ! [[ ${from} -ef ${to} ]]; declare -i no_backup=$?
+                    # Try to remove it
+                    safe_rm "${to}" "\"${to}\" already exists" ${no_backup} || return 0
+                fi
+            fi
+
+            # Do the actual copy
+            if  ! ((soft_error_occurred)); then
+                command="cp"
+                case ${operation} in
+                    "hardlink") command+=" -l";;
+                    "softlink") command+=" -s";;
+                    "copy") ;;
+                    *) error ;;
+                esac
+                log "${command} ${from} ${to}"
+                if ! ((pretend)); then
+                    eval ${command} "${from}" "${to}"
+                fi
+            fi
+        fi
+    }
+
+    install_entry_inner "${from}" "${to}"
+}
+
+parse_options $@
+parse_manifest
+
+if [[ ${operation} == "list" ]]; then
+    over_labels print_label
+else
+    over_entries install_entry
+fi
+
+if ((soft_error_occurred)); then
+    exit 1
+fi
