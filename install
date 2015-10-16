@@ -279,11 +279,11 @@ install_entry(){
 
             # Do the actual copy
             if  ! ((soft_error_occurred)); then
-                command="cp"
+                declare command
                 case ${operation} in
-                    "hardlink") command+=" -l";;
-                    "softlink") command+=" -s";;
-                    "copy") ;;
+                    "hardlink") command="ln";;
+                    "softlink") command="ln -sr";;
+                    "copy")     command="cp";;
                     *) error ;;
                 esac
                 log "${command} ${from} ${to}"
