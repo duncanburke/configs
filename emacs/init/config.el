@@ -1,3 +1,4 @@
+(require 'utils)
 ;; Alternative: "DejaVu Sans Mono:style=Book:size=12"
 (add-to-list 'default-frame-alist '(font . "Terminus:style=Regular:size=10"))
 
@@ -12,11 +13,11 @@
  split-height-threshold nil
  split-width-threshold 0)
 
-(tool-bar-mode -1)
-(menu-bar-mode -1)
-(fringe-mode 0)
-(scroll-bar-mode -1)
-(column-number-mode)
+(try-fn tool-bar-mode -1)
+(try-fn menu-bar-mode -1)
+(try-fn fringe-mode 0)
+(try-fn scroll-bar-mode -1)
+(try-fn column-number-mode)
 
 (setq-default
  indent-tabs-mode nil

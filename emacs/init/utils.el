@@ -86,4 +86,8 @@
 (defun mode-extension (mode extension)
   (add-to-list 'auto-mode-alist `(,(concat "\\" extension "$") . ,mode)))
 
+(defmacro try-fn (fn &rest args)
+  `(if (symbol-function (quote ,fn))
+       (,fn ,@args)))
+
 (provide 'utils)
