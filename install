@@ -22,6 +22,7 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 set -eufC -o pipefail +o posix
+shopt -s dotglob nullglob
 
 declare manifest_file
 declare base_dir
@@ -46,8 +47,8 @@ description:
 
     <from>:<label>:<to>
 
-  <label> is a word which allows the installation to be restrictied to a
-  particular subset.
+  <label> is a word which allows the installation to be restricted to a
+  particular subset of the manifest.
 
   Unless --symbolic or --copy is specified, files are installed as hard links.
 options:
@@ -76,7 +77,7 @@ soft_error(){
 
 debug(){
     if [[ -v DEBUG ]] && (( ${DEBUG} )); then
-        echo "${1}" >&2
+        echo "$1" >&2
     fi
 }
 
@@ -127,17 +128,17 @@ parse_options(){
 }
 
 parse_manifest(){
-    if ! [[ -f ${manifest_file} ]]; then
+    if ! [[ -f "${manifest_file}" ]]; then
         error "manifest \"${manifest_file}\" not found"
     fi
 
     while read -r line; do
-        IFS=":" read from label to <<< ${line} || error "parsing \"${line}\""
-        if [[ -z ${from} || -z ${label} || -z ${to} ]]; then
+        IFS=":" read from label to <<< "${line}" || error "parsing \"${line}\""
+        if [[ -z "${from}" || -z "${label}" || -z "${to}" ]]; then
             error "invalid manifest entry \"${line}\""
         fi
         # Also check there aren't any spaces in the label
-        if [[ ${label} != $(tr -d '[:space:]' <<< ${label}) ]]; then
+        if [[ "${label}" != $(tr -d '[:space:]' <<< "${label}") ]]; then
             error "invalid label \"${label}\""
         fi
 
@@ -149,38 +150,44 @@ parse_manifest(){
 }
 
 over_label(){
-    IFS=";" read -a entries <<< "${manifest[$2]}"
+    declare -r f="$1" label="$2"
+    IFS=";" read -a entries <<< "${manifest[${label}]}"
     for entry in "${entries[@]}"; do
-        IFS=":" read from to <<< ${entry}
-        $1 ${from} ${to}
+        IFS=":" read from to <<< "${entry}"
+        $f "${from}" "${to}"
     done
 }
 
 over_labels(){
+    declare -r f=$1; shift
     if ((${#labels[@]})); then
         for label in "${labels[@]}"; do
-            if [[ -z ${manifest[${label}]} ]]; then
+            if [[ -z "${manifest[${label}]}" ]]; then
                 error "invalid label \"${label}\""
             fi
-            $1 ${label}
+            debug "over_labels calling $f ${label}"
+            $f "${label}" "$@"
         done
     else
         for label in "${!manifest[@]}"; do
-            $1 ${label}
+            $f "${label}" "$@"
         done
     fi
 }
 
 over_entries(){
     declare -r f="$1"
+    debug "over_entries $f"
     do_label(){
-        label="$1"
+        declare -r label="$1" f=$2
+        debug "do_label calling over_label $f ${label}"
         over_label "${f}" "${label}"
     }
-    over_labels do_label
+    over_labels do_label ${f}
 }
 
 print_label(){
+    declare -r label="$1"
     echo "${label}"
     echo_label(){
         echo -e "\t$1 $2"
@@ -222,16 +229,18 @@ install_entry(){
     debug "install_entry ${from} ${to}"
 
     # Firstly ensure the destination directory exists
-    declare to_dir
-    if [[ -d ${from} ]]; then
+    declare from_dir to_dir
+    if [[ -d "${from}" ]]; then
+        from_dir="${from}"
         to_dir="${to}"
     else
+        from_dir="$(dirname "${from}")"
         to_dir="$(dirname "${to}")"
     fi
-    if ! [[ -d ${to_dir} ]]; then
+    if ! [[ -d "${to_dir}" ]]; then
         # If it isn't a directory, find the longest prefix which exists
         to_base="${to_dir}"
-        while ! [[ -e ${to_base} ]]; do
+        while ! [[ -e "${to_base}" ]]; do
             to_base="$(dirname to_base)"
         done
 
@@ -242,12 +251,19 @@ install_entry(){
         fi
 
         # Create the destination directory
-        if ! [[ -d ${to_dir} ]]; then
+        if ! [[ -d "${to_dir}" ]]; then
             log "mkdir -p ${to_dir}"
             if ! ((pretend)); then
                 mkdir -p "${to_dir}"
             fi
         fi
+    elif [[ "${from_dir}" -ef "${to_dir}" ]]; then
+        # The destination directory already exists
+        # We need to check if the installation directory is symlinked to the initial directory
+        # This is a sufficiently uncommon and subtly occurrence that no attempt is made
+        # to handle it automatically.
+        soft_error "\"${to_dir}\" is the same directory as \"${from_dir}\""
+        return 0
     fi
 
     install_entry_inner(){
