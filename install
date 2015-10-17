@@ -26,7 +26,7 @@ shopt -s dotglob nullglob
 
 declare manifest_file
 declare base_dir
-declare operation # "hardlink", "softlink", "copy", "list"
+declare operation # "hardlink", "softlink", "copy", "list", "uninstall"
 declare -i force=0 backup=0 verbose=0 pretend=0
 declare -a labels
 
@@ -36,7 +36,7 @@ declare -i soft_error_occurred=0
 
 print_usage(){
     cat >&2 <<EOF
-usage: $0 [-m <manifest>] (-l [-v] | [(-s | -c)] [-f] [-b] [-p | -v]) [<label>...]
+usage: $0 [-m <manifest>] (-l | -u [-p] | [(-s | -c)] [-fbp]) [-v] [<label>...]
 description:
   Installs files from a manifest to target paths in a flexible manner.
   If <manifest> is not provided, it is assumed to be in the same directory
@@ -56,6 +56,7 @@ options:
   -l, --list                 output the labels found in <manifest>
   -s, --symbolic             install files as symbolic links
   -c, --copy                 install files as copies
+  -u, --uninstall            uninstall destination files
   -f, --force                install even if destination already exists
   -b, --backup               copy destination to destination~
   -v, --verbose              output operations performed
@@ -82,7 +83,7 @@ debug(){
 }
 
 parse_options(){
-    TEMP=$(getopt -o m:lscfbvph --long manifest:,list,symbolic,copy,force,backup,verbose,pretend,help -- "$@")
+    TEMP=$(getopt -o m:lscufbvph --long manifest:,list,symbolic,copy,uninstall,force,backup,verbose,pretend,help -- "$@")
 
     if [ $? != 0 ] ; then
         print_usage; exit 1
@@ -98,6 +99,7 @@ parse_options(){
             -l|--list) ! [[ -v operation ]] || fail;  operation="list"; shift ;;
             -s|--symbolic) ! [[ -v operation ]] || fail; operation="softlink"; shift ;;
             -c|--copy) ! [[ -v operation ]] || fail; operation="copy"; shift ;;
+            -u|--uninstall) ! [[ -v operation ]] || fail; operation="uninstall"; shift ;;
             -f|--force) force=1; shift ;;
             -b|--backup) backup=1; shift ;;
             -v|--verbose) verbose=1; shift ;;
@@ -114,8 +116,10 @@ parse_options(){
         operation="hardlink"
     fi
 
-    if [[ ${operation} = "list" ]] && { ((force)) || ((backup)) || ((pretend)); } then
-       fail
+    if [[ ${operation} = "list" ]] && { ((force)) || ((backup)) || ((pretend)); }; then
+        fail
+    elif [[ ${operation} = "uninstall" ]] && { ((force)) || ((backup)); }; then
+        fail
     fi
 
     if ! [[ -v manifest_file ]]; then
@@ -275,6 +279,13 @@ install_entry(){
                 install_entry_inner "${from%/}/${child}" "${to%/}/${child}"
             done
             return 0
+        elif [[ ${operation} = "uninstall" ]]; then
+            if [[ -e ${to} ]]; then
+                log "rm ${to}"
+                if ! ((pretend)); then
+                    rm "${to}"
+                fi
+            fi
         else
             # It's a regular file, check if the destination exists
             if [[ -e ${to} ]]; then
