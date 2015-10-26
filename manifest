@@ -1,4 +1,5 @@
 bashrc:general:~/.bashrc
+profile:general:~/.profile
 gitcompletion.sh:general:~/.gitcompletion
 gitconfig:general:~/.gitconfig
 gitignore:general:~/.gitignore_global

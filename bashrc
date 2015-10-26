@@ -1,8 +1,12 @@
+# -*- mode: shell-script; -*-
+
 # Check that gpg-agent is running, regardless of interactive status
-. ~/.start_agent
+if [[ -e ~/.start_agent ]]; then
+    . ~/.start_agent
+fi
 
 ## Check for an interactive session
-[ -z "$PS1" ] && return
+[[ -z "$PS1" ]] && return
 
 # colored prompt
 if [ "`tput colors`" = "256" ]; then
@@ -23,23 +27,13 @@ PS1="\[$B\]┌─\[$W\][ \[$Y\]\A \[$W\]][ \[$U_COL\]\u\[$G\]@\h:\w \[$W\]]\n\[$
 
 alias nemacs='emacs -nw'
 alias ls='ls -h --color=auto'
-
-alias rm='rm -I'                    # 'rm -i' prompts for every file
-
+alias rm='rm -I'
 alias ec='emacsclient -cnw -a ""'
 
 complete -cf sudo
 complete -cf man
 set show-all-if-ambiguous on
 set show-all-if-unmodified on
-
-export MPD_HOST='127.0.0.1'
-export MPD_PORT='6600'
-
-source ~/.git-completion.sh
-
-export PRINTER='xerox_3220'
-export EDITOR='emacsclient -cnw -a ""'
 
 # As this in an interactive shell, set GPG_TTY
 export GPG_TTY=`tty`
