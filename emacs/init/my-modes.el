@@ -128,7 +128,8 @@
                                          ("C-n" . ido-next-match-dir)
                                          ("C-f" . ido-fallback-command)
                                          ("C-b" . ido-enter-dired)))
-                   (my-keys-remap-mode 'ido-file-completion-map)
+                   (my-keys-remap-mode 'ido-file-completion-map
+                                         '(("C-f" . ido-fallback-command)))
                    (my-keys-remap-mode 'ido-buffer-completion-map)
                    (my-keys-remap-mode 'ido-completion-map)
                    (setq saved-ido-common-completion-map ido-common-completion-map
@@ -180,9 +181,6 @@
   (my-keys-remap-mode 'lisp-mode-map)
   (my-keys-remap-mode 'emacs-lisp-mode-map)
   (my-keys-remap-mode 'lisp-interaction-mode-map))
-
-(add-hook 'emacs-lisp-mode-hook #'rainbow-blocks-mode)
-(add-hook 'lisp-mode-hook #'rainbow-blocks-mode)
 
 ;; package
 (with-eval-after-load "package"
@@ -365,7 +363,10 @@
     '(("M-h" . nil)
       ("M-t" . nil)
       ("M-n" . nil)
-      ("M-s" . nil)))))
+      ("M-s" . nil)))
+   (setq indent-line-function 'tab-to-tab-stop
+         markdown-indent-on-enter nil)
+   ))
 
 (add-hook-anon
  'markdown-mode-hook
