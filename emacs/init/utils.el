@@ -76,9 +76,23 @@
 
 (defun tabstop-hook ()
   (define-key (current-local-map) (kbd "TAB") 'tab-to-tab-stop)
+  (define-key (current-local-map) (kbd "<backspace>") 'delete-to-tabstop)
   (setq tab-width 4
-        indent-tabs-mode t
+        indent-tabs-mode nil
         tab-stop-list (number-sequence 4 200 4)))
+
+(defun delete-to-tabstop ()
+  (interactive)
+  (let ((prev-tabstop (indent-next-tab-stop (current-column) t))
+        (prev-whitespace (lambda () (or (eq (preceding-char) ?\s)
+                                        (eq (preceding-char) ?\t))))
+        )
+    (if (funcall prev-whitespace)
+        (while (and
+                (> (current-column) prev-tabstop)
+                (funcall prev-whitespace))
+          (delete-backward-char 1))
+      (delete-backward-char 1))))
 
 (defun linum-hook ()
   (linum-mode))
