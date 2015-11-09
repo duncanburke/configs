@@ -11,7 +11,8 @@
  split-height-threshold nil
  ;; Make windows split vertically like C-x 3 for things like help, grep, compile, gdb etc.
  split-height-threshold nil
- split-width-threshold 0)
+ split-width-threshold 0
+ large-file-warning-threshold 1000000000)
 
 (try-fn tool-bar-mode -1)
 (try-fn menu-bar-mode -1)
