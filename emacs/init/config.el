@@ -62,4 +62,7 @@
 (when (file-exists-p custom-file)
   (load custom-file))
 
+(setq custom-theme-load-path '("~/dev/subatomic256"))
+(setq custom-theme-directory "~/.emacs.d/themes/")
+
 (provide 'config)
