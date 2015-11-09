@@ -12,7 +12,12 @@
  ;; Make windows split vertically like C-x 3 for things like help, grep, compile, gdb etc.
  split-height-threshold nil
  split-width-threshold 0
- large-file-warning-threshold 1000000000)
+ large-file-warning-threshold 1000000000
+ print-length nil
+ print-level nil
+ eval-expression-print-length nil
+ eval-expression-print-level nil)
+
 
 (try-fn tool-bar-mode -1)
 (try-fn menu-bar-mode -1)
