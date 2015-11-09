@@ -52,4 +52,8 @@
  auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-saves" t))
  create-lockfiles nil)
 
+(setq custom-file "~/.emacs.d/custom.el")
+(when (file-exists-p custom-file)
+  (load custom-file))
+
 (provide 'config)
