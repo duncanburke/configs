@@ -1,0 +1,333 @@
+set bell-style none
+set colored-stats on
+
+set input-meta on
+set enable-meta-key on
+set convert-meta off
+set output-meta on
+
+# Moving Point
+"\C-h": backward-char
+"\eh": backward-word
+"\eH": beginning-of-line
+"\C-s": forward-char
+"\es": forward-word
+"\eS": end-of-line
+# redraw-current-line (not bound)
+
+# Manipulating History
+"\C-j": accept-line
+"\C-m": accept-line
+
+"\C-t": previous-history
+"\C-n": next-history
+"\eT": beginning-of-history
+"\eN": end-of-history
+"\C-a": reverse-search-history
+"\C-o": forward-search-history
+"\ea": non-incremental-reverse-search-history
+"\eo": non-incremental-forward-search-history
+# yank-nth-arg (not bound)
+# yank-last-arg (not bound)
+
+# Changing Text
+"\C-d": end-of-file
+"\C-l": delete-char
+"\C-g": backward-delete-char
+"\C-j": quoted-insert
+
+# Killing and Yanking
+"\eL": kill-line
+"\eG": backward-kill-line
+"\el": kill-word
+"\eg": backward-kill-word
+"\C-w": kill-region
+"\ew": copy-region-ass-kill
+"\C-y": yank
+"\ey": yank-pop
+
+# Numeric Arguments
+"\C-p": universal-argument
+
+# Completing
+"\C-i": complete
+
+# Keyboard Macros
+"\C-x(": start-kbd-macro
+"\C-x)": end-kbd-macro
+"\C-xe": call-last-kbd-macro
+
+# Miscellaneous
+"\C-x\C-r": re-read-init-file
+"\e,": abort
+"\C-/": undo
+"\e ": set-mark
+
+"\C-x\C-e": edit-and-execute-command
+"\C-x\C-v": display-shell-version
+"\C-x\C-x": exchange-point-and-mark
+"\C-x*": glob-expand-word
+"\C-xg": glob-list-expansions
+"\C-x!": possible-command-completions
+"\C-x/": possible-filename-completions
+"\C-x@": possible-hostname-completions
+"\C-x~": possible-username-completions
+"\C-x$": possible-variable-completions
+"\C-x\C-r": re-read-init-file
+"\C-x\C-u": undo
+
+# "\eg": glob-complete-word
+# "\e\\": delete-horizontal-space
+# "\e^": history-expand-line
+# "\e": insert-comment
+# "\e*": insert-completions
+# "\e.": insert-last-argument
+# "\e_": insert-last-argument
+# "\e=": possible-completions
+# "\e?": possible-completions
+# "\e\C-r": revert-line
+# "\er": revert-line
+# "\e\C-e": shell-expand-line
+# "\e&": tilde-expand
+# "\et": transpose-words
+# "\eu": upcase-word
+# "\e.": yank-last-arg
+# "\e_": yank-last-arg
+# "\e\C-y": yank-nth-arg
+# "\ey": yank-pop
+
+"\e-": digit-argument
+"\e0": digit-argument
+"\e1": digit-argument
+"\e2": digit-argument
+"\e3": digit-argument
+"\e4": digit-argument
+"\e5": digit-argument
+"\e6": digit-argument
+"\e7": digit-argument
+"\e8": digit-argument
+"\e9": digit-argument
+
+" ": self-insert
+"!": self-insert
+"\"": self-insert
+"#": self-insert
+"$": self-insert
+"%": self-insert
+"&": self-insert
+"'": self-insert
+"(": self-insert
+")": self-insert
+"*": self-insert
+"+": self-insert
+",": self-insert
+"-": self-insert
+".": self-insert
+"/": self-insert
+"0": self-insert
+"1": self-insert
+"2": self-insert
+"3": self-insert
+"4": self-insert
+"5": self-insert
+"6": self-insert
+"7": self-insert
+"8": self-insert
+"9": self-insert
+":": self-insert
+";": self-insert
+"<": self-insert
+"=": self-insert
+">": self-insert
+"?": self-insert
+"@": self-insert
+"A": self-insert
+"B": self-insert
+"C": self-insert
+"D": self-insert
+"E": self-insert
+"F": self-insert
+"G": self-insert
+"H": self-insert
+"I": self-insert
+"J": self-insert
+"K": self-insert
+"L": self-insert
+"M": self-insert
+"N": self-insert
+"O": self-insert
+"P": self-insert
+"Q": self-insert
+"R": self-insert
+"S": self-insert
+"T": self-insert
+"U": self-insert
+"V": self-insert
+"W": self-insert
+"X": self-insert
+"Y": self-insert
+"Z": self-insert
+"[": self-insert
+"\\": self-insert
+"]": self-insert
+"^": self-insert
+"_": self-insert
+"`": self-insert
+"a": self-insert
+"b": self-insert
+"c": self-insert
+"d": self-insert
+"e": self-insert
+"f": self-insert
+"g": self-insert
+"h": self-insert
+"i": self-insert
+"j": self-insert
+"k": self-insert
+"l": self-insert
+"m": self-insert
+"n": self-insert
+"o": self-insert
+"p": self-insert
+"q": self-insert
+"r": self-insert
+"s": self-insert
+"t": self-insert
+"u": self-insert
+"v": self-insert
+"w": self-insert
+"x": self-insert
+"y": self-insert
+"z": self-insert
+"{": self-insert
+"|": self-insert
+"}": self-insert
+"~": self-insert
+"\200": self-insert
+"\201": self-insert
+"\202": self-insert
+"\203": self-insert
+"\204": self-insert
+"\205": self-insert
+"\206": self-insert
+"\207": self-insert
+"\210": self-insert
+"\211": self-insert
+"\212": self-insert
+"\213": self-insert
+"\214": self-insert
+"\215": self-insert
+"\216": self-insert
+"\217": self-insert
+"\220": self-insert
+"\221": self-insert
+"\222": self-insert
+"\223": self-insert
+"\224": self-insert
+"\225": self-insert
+"\226": self-insert
+"\227": self-insert
+"\230": self-insert
+"\231": self-insert
+"\232": self-insert
+"\233": self-insert
+"\234": self-insert
+"\235": self-insert
+"\236": self-insert
+"\237": self-insert
+" ": self-insert
+"¡": self-insert
+"¢": self-insert
+"£": self-insert
+"¤": self-insert
+"¥": self-insert
+"¦": self-insert
+"§": self-insert
+"¨": self-insert
+"©": self-insert
+"ª": self-insert
+"«": self-insert
+"¬": self-insert
+"­": self-insert
+"®": self-insert
+"¯": self-insert
+"°": self-insert
+"±": self-insert
+"²": self-insert
+"³": self-insert
+"´": self-insert
+"µ": self-insert
+"¶": self-insert
+"·": self-insert
+"¸": self-insert
+"¹": self-insert
+"º": self-insert
+"»": self-insert
+"¼": self-insert
+"½": self-insert
+"¾": self-insert
+"¿": self-insert
+"À": self-insert
+"Á": self-insert
+"Â": self-insert
+"Ã": self-insert
+"Ä": self-insert
+"Å": self-insert
+"Æ": self-insert
+"Ç": self-insert
+"È": self-insert
+"É": self-insert
+"Ê": self-insert
+"Ë": self-insert
+"Ì": self-insert
+"Í": self-insert
+"Î": self-insert
+"Ï": self-insert
+"Ğ": self-insert
+"Ñ": self-insert
+"Ò": self-insert
+"Ó": self-insert
+"Ô": self-insert
+"Õ": self-insert
+"Ö": self-insert
+"×": self-insert
+"Ø": self-insert
+"Ù": self-insert
+"Ú": self-insert
+"Û": self-insert
+"Ü": self-insert
+"İ": self-insert
+"Ş": self-insert
+"ß": self-insert
+"à": self-insert
+"á": self-insert
+"â": self-insert
+"ã": self-insert
+"ä": self-insert
+"å": self-insert
+"æ": self-insert
+"ç": self-insert
+"è": self-insert
+"é": self-insert
+"ê": self-insert
+"ë": self-insert
+"ì": self-insert
+"í": self-insert
+"î": self-insert
+"ï": self-insert
+"ğ": self-insert
+"ñ": self-insert
+"ò": self-insert
+"ó": self-insert
+"ô": self-insert
+"õ": self-insert
+"ö": self-insert
+"÷": self-insert
+"ø": self-insert
+"ù": self-insert
+"ú": self-insert
+"û": self-insert
+"ü": self-insert
+"ı": self-insert
+"ş": self-insert
+"ÿ": self-insert

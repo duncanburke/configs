@@ -41,3 +41,6 @@ export GPG_TTY=`tty`
 function hmap { ghc -e "interact ($*)";  }
 function hmapl { hmap  "unlines.($*).lines" ; }
 function hmapw { hmapl "map (unwords.($*).words)" ; }
+
+stty stop undef
+stty start undef
