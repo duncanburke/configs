@@ -439,4 +439,14 @@
   (flyspell-mode)
   (wc-mode))
 
+(define-derived-mode large-text-mode
+  text-mode "Large-Text"
+  "Major mode for editing very large text files"
+  (interactive))
+
+(add-hook-anon 'large-text-mode-hook
+               (linum-mode 0))
+
+(mode-extension #'large-text-mode ".ck2")
+
 (provide 'my-modes)
