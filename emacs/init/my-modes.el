@@ -337,18 +337,13 @@
    (require 'magit)
    (setq magit-last-seen-setup-instructions "1.4.0")
    (my-keys-remap-mode 'git-commit-mode-map)
-   (my-keys-remap-mode 'git-rebase-mode-map)
    (my-keys-remap-mode 'magit-mode-map)
-   (my-keys-remap-mode 'magit-commit-mode-map)
    (my-keys-remap-mode 'magit-status-mode-map)
    (my-keys-remap-mode 'magit-log-mode-map)
    (my-keys-remap-mode 'magit-cherry-mode-map)
    (my-keys-remap-mode 'magit-reflog-mode-map)
    (my-keys-remap-mode 'magit-diff-mode-map)
-   (my-keys-remap-mode 'magit-wazzup-mode-map)
-   (my-keys-remap-mode 'magit-branch-manager-mode-map)
    (my-keys-remap-mode 'magit-process-mode-map)
-   (my-keys-remap-mode 'magit-section-jump-map)
    (my-keys-remap-mode 'magit-popup-mode-map)))
 
 ;; monkey-patch magit to show patch on commit buffer
