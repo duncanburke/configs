@@ -4,7 +4,7 @@ gitcompletion.sh:general:~/.gitcompletion
 gitconfig:general:~/.gitconfig
 gitignore:general:~/.gitignore_global
 start_agent:general:~/.start_agent
-#inputrc:general:~/.inputrc
+inputrc:general:~/.inputrc
 
 gtkrc-2.0:graphical:~/.gtkrc-2.0
 xinitrc:graphical:~/.xinitrc
