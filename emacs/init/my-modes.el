@@ -244,6 +244,11 @@
 ;; company-ghc
 (el-use-package "company-ghc")
 
+;; dash
+(el-register-package
+ :name dash
+ :type elpa)
+
 ;; flx
 (el-register-package
  :name flx
