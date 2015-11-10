@@ -29,6 +29,7 @@ alias nemacs='emacs -nw'
 alias ls='ls -h --color=auto'
 alias rm='rm -I'
 alias ec='emacsclient -cnw -a ""'
+alias ed='emacs -q --load "~/configs/emacs/init.el"'
 
 complete -cf sudo
 complete -cf man
