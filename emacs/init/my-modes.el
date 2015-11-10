@@ -409,6 +409,7 @@
  :name subatomic256-theme
  :type github
  :pkgname "duncanburke/subatomic256"
+ :depends dash
  :after
  (progn
    (load-file "subatomic256-theme.el")
