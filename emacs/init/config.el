@@ -54,15 +54,15 @@
 (setq source-directory "~/src/emacs")
 
 (setq
- backup-directory-alist '((".*" . "~/.emacs.d/backups/"))
- auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-saves" t))
+ backup-directory-alist `((".*" . ,(user-subdir "backups")))
+ auto-save-file-name-transforms `((".*" ,(user-subdir "auto-saves") t))
  create-lockfiles nil)
 
-(setq custom-file "~/.emacs.d/custom.el")
+(setq custom-file (user-subdir "custom.el"))
 (when (file-exists-p custom-file)
   (load custom-file))
 
 (setq custom-theme-load-path '("~/dev/subatomic256"))
-(setq custom-theme-directory "~/.emacs.d/themes/")
+(setq custom-theme-directory (user-subdir "themes"))
 
 (provide 'config)

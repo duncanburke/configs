@@ -1,4 +1,7 @@
-(add-to-list 'load-path "~/.emacs.d/init/")
+
+(defun user-subdir (dir)
+  (concat (file-name-as-directory user-emacs-directory) dir))
+(add-to-list 'load-path (user-subdir "init"))
 (require 'config)
 
 (require 'package)
@@ -6,7 +9,7 @@
                           ("gnu" . "http://elpa.gnu.org/packages/")))
 (package-initialize)
 
-(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+(add-to-list 'load-path (user-subdir "el-get/el-get"))
 (unless (require 'el-get nil t)
   (with-current-buffer
       (url-retrieve-synchronously
