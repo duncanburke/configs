@@ -34,7 +34,6 @@ set output-meta on
 "\C-d": end-of-file
 "\C-l": delete-char
 "\C-g": backward-delete-char
-"\C-j": quoted-insert
 
 # Killing and Yanking
 "\eL": kill-line
