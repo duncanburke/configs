@@ -30,3 +30,4 @@ alternative_header_first_line_format = $b$1$aqqu$/a$9 {%t}|{%f} $1$atqq$/a$9$/b
 alternative_header_second_line_format = {{$4$b%a$/b$9}{ - $7%b$9}{ ($4%y$9)}}|{%D}
 song_columns_list_format = (7f)[green]{l} (20)[cyan]{A|a} (50)[yellow]{t|f:Title} (20)[red]{b}
 media_library_primary_tag = album_artist
+ask_before_clearing_playlists = no
