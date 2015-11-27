@@ -1,0 +1,17 @@
+editMode: Emacs
+bind: ctrl-h left
+bind: meta-h ctrl-left
+bind: ctrl-t ctrl-p
+bind: meta-t meta-p
+bind: ctrl-n ctrl-n
+bind: meta-n meta-n
+bind: ctrl-s right
+bind: meta-s ctrl-right
+
+bind: ctrl-g backspace
+bind: meta-g ctrl-backspace
+bind: ctrl-l delete
+bind: meta-l meta-d
+
+bind: ctrl-a ctrl-r
+bind: ctrl-o ctrl-s

@@ -5,6 +5,7 @@ gitconfig:general:~/.gitconfig
 gitignore:general:~/.gitignore_global
 start_agent:general:~/.start_agent
 inputrc:general:~/.inputrc
+haskeline:general:~/.haskeline
 
 gtkrc-2.0:graphical:~/.gtkrc-2.0
 xinitrc:graphical:~/.xinitrc
