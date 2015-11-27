@@ -16,4 +16,5 @@ emacs/init.el:emacs:~/.emacs.d/init.el
 emacs/init:emacs:~/.emacs.d/init
 
 ncmpcpp:music:~/.ncmpcpp/config
+ncmpcpp_bindings:music:~/.ncmpcpp/bindings
 ghci:haskell:~/.ghci
