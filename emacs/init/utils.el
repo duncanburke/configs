@@ -1,3 +1,6 @@
+(require 'cl-macs)
+(require 'cl-extra)
+
 ;; Often things will open new windows for some reason. These can be useful, but one can be
 ;; left with a multitude of useless buffers lying around. Rather than just switching away from the offending
 ;; buffer, use C-z z. C-z x is somewhat unpredictable, as one isn't sure exactly which other buffer it's going
@@ -103,5 +106,27 @@
 (defmacro try-fn (fn &rest args)
   `(if (symbol-function (quote ,fn))
        (,fn ,@args)))
+
+(defun force-define-key (keymap key def)
+  (let ((lookup (lookup-key keymap key)))
+    (when (numberp lookup)
+      (define-key keymap (cl-subseq key 0 lookup) nil))
+    (define-key keymap key def)))
+
+(defmacro keymap-define (keymap &rest bindings)
+  `(progn ,@(cl-mapcar
+       (lambda (binding)
+         `(force-define-key ,keymap ,(car binding) ,(cadr binding))
+         )
+       bindings)
+    ))
+
+(defmacro keymap-define-kbd (keymap &rest bindings)
+  `(keymap-define
+    ,keymap
+    ,@(cl-mapcar
+       (lambda (binding)
+         `(,(kbd (car binding)) ,(cadr binding)))
+       bindings)))
 
 (provide 'utils)

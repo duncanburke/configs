@@ -1,150 +1,352 @@
-(require 'my-keys-defns)
+(require 'utils)
 
-;; Rebind key prefixes we're going to use
-(my-map-remap-key (kbd "C-h") (kbd "C-."))
-(my-map-remap-key (kbd "C-u") (kbd "C-p"))
-(my-map-remap-key (kbd "C-c") (kbd "C-u"))
-(my-map-remap-key (kbd "C-q") (kbd "C-e"))
-(my-map-remap-key (kbd "C-g") (kbd "C-,"))
-(my-map-remap-key (kbd "C-z") (kbd "C-b"))
-(my-map-remap-key (kbd "M-o") (kbd "M-'"))
-(my-map-remap-key (kbd "M-p") (kbd "M-t"))
-;; This is just a funny coincidence...
-(my-map-remap-key (kbd "M-n") (kbd "M-n"))
+(keymap-define-kbd
+ global-map
+ ("C-'")
+ ("M-'" 'comment-region)
+ ("M-\"" 'uncomment-region)
+ ("C-M-'")
 
-;; Cursor Movement Bindings
-(my-map-bind-key (kbd "C-h") 'backward-char)
-(my-map-bind-key (kbd "C-t") 'previous-line)
-(my-map-bind-key (kbd "C-n") 'next-line)
-(my-map-bind-key (kbd "C-s") 'forward-char)
+ ("C-,")
+ ("M-," 'keyboard-quit)
+ ("M-<" 'beginning-of-buffer)
+ ("C-M-,")
 
-(my-map-bind-key (kbd "M-h") 'left-word)
-(my-map-bind-key (kbd "M-t") 'backward-paragraph)
-(my-map-bind-key (kbd "M-n") 'forward-paragraph)
-(my-map-bind-key (kbd "M-s") 'right-word)
+ ("C-.")
+ ("M-." 'quit)
+ ("M->" 'end-of-buffer)
+ ("C-M-.")
 
-(my-map-bind-key (kbd "M-H") 'beginning-of-line)
-(my-map-bind-key (kbd "M-T") 'scroll-down-command)
-(my-map-bind-key (kbd "M-N") 'scroll-up-command)
-(my-map-bind-key (kbd "M-S") 'end-of-line)
+ ("C-p" 'universal-argument)
+ ("M-p")
+ ("M-P")
+ ("C-M-p")
 
-;; Kill Bindings
-(my-map-bind-key (kbd "C-g") 'backward-delete-char)
-(my-map-bind-key (kbd "C-c") 'nil)
-(my-map-bind-key (kbd "C-r") 'nil)
-(my-map-bind-key (kbd "C-l") 'delete-char)
+ ("C-y" 'quoted-insert)
+ ("M-y")
+ ("M-Y")
+ ("C-M-y")
 
-(my-map-bind-key (kbd "M-g") 'backward-kill-word)
-(my-map-bind-key (kbd "M-c") 'backward-kill-paragraph)
-(my-map-bind-key (kbd "M-r") 'kill-paragraph)
-(my-map-bind-key (kbd "M-l") 'kill-word)
+ ("C-a" 'isearch-backward)
+ ("M-a" 'search-backward-regexp)
+ ("M-A" 'query-replace)
+ ("C-M-a" 'replace-regexp)
 
-(my-map-bind-key (kbd "M-G") 'backward-kill-line)
-(my-map-bind-key (kbd "M-C") 'nil)
-(my-map-bind-key (kbd "M-R") 'nil)
-(my-map-bind-key (kbd "M-L") 'kill-line)
+ ("C-o" 'isearch-forward)
+ ("M-o" 'isearch-forward-regexp)
+ ("M-O" 'query-replace-regexp)
+ ("C-M-o" 'replace-regexp)
 
-;; Bindings for window movement
-(my-map-bind-key (kbd "C-M-h") 'windmove-left)
-(my-map-bind-key (kbd "C-M-t") 'windmove-up)
-(my-map-bind-key (kbd "C-M-n") 'windmove-down)
-(my-map-bind-key (kbd "C-M-s") 'windmove-right)
+ ("C-e" 'kill-region)
+ ("M-e" 'kill-ring-save)
+ ("M-E")
+ ("s-e" 'clipboard-kill-ring-save)
+ ("C-M-e")
+
+ ("C-u" 'yank)
+ ("M-u" 'yank-pop)
+ ("M-U")
+ ("s-u" 'clipboard-yank)
+ ("C-M-u")
+
+ ;; TODO: TABS!!!
+ ;; ("C-i" ...)
+
+ ("C-;")
+ ("M-;")
+ ("M-:" 'eval-expression)
+ ("C-M-;")
+
+ ("C-q")
+ ("M-q")
+ ("M-Q")
+ ("C-M-q")
+
+ ("C-j" 'newline)
+ ("M-j")
+ ("M-J")
+ ("C-M-j")
+
+ ("C-k" 'mode-specific-command-prefix)
+ ("M-k" 'help-command)
+ ("M-K")
+ ("C-M-k")
+
+ ("C-x" 'Control-X-prefix)
+ ("M-x")
+ ("M-X")
+ ("C-M-x")
+
+ ("C-f")
+ ("M-f")
+ ("M-F")
+ ("C-M-f")
+
+ ("C-g" 'backward-delete-char)
+ ("M-g" 'backward-kill-word)
+ ("M-G" 'backward-kill-line)
+ ("C-M-g")
+
+ ("C-c") ;; TODO
+ ("M-c" 'backward-kill-paragraph)
+ ("M-C") ;; TODO
+ ("C-M-c")
+
+ ("C-r") ;; TODO
+ ("M-r" 'kill-paragraph)
+ ("M-R") ;; TODO
+ ("C-M-r")
+
+ ("C-l" 'delete-char)
+ ("M-l" 'kill-word)
+ ("M-L" 'kill-line)
+ ("C-M-l")
+
+ ("C-/")
+ ("M-/")
+ ("M-?")
+ ("C-M-/")
+
+ ("C-=")
+ ("M-=")
+ ("M-+")
+ ("C-M-=")
+
+ ("C-d")
+ ("M-d")
+ ("M-D")
+ ("C-M-d")
+
+ ("C-h" 'backward-char)
+ ("M-h" 'left-word)
+ ("M-H" 'beginning-of-line)
+ ("C-M-h" 'windmove-left)
+
+ ("C-t" 'previous-line)
+ ("M-t" 'backward-paragraph)
+ ("M-T" 'scroll-down-command) ;; TODO
+ ("C-M-t" 'windmove-up)
+
+ ("C-n" 'next-line)
+ ("M-n" 'forward-paragraph)
+ ("M-N" 'scroll-up-command)
+ ("C-M-n" 'windmove-down)
+
+ ("C-s" 'forward-char)
+ ("M-s" 'right-word)
+ ("M-S" 'end-of-line)
+ ("C-M-s" 'windmove-right)
+
+ ("C--")
+ ("M--" 'negative-argument)
+ ("C-M--")
+ ("C-_")
+ ("M-_")
+ ("C-M-_")
+
+ ("C-b")
+ ("M-b")
+ ("M-B")
+ ("C-M-b")
+
+ ("C-m" 'newline)
+ ("M-m")
+ ("M-M")
+ ("C-M-m")
+
+ ("C-w")
+ ("M-w")
+ ("M-W")
+ ("C-M-w")
+
+ ("C-v")
+ ("M-v")
+ ("M-V")
+ ("C-M-v")
+
+ ("C-z" 'undo)
+ ("M-z" 'undo-only)
+ ("M-Z")
+ ("C-M-z")
+
+ ("<up>")
+ ("<C-up>")
+ ("<M-up>")
+ ("<C-M-up>")
+ ("<C-M-S-up>")
+
+ ("<down>")
+ ("<C-down>")
+ ("<M-down>")
+ ("<C-M-down>")
+ ("<C-M-S-down>")
+
+ ("<left>")
+ ("<C-left>")
+ ("<M-left>")
+ ("<C-M-left>")
+ ("<C-M-S-left>")
+
+ ("<right>")
+ ("<C-right>")
+ ("<M-right>")
+ ("<C-M-right>")
+ ("<C-M-S-right>")
+
+ ("<prior>")
+ ("<C-prior>")
+ ("<M-prior>")
+ ("<C-M-prior>")
+ ("<C-M-S-prior>")
+
+ ("<next>")
+ ("<C-next>")
+ ("<M-next>")
+ ("<C-M-next>")
+ ("<C-M-S-next>")
+
+ ("<backspace>" 'backward-delete-char)
+ ("<C-backspace>")
+ ("<M-backspace>")
+ ("<C-M-backspace>")
+ ("<C-M-S-backspace>")
+ )
+
+(keymap-define-kbd
+ (symbol-function 'Control-X-prefix)
+ ("<return>" 'execute-extended-command)
+ ("M-," 'ignore))
+
+(keymap-define-kbd
+ (symbol-function 'mode-specific-command-prefix)
+ ("M-," 'ignore))
 
 
-(my-map-bind-key (kbd "C-a") 'isearch-backward)
-(my-map-bind-key (kbd "C-o") 'isearch-forward)
-(my-map-bind-key (kbd "M-a") 'isearch-backward-regexp)
-(my-map-bind-key (kbd "M-o") 'isearch-forward-regexp)
-(my-map-bind-key (kbd "C-;") 'query-replace)
-(my-map-bind-key (kbd "C-q") 'query-replace-regexp)
-(my-map-bind-key (kbd "M-;") 'replace-string)
-(my-map-bind-key (kbd "M-q") 'replace-regexp)
+(keymap-define-kbd
+ minibuffer-local-map
+ ("C-g")
+ ("<XF86Back>")
+ ("<XF86Forward>")
+ ("<down>")
+ ("<next>")
+ ("<prior>")
+ ("<up>")
+ ("M-n")
+ ("M-p")
+ ("M-r")
+ ("M-s")
 
-;; Alternate binding for M-x
-(my-map-bind-key (kbd "C-x RET") 'execute-extended-command)
+ ("M-," 'abort-recursive-edit)
+ ("C-t" 'previous-history-element)
+ ("C-n" 'next-history-element)
+ ("C-a" 'previous-matching-history-element)
+ ("C-o" 'next-matching-history-element)
+ )
 
-(my-map-bind-key (kbd "C-b x") 'close-and-kill-next-pane)
-(my-map-bind-key (kbd "C-b z") 'close-and-kill-this-pane)
+(keymap-define-kbd
+ minibuffer-local-completion-map
+ ("<prior>")
+ ("M-v")
+ ("C-w" 'switch-to-completions))
 
-;; Keybindings to the X clipboard
-(my-map-bind-key (kbd "s-u") 'clipboard-yank)
-(my-map-bind-key (kbd "s-e") 'clipboard-kill-ring-save)
-(my-map-bind-key (kbd "C-u v") 'clipboard-yank)
-(my-map-bind-key (kbd "C-u c") 'clipboard-kill-ring-save)
+(keymap-define-kbd
+ completion-list-mode-map
+ ("C-w" 'delete-completion-window)
+ ("M-t" 'previous-completion)
+ ("M-n" 'next-completion)
+ ("<left>")
+ ("<right>"))
 
-;; Delete trailing whitespace
-(my-map-bind-key (kbd "C-x t") 'delete-trailing-whitespace)
+(keymap-define-kbd
+ query-replace-map
+ ("C-g")
+ ("M-," 'quit)
+ ("C-h")
+ ("M-k" 'help)
+ ("C-l")
+ ("C-w" 'recenter)
+ ("C-r")
+ ("C-w" 'edit)
+ ("C-v")
+ ("C-e" 'delete-and-edit)
+ ("C-]")
+ ("<M-next>")
+ ("<M-prior>")
+ ("<next>")
+ ("<prior>")
+ ("C-M-v")
+ ("M-v")
+ ("C-M-S-v")
+ ("M-t" 'scroll-up)
+ ("M-n" 'scroll-down)
+ ("C-M-t" 'scroll-other-window)
+ ("C-M-n" 'scroll-other-window-down))
 
-;; Line wrap at right edge of screen
-(my-map-bind-key (kbd "C-u t") 'toggle-truncate-lines)
+(with-eval-after-load "isearch"
+  (keymap-define-kbd
+   isearch-mode-map
+   ("C-g")
+   ("M-," 'isearch-abort)
+   ("C-q")
+   ("C-y" 'isearch-quote-char)
+   ("C-r")
+   ("C-a" 'isearch-repeat-backward)
+   ("C-s")
+   ("C-o" 'isearch-repeat-forward)
+   ("C-h")
+   ("C-k C-k" 'isearch-help-for-help)
+   ("C-k ?" 'isearch-help-for-help)
+   ("C-k b" 'isearch-describe-bindings)
+   ("C-k k" 'isearch-describe-key)
+   ("C-k m" 'isearch-describe-mode)
+   ("C-k ," 'help-quit)
+   ("C-M-r")
+   ("M-a" 'isearch-repeat-backward)
+   ("C-M-s")
+   ("M-o" 'isearch-repeat-forward)
 
-;; Line numbers at left edge of screen
-(my-map-bind-key (kbd "C-u l") 'linum-mode)
+   ("C-w")
+   ("C-e" 'isearch-yank-word-or-char)
+   ("C-M-w")
+   ("C-M-e" 'isearch-del-char)
+   ("C-y")
+   ("C-u" 'isearch-yank-kill)
+   ("C-M-y")
+   ("C-M-u" 'isearch-yank-char)
+   ("M-y")
+   ("M-u" 'isearch-yank-pop)
 
-;; replace buff-menu with bs-show
-(my-map-bind-key (kbd "C-x C-b") 'bs-show)
+   ("M-%")
+   ("M-A" 'isearch-query-replace)
+   ("C-M-%")
+   ("M-O" 'isearch-query-replace-regexp)
+   ("M-c")
+   ("C-w" 'isearch-edit-string)
+   ("M-n")
+   ("M-n" 'isearch-ring-advance)
+   ("M-p")
+   ("M-t" 'isearch-ring-retreat)
+   ("M-r")
+   ("C-v" 'isearch-toggle-regexp)
 
-;; Show-hide menu
-(my-map-bind-key (kbd "C-x y") 'menu-bar-mode)
+   ("M-s")
+   ("<f1>")
+   ("<help>"))
+  (setq minibuffer-local-isearch-map (make-sparse-keymap))
+  (set-keymap-parent minibuffer-local-isearch-map minibuffer-local-map)
+  (keymap-define-kbd
+   minibuffer-local-isearch-map
+   ("RET" 'exit-minibuffer)
+   ("C-M-i" 'isearch-complete-edit)
+   ("C-a" 'isearch-reverse-exit-minibuffer)
+   ("C-o" 'isearch-forward-exit-minibuffer)
+   ("C-s" 'isearch-yank-char-in-minibuffer))
+  )
 
-;; Show whitespace
-(my-map-bind-key (kbd "C-u w") 'whitespace-mode)
-
-;; Jump to the specified line number
-(my-map-bind-key (kbd "C-u a") 'goto-line)
-
-(my-map-bind-key (kbd "C-'") 'comment-region)
-(my-map-bind-key (kbd "M-'") 'uncomment-region)
-
-(my-map-bind-key (kbd "C-u x") 'text-mode)
-
-(my-map-bind-key (kbd "C-u g") 'magit-status)
-
-
-
-;; Disable C-z. Normally, this would cause it to be minimised in a graphical environment, but it gets
-;; confused with xmonad
-(global-unset-key (kbd "C-z"))
-
-;; (global-unset-key (kbd "C-n"))
-;; (global-unset-key (kbd "C-p"))
-;; (global-unset-key (kbd "C-f"))
-;; (global-unset-key (kbd "C-b"))
-;; (global-unset-key (kbd "C-a"))
-;; (global-unset-key (kbd "C-e"))
-
-;; (global-unset-key (kbd "<up>"))
-;; (global-unset-key (kbd "<down>"))
-;; (global-unset-key (kbd "<left>"))
-;; (global-unset-key (kbd "<right>"))
-;; (global-unset-key (kbd "<prior>"))
-;; (global-unset-key (kbd "<next>"))
-
-;; (global-unset-key (kbd "M-n"))
-;; (global-unset-key (kbd "M-p"))
-;; (global-unset-key (kbd "M-f"))
-;; (global-unset-key (kbd "M-b"))
-;; (global-unset-key (kbd "M-a"))
-;; (global-unset-key (kbd "M-e"))
-
-;; (global-unset-key (kbd "<C-up>"))
-;; (global-unset-key (kbd "<C-down>"))
-;; (global-unset-key (kbd "<C-left>"))
-;; (global-unset-key (kbd "<C-right>"))
-
-;; (global-unset-key (kbd "<M-up>"))
-;; (global-unset-key (kbd "<M-down>"))
-;; (global-unset-key (kbd "<M-left>"))
-;; (global-unset-key (kbd "<M-right>"))
-
-;; (global-unset-key (kbd "<backspace>"))
-;; (global-unset-key (kbd "DEL"))
-;; (global-unset-key (kbd "<deletechar>"))
-;; (global-unset-key (kbd "<C-backspace>"))
-;; (global-unset-key (kbd "<M-backspace>"))
-
-;; (global-unset-key (kbd "C-x o"))
-;; (global-unset-key (kbd "M-x"))
-
+(with-eval-after-load "tabulated-list"
+  (keymap-define-kbd
+   tabulated-list-mode-map
+   ("p")
+   ("t" 'previous-line)))
 
 (provide 'my-keys)

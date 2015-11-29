@@ -1,73 +1,106 @@
 (require 'el-helper)
 (require 'utils)
 
-(let ((minibuffer-bindings
-       '(("C-n" . next-history-element)
-         ("C-t" . previous-history-element)
-         ("M-n" . next-matching-history-element)
-         ("C-t" . previous-matching-history-element))))
-  (my-keys-remap-mode 'minibuffer-local-map
-                      minibuffer-bindings)
-  (my-keys-remap-mode 'minibuffer-local-ns-map
-                      minibuffer-bindings)
-  (my-keys-remap-mode 'minibuffer-local-completion-map
-                      minibuffer-bindings))
-
-(my-keys-remap-mode 'multi-query-replace-map)
-(my-keys-remap-mode 'query-replace-map)
-
 ;; Inbuilt Modes
 ;; -------------
 
 ;; bs
 (with-eval-after-load "bs"
-  (my-keys-remap-mode 'bs-mode-map
-                      '(("M-s" . scroll-right)
-                        ("M-h" . scroll-left)
-                        ("C-t" . bs-up)
-                        ("C-n" . bs-down))))
+  (keymap-define-kbd
+   bs-mode-map
+   ("C-c")
+   ("C-k C-k" 'bs-kill)
+   ("C-d")
+   ("C-g" 'bs-delete-backward)
+   ("C-g")
+   ("M-," 'bs-abort)
+   ("C-o")
+   ("C-w" 'bs-tmp-select-other-window)
+   ("C-t" 'bs-up)
+   ("C-n" 'bs-down)))
 
 ;; cc-mode
 (with-eval-after-load "cc-mode"
-  (my-keys-remap-mode 'c-mode-base-map)
-  (my-keys-remap-mode 'c-mode-map)
-  (my-keys-remap-mode 'c++-mode-map)
-  (my-keys-remap-mode 'objc-mode-map)
-  (my-keys-remap-mode 'java-mode-map)
-  (my-keys-remap-mode 'idl-mode-map)
-  (my-keys-remap-mode 'pike-mode-map)
-  (my-keys-remap-mode 'awk-mode-map))
+  (keymap-define-kbd
+   c-mode-base-map
+   ("C-d")
+   ("C-l" 'c-electric-delete-forward)
+   ("C-k" (lookup-key c-mode-base-map [?\C-c]))
+   ("C-c")
+   ("C-M-a")
+   ("C-M-e")
+   ("C-M-h")
+   ("C-M-q"))
+  (keymap-define-kbd
+   c-mode-map
+   ("C-k C-e" 'c-macro-expand)
+   ("RET" 'newline-and-indent
+   ("C-c"))
+  (keymap-define-kbd
+   c++-mode-map
+   ("C-k :" 'c-scope-operator)
+   ("C-c"))
+  (keymap-define-kbd
+   awk-mode-map
+   ("C-M-a")
+   ("C-M-e")
+   ("M-a")
+   ("M-e")))
 
-(add-hook-anon 'c-mode-hook
-               (setq c-basic-offset 2
-                     tab-width 2
-                     show-trailing-whitespace t
-                     indent-tabs-mode t)
-               (smart-tabs-mode t)
-               (c-set-offset 'case-label '+)
-               (c-toggle-auto-newline nil)
-               (c-toggle-hungry-state t)
-               (c-toggle-electric-state t)
-               (c-toggle-syntactic-indentation t)
-               (local-set-key (kbd "RET") 'newline-and-indent)
-               (subword-mode t))
+  (add-hook-anon
+   'c-mode-hook
+   (setq c-basic-offset 2
+         tab-width 2
+         show-trailing-whitespace t
+         indent-tabs-mode t)
+   (smart-tabs-mode t)
+   (c-set-offset 'case-label '+)
+   (c-toggle-auto-newline nil)
+   (c-toggle-hungry-state t)
+   (c-toggle-electric-state t)
+   (c-toggle-syntactic-indentation t)
+   (subword-mode t))
+  )
+
 
 ;; comint
 (with-eval-after-load "comint"
-  (my-keys-remap-mode
-   'comint-mode-map
-   '(("M-a" . comint-history-isearch-backward-regexp))))
+  (keymap-define-kbd
+   comint-mode-map
+   ("C-d")
+   ("C-l" 'comint-delchar-or-maybe-eof)
+   ("<C-down>")
+   ("<C-up>")
+   ("M-n")
+   ("M-p")
+   ("M-t" 'comint-previous-input)
+   ("M-n" 'comint-next-input)
+   ("C-k" (lookup-key comint-mode-map [?\C-c]))
+   ("C-c")
+   ("M-r")
+   ("M-a" 'comint-history-isearch-backward-regexp)
+   ("C-M-l")))
 
 ;; conf-mode
-;; conf-unix-mode, conf-windows-mode, conf-space-mode, conf-colon-mode
+;;; conf-unix-mode, conf-windows-mode, conf-space-mode, conf-colon-mode
+;;(add-hook 'conf-mode-hook #'tabstop-hook)
 (with-eval-after-load "conf-mode"
-  (my-keys-remap-mode 'conf-mode-map))
-
-(add-hook 'conf-mode-hook #'tabstop-hook)
+  (keymap-define-kbd
+   conf-mode-map
+   ("C-k" (lookup-key conf-mode-map [?\C-c]))
+   ("C-c")))
 
 ;; dired
 (with-eval-after-load "dired"
-  (my-keys-remap-mode 'dired-mode-map)
+  (keymap-define-kbd
+   dired-mode-map
+   ("C-o")
+   ("C-t")
+   ("C-M-d")
+   ("C-M-n")
+   ("C-M-p")
+   ("C-M-u")
+   ("M-s"))
   ;; Allow dired to recursive delete without confirmation
   (setq dired-recursive-deletes 'always)
   ;; Stop dired from spamming windows as you navigate
@@ -75,155 +108,211 @@
 
 ;; wdired
 (with-eval-after-load "wdired"
-  (my-keys-remap-mode 'wdired-mode-map))
+  (keymap-define-kbd
+   wdired-mode-map
+   ("C-p")
+   ("C-t" 'wdired-previous-line)
+   ("C-k" (lookup-key wdired-mode-map [?\C-c]))
+   ("C-c")))
 
 ;; edmacro-mode
 (with-eval-after-load "edmacro"
-  (my-keys-remap-mode 'edmacro-mode-map))
+  (keymap-define-kbd
+   edmacro-mode-map
+   ("C-k" (lookup-key edmacro-mode-map [?\C-c]))
+   ("C-c")))
 
 ;; eshell
-;; (with-eval-after-load "esh-mode"
-;;   (my-keys-remap-mode 'eshell-mode-map))
 
 ;; flyspell-mode
 (with-eval-after-load "flyspell"
-  (my-keys-remap-mode 'flyspell-mode-map))
+  (keymap-define-kbd
+   flyspell-mode-map
+   ("C-c")
+   ("C-k $" 'flyspell-correct-word-before-point)
+   ("C-,")
+   ("C-.")
+   ("C-;")))
 
 ;; fundamental-mode
 
 ;; help-mode
-
 (with-eval-after-load "help-mode"
-  (my-keys-remap-mode 'help-mode-map))
+  (keymap-define-kbd
+   help-mode-map
+   ("C-c")
+   ("M-t" 'help-go-back)
+   ("M-n" 'help-fo-forward)))
 
 ;; ido
-(defvar saved-ido-common-completion-map nil)
-(defvar saved-ido-file-dir-completion-map nil)
-(defvar saved-ido-file-completion-map nil)
-(defvar saved-ido-buffer-completion-map nil)
-(defvar saved-ido-completion-map nil)
+(with-eval-after-load "ido"
+  (defun ido-init-completion-maps ())
+  (defun ido-setup-completion-map ())
 
-(add-hook-anon 'ido-setup-hook
-               (if saved-ido-common-completion-map
-                   (progn
-                     (setq ido-common-completion-map saved-ido-common-completion-map
-                           ido-file-dir-completion-map saved-ido-file-dir-completion-map
-                           ido-file-completion-map saved-ido-file-completion-map
-                           ido-completion-map saved-ido-completion-map))
-                 (progn
-                   (my-keys-remap-mode 'ido-common-completion-map
-                                       '(("C-h" . nil)
-                                         ("C-s" . nil)
-                                         ("C-l" . nil)
-                                         ("C-," . ido-exit-minibuffer)
-                                         ("C-." . nil)
-                                         ("C-g" . nil)
-                                         ("M-g" . nil)
-                                         ("C-t" . ido-prev-match)
-                                         ("C-n" . ido-next-match)))
-                   (my-keys-remap-mode 'ido-file-dir-completion-map
-                                       '(("C-g" . ido-delete-backward-updir)
-                                         ("M-c" . ido-delete-backward-word-updir)
-                                         ("C-t" . ido-prev-match-dir)
-                                         ("C-n" . ido-next-match-dir)
-                                         ("C-f" . ido-fallback-command)
-                                         ("C-b" . ido-enter-dired)))
-                   (my-keys-remap-mode 'ido-file-completion-map
-                                         '(("C-f" . ido-fallback-command)))
-                   (my-keys-remap-mode 'ido-buffer-completion-map)
-                   (my-keys-remap-mode 'ido-completion-map)
-                   (setq saved-ido-common-completion-map ido-common-completion-map
-                         saved-ido-file-dir-completion-map ido-file-dir-completion-map
-                         saved-ido-file-completion-map ido-file-completion-map
-                         saved-ido-buffer-completion-map ido-buffer-completion-map
-                         saved-ido-completion-map ido-completion-map)))
-               (setq ido-enable-flex-matching t
-                     ido-use-filename-at-point nil
-                     ido-create-new-buffer 'always
-                     ido-default-file-method 'selected-window
-                     ido-default-buffer-method 'selected-window
-                     ido-enable-flex-matching t
-                     ido-use-faces nil
-                     ido-auto-merge-work-directories-length -1))
+  (setq ido-common-completion-map (make-sparse-keymap))
+  (set-keymap-parent ido-common-completion-map minibuffer-local-map)
+  (keymap-define-kbd
+   ido-common-completion-map
+   ("C-h" 'ido-magic-backward-char)
+   ("C-s" 'ido-magic-forward-char)
+   ("TAB" 'ido-complete)
+   ("RET" 'ido-exit-minibuffer)
+   ("M-h" 'ido-prev-match)
+   ("M-s" 'ido-next-match)
+   ("SPC" 'ido-complete-space)
+   ("M-k" 'ido-completion-help)
+   ("C-j" 'ido-select-text)
+   ("RET" 'ido-exit-minibuffer)
+   ("C-SPC" 'ido-restrict-to-matches)
+   ("M-SPC" 'ido-take-first-match)
+   ("M-w" 'ido-undo-merge-work-directory))
+
+  (setq ido-file-dir-completion-map (make-sparse-keymap))
+  (set-keymap-parent ido-file-dir-completion-map ido-common-completion-map)
+  (keymap-define-kbd
+   ido-file-dir-completion-map
+   ("C-x C-b" 'ido-enter-switch-buffer)
+   ("C-x C-f" 'ido-fallback-command)
+   ("C-x C-d" 'ido-enter-dired)
+   ("C-t" 'ido-prev-match-dir)
+   ("C-n" 'ido-next-match-dir)
+   ("M-t" 'ido-prev-work-directory)
+   ("M-n" 'ido-next-work-directory)
+   ("<backspace>" 'ido-delete-backward-updir)
+   ("<C-backspace>" 'ido-up-directory)
+   ("C-g" 'ido-delete-backward-updir)
+   ("M-g" 'ido-delete-backward-word-updir)
+   ("M-T" 'ido-prev-work-file)
+   ("M-N" 'ido-next-work-file)
+   ("C-M-t" 'ido-prev-work-directory)
+   ("C-M-n" 'ido-next-work-directory)
+   ("C-w" 'ido-merge-work-directories)
+   ("M-W" 'ido-forget-work-directory))
+
+  (setq ido-file-completion-map (make-sparse-keymap))
+  (set-keymap-parent ido-file-completion-map ido-file-dir-completion-map)
+  (keymap-define-kbd
+   ido-file-completion-map
+   ("C-v" 'ido-toggle-literal)
+   ("C-z" 'ido-delete-file-at-head))
+
+  (setq ido-buffer-completion-map (make-sparse-keymap))
+  (set-keymap-parent ido-buffer-completion-map ido-common-completion-map)
+  (keymap-define-kbd
+   ido-buffer-completion-map
+   ("C-x C-f" 'ido-enter-find-file)
+   ("C-x C-b" 'ido-fallback-command)
+   ("C-z" 'ido-kill-buffer-at-head)
+   ("C-v" 'ido-toggle-virtual-buffers))
+
+  (add-hook-anon
+   'ido-setup-hook
+   (setq ido-enable-flex-matching t
+         ido-use-filename-at-point nil
+         ido-create-new-buffer 'always
+         ido-default-file-method 'selected-window
+         ido-default-buffer-method 'selected-window
+         ido-enable-flex-matching t
+         ido-use-faces nil
+         ido-auto-merge-work-directories-length -1))
+  )
 
 (ido-mode 1)
 (ido-everywhere 1)
 
 ;; ielm
 (with-eval-after-load "ielm"
-  (my-keys-remap-mode 'ielm-map))
+  (keymap-define-kbd
+   ielm-map
+   ("C-c")
+   ("C-k C-b" 'ielm-change-working-buffer)
+   ("C-k C-f" 'ielm-display-working-buffer)
+   ("C-k C-v" 'ielm-print-working-buffer)))
 
-;; isearch-mode
-(with-eval-after-load "isearch"
-  (my-keys-remap-mode
-   'isearch-mode-map
-   '(("C-a" . isearch-repeat-backward)
-     ("C-o" . isearch-repeat-forward)
-     ("M-a" . isearch-repeat-backward)
-     ("M-o" . isearch-repeat-forward)
-     ("C-," . isearch-abort)
-     ("C-e" . isearch-quote-char)
-     ("M-p" . isearch-ring-retreat)
-     ("M-t" . isearch-ring-advance)
-     ("C-g" . isearch-delete-char)))
-  (my-keys-remap-mode
-   'minibuffer-local-isearch-map
-   '(("TAB" . isearch-complete-edit)
-     ("C-a" . isearch-reverse-exit-minibuffer)
-     ("C-o" . isearch-forward-exit-minibuffer)
-     ("M-a" . isearch-reverse-exit-minibuffer)
-     ("M-o" . isearch-forward-exit-minibuffer))))
+;; info
+(with-eval-after-load "info"
+  (setq Info-mode-map (make-keymap))
+  (suppress-keymap Info-mode-map)
+  (keymap-define-kbd
+   Info-mode-map
+   ("RET" 'Info-follow-nearest-node)
+   ("TAB" 'Info-next-reference)
+   ("M-TAB" 'Info-prev-reference)
+   ("M-T" 'Info-scroll-down)
+   ("M-N" 'Info-scroll-up)
+   ("q" 'Info-exit)
+   ("h" 'Info-prev)
+   ("s" 'Info-next)
+   ("t" 'Info-up)
+   ("o" 'Info-search)
+   ("e" 'Info-copy-current-node-name)
+   ("<" 'Info-top-node)
+   (">" 'Info-final-node))
 
+  (keymap-define-kbd
+   Info-edit-mode-map
+   ("C-c")
+   ("C-k C-k" 'Info-cease-edit)))
 
 ;; lisp-mode
 (with-eval-after-load "lisp-mode"
-  (my-keys-remap-mode 'lisp-mode-shared-map)
-  (my-keys-remap-mode 'lisp-mode-map)
-  (my-keys-remap-mode 'emacs-lisp-mode-map)
-  (my-keys-remap-mode 'lisp-interaction-mode-map))
+  (keymap-define-kbd
+   lisp-mode-map
+   ("C-c")
+   ("C-k C-z" 'run-lisp)))
 
 ;; package
 (with-eval-after-load "package"
-  (my-keys-remap-mode 'package-menu-mode-map))
+  (keymap-define-kbd
+   package-menu-mode-map
+   ("M-t" 'scroll-down-command)
+   ("M-n" 'scroll-up-command)))
 
 ;; prog-mode
 (with-eval-after-load "prog-mode"
-  (my-keys-remap-mode 'prog-mode-map))
-
-(add-hook 'prog-mode-hook #'linum-hook)
+  (add-hook 'prog-mode-hook #'linum-hook))
 
 ;; python-mode
 (with-eval-after-load "python"
-  (my-keys-remap-mode 'python-mode-map
-                      '("RET" . 'newline-and-indent))
-  (my-keys-remap-mode 'inferior-python-mode-map))
+  (keymap-define-kbd
+   python-mode-map
+   ("C-k" (lookup-key python-mode-map [?\C-c]))
+   ("C-c"))
 
-(add-hook-anon 'python-mode-hook
-               (setq python-check-command "pychecker --stdlib -# 0 -xXT"
-                     tab-width 4
-                     python-indent 4))
+  (add-hook-anon
+   'python-mode-hook
+   (setq python-check-command "pychecker --stdlib -# 0 -xXT"
+         tab-width 4
+         python-indent 4)))
 
 ;;sh-mode
 (with-eval-after-load "sh-script"
-  (my-keys-remap-mode 'sh-mode-map))
+  (keymap-define-kbd
+   sh-mode-map
+   ("C-k" (lookup-key sh-mode-map [?\C-c]))
+   ("C-c"))
 
-(add-hook-anon 'sh-mode-hook
-               (sh-electric-here-document-mode -1))
-
-;; tabulated-list
-(with-eval-after-load "tabulated-list"
-  (define-key tabulated-list-mode-map "p" nil)
-  (define-key tabulated-list-mode-map "t" 'previous-line))
+  (add-hook-anon
+   'sh-mode-hook
+   (sh-electric-here-document-mode -1)))
 
 ;; term
 (with-eval-after-load "term"
-  (my-keys-remap-mode 'term-mode-map))
+  (keymap-define-kbd
+   term-mode-map
+   ("C-k" (lookup-key term-mode-map [?\C-c]))
+   ("C-c")
+   ("C-d")
+   ("C-l" 'term-delchar-or-maybe-eof)
+   ("M-p")
+   ("M-t" 'term-previous-input)
+   ("M-r")
+   ("M-s")
+   ("C-a" 'term-previous-matching-input)
+   ("C-o" 'term-next-matching-input)))
 
 ;; text-mode
-(with-eval-after-load "text-mode"
-  (my-keys-remap-mode 'text-mode-map))
-
-(add-hook 'text-mode-hook #'tabstop-hook)
+;;(add-hook 'text-mode-hook #'tabstop-hook)
 (add-hook 'text-mode-hook #'linum-hook)
 
 ;; Packages
@@ -231,14 +320,13 @@
 
 ;; company
 ;; hooks: company-completion-(started|cancelled|finished)-hook
+;; company-mode-map company-active-map
 (el-register-package
  :name company
  :type elpa
  :after
  (progn
    (require 'company)
-   (my-keys-remap-mode 'company-mode-map)
-   (my-keys-remap-mode 'company-active-map)
    (add-to-list 'company-backends 'company-ghc)))
 
 ;; company-ghc
@@ -287,14 +375,14 @@
  :build `(("make" ,(format "EMACS=%s" el-get-emacs) "all"))
  :post-init (require 'haskell-mode-autoloads))
 
-(with-eval-after-load "haskell-cabal"
-  (my-keys-remap-mode 'haskell-cabal-mode-map))
+;; (with-eval-after-load "haskell-cabal"
+;;   (my-keys-remap-mode 'haskell-cabal-mode-map))
 
-(with-eval-after-load "haskell-interactive-mode"
-  (my-keys-remap-mode 'haskell-interactive-mode-map))
+;; (with-eval-after-load "haskell-interactive-mode"
+;;   (my-keys-remap-mode 'haskell-interactive-mode-map))
 
-(with-eval-after-load "haskell-mode"
-  (my-keys-remap-mode 'haskell-mode-map))
+;; (with-eval-after-load "haskell-mode"
+;;   (my-keys-remap-mode 'haskell-mode-map))
 
 (add-hook-anon
  'haskell-mode-hook
@@ -326,7 +414,11 @@
 (mode-extension #'haskell-cabal-mode ".cabal")
 
 ;; help-fns+
-(el-use-package "help-fns+")
+(el-register-package
+ :name help-fns+
+ :type elpa
+ :features 'help-fns+
+ :lazy nil)
 
 ;; magit
 (el-register-package
@@ -336,15 +428,16 @@
  (progn
    (require 'magit)
    (setq magit-last-seen-setup-instructions "1.4.0")
-   (my-keys-remap-mode 'git-commit-mode-map)
-   (my-keys-remap-mode 'magit-mode-map)
-   (my-keys-remap-mode 'magit-status-mode-map)
-   (my-keys-remap-mode 'magit-log-mode-map)
-   (my-keys-remap-mode 'magit-cherry-mode-map)
-   (my-keys-remap-mode 'magit-reflog-mode-map)
-   (my-keys-remap-mode 'magit-diff-mode-map)
-   (my-keys-remap-mode 'magit-process-mode-map)
-   (my-keys-remap-mode 'magit-popup-mode-map)))
+   ;; (my-keys-remap-mode 'git-commit-mode-map)
+   ;; (my-keys-remap-mode 'magit-mode-map)
+   ;; (my-keys-remap-mode 'magit-status-mode-map)
+   ;; (my-keys-remap-mode 'magit-log-mode-map)
+   ;; (my-keys-remap-mode 'magit-cherry-mode-map)
+   ;; (my-keys-remap-mode 'magit-reflog-mode-map)
+   ;; (my-keys-remap-mode 'magit-diff-mode-map)
+   ;; (my-keys-remap-mode 'magit-process-mode-map)
+   ;; (my-keys-remap-mode 'magit-popup-mode-map)
+   ))
 
 ;; monkey-patch magit to show patch on commit buffer
 (advice-add #'magit-key-mode-popup-committing :after
@@ -358,12 +451,12 @@
  :after
  (progn
    (require 'markdown-mode)
-   (my-keys-remap-mode
-    'markdown-mode-map
-    '(("M-h" . nil)
-      ("M-t" . nil)
-      ("M-n" . nil)
-      ("M-s" . nil)))
+   ;; (my-keys-remap-mode
+   ;;  'markdown-mode-map
+   ;;  '(("M-h" . nil)
+   ;;    ("M-t" . nil)
+   ;;    ("M-n" . nil)
+   ;;    ("M-s" . nil)))
    (setq indent-line-function 'tab-to-tab-stop
          markdown-indent-on-enter nil)
    ))
@@ -386,7 +479,8 @@
  :after
  (progn
    (require 'org)
-   (my-keys-remap-mode 'org-mode-map)))
+   ;; (my-keys-remap-mode 'org-mode-map)
+   ))
 
 (add-hook-anon
  'org-mode-hook
@@ -395,11 +489,6 @@
        org-todo-keywords '((sequence "TODO" "DOING" "|" "DONE"))))
 
 (push '("---\\(.\\|\n\\)*format:\\s-*org" . org-mode) magic-mode-alist)
-
-;; rainbow-blocks-mode
-(el-register-package
- :name rainbow-blocks
- :type elpa)
 
 ;; smart-tabs-mode
 (el-use-package "smarttabs")

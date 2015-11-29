@@ -21,11 +21,12 @@
 
 (require 'utils)
 
-(require 'my-keys)
-(my-keys-process-bindings)
-(my-keys-apply-global)
-
 (require 'el-helper)
+
+(require 'my-keys)
 (require 'my-modes)
 
+;;(el-use-package "help-fns+")
 (el-get-packages)
+
+(require 'help-fns+)
