@@ -651,7 +651,7 @@
         markdown-indent-on-enter nil
         markdown-enable-math t
         markdown-unordered-list-item-prefix "- "
-        markdown-font-lock-support-mode nil)
+        markdown-font-lock-support-mode 'jit-lock-mode)
   (add-hook-anon
    'markdown-mode-hook
    (flyspell-mode)
