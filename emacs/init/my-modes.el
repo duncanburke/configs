@@ -147,14 +147,13 @@
 ;; ido
 (with-eval-after-load "ido"
   (defun ido-init-completion-maps ())
-  (defun ido-setup-completion-map ())
 
   (setq ido-common-completion-map (make-sparse-keymap))
   (set-keymap-parent ido-common-completion-map minibuffer-local-map)
   (keymap-define-kbd
    ido-common-completion-map
-   ("C-h" 'ido-magic-backward-char)
-   ("C-s" 'ido-magic-forward-char)
+   ("C-h")
+   ("C-s")
    ("TAB" 'ido-complete)
    ("RET" 'ido-exit-minibuffer)
    ("M-h" 'ido-prev-match)
@@ -165,56 +164,58 @@
    ("RET" 'ido-exit-minibuffer)
    ("C-SPC" 'ido-restrict-to-matches)
    ("M-SPC" 'ido-take-first-match)
-   ("M-w" 'ido-undo-merge-work-directory))
+   ("M-t" 'ido-prev-work-directory)
+   ("M-n" 'ido-next-work-directory)
+   ("M-w" 'ido-undo-merge-work-directory)
+   ("C-w" 'ido-merge-work-directories)
+   ("C-v" 'ido-forget-work-directory)
+   ("C-M-g" 'ido-toggle-literal)
+   ("C-M-c" 'ido-toggle-ignore)
+   ("C-M-r" 'ido-toggle-virtual-buffers)
+   )
 
   (setq ido-file-dir-completion-map (make-sparse-keymap))
   (set-keymap-parent ido-file-dir-completion-map ido-common-completion-map)
   (keymap-define-kbd
    ido-file-dir-completion-map
-   ("C-x C-b" 'ido-enter-switch-buffer)
-   ("C-x C-f" 'ido-fallback-command)
-   ("C-x C-d" 'ido-enter-dired)
+   ("C-b" 'ido-enter-switch-buffer)
+   ("C-f" 'ido-fallback-command)
+   ("C-d" 'ido-enter-dired)
    ("C-t" 'ido-prev-match-dir)
    ("C-n" 'ido-next-match-dir)
-   ("M-t" 'ido-prev-work-directory)
-   ("M-n" 'ido-next-work-directory)
    ("<backspace>" 'ido-delete-backward-updir)
    ("<C-backspace>" 'ido-up-directory)
    ("C-g" 'ido-delete-backward-updir)
    ("M-g" 'ido-delete-backward-word-updir)
    ("M-T" 'ido-prev-work-file)
-   ("M-N" 'ido-next-work-file)
-   ("C-M-t" 'ido-prev-work-directory)
-   ("C-M-n" 'ido-next-work-directory)
-   ("C-w" 'ido-merge-work-directories)
-   ("M-W" 'ido-forget-work-directory))
+   ("M-N" 'ido-next-work-file))
 
   (setq ido-file-completion-map (make-sparse-keymap))
   (set-keymap-parent ido-file-completion-map ido-file-dir-completion-map)
   (keymap-define-kbd
    ido-file-completion-map
-   ("C-v" 'ido-toggle-literal)
    ("C-z" 'ido-delete-file-at-head))
 
   (setq ido-buffer-completion-map (make-sparse-keymap))
   (set-keymap-parent ido-buffer-completion-map ido-common-completion-map)
   (keymap-define-kbd
    ido-buffer-completion-map
-   ("C-x C-f" 'ido-enter-find-file)
-   ("C-x C-b" 'ido-fallback-command)
-   ("C-z" 'ido-kill-buffer-at-head)
-   ("C-v" 'ido-toggle-virtual-buffers))
+   ("C-f" 'ido-enter-find-file)
+   ("C-b" 'ido-fallback-command)
+   ("C-z" 'ido-kill-buffer-at-head))
 
-  (add-hook-anon
-   'ido-setup-hook
-   (setq ido-enable-flex-matching t
-         ido-use-filename-at-point nil
-         ido-create-new-buffer 'always
-         ido-default-file-method 'selected-window
-         ido-default-buffer-method 'selected-window
-         ido-enable-flex-matching t
-         ido-use-faces nil
-         ido-auto-merge-work-directories-length -1))
+  (setq ido-enable-flex-matching t
+        ido-use-filename-at-point nil
+        ido-create-new-buffer 'never
+        ido-default-file-method 'selected-window
+        ido-default-buffer-method 'selected-window
+        ido-use-faces t
+        ido-buffer-disable-smart-matches nil
+        ido-max-prospects 64
+        ido-auto-merge-work-directories-length 0
+        ido-auto-merge-delay-time 0
+        ido-enter-matching-directory t
+        ido-use-virtual-buffers t)
   )
 
 (ido-mode 1)
@@ -247,7 +248,8 @@
    ("o" 'Info-search)
    ("e" 'Info-copy-current-node-name)
    ("<" 'Info-top-node)
-   (">" 'Info-final-node))
+   (">" 'Info-final-node)
+   ("w" 'Info-menu))
 
   (keymap-define-kbd
    Info-edit-mode-map
@@ -260,6 +262,48 @@
    lisp-mode-map
    ("C-c")
    ("C-k C-z" 'run-lisp)))
+
+;; outline-mode
+(with-eval-after-load "outline"
+  (setq outline-mode-map (make-sparse-keymap))
+  (keymap-define-kbd
+   outline-mode-map
+   ("C-M-g" 'outline-backward-same-level)
+   ("C-M-c" 'outline-previous-visible-heading)
+   ("C-M-r" 'outline-next-visible-heading)
+   ("C-M-l" 'outline-forward-same-level)
+
+   ("C-M-d" 'outline-up-heading)
+
+   ("C-M-m" 'outline-promote)
+   ("C-M-w" 'outline-move-subtree-up)
+   ("C-M-v" 'outline-move-subtree-down)
+   ("C-M-z" 'outline-demote)
+
+   ;; Alternate bindings for terminals
+   ("C-k C-g" [?\C-\M-g])
+   ("C-k C-c" [?\C-\M-c])
+   ("C-k C-r" [?\C-\M-r])
+   ("C-k C-l" [?\C-\M-l])
+   ("C-k C-d" [?\C-\M-d])
+   ("C-k C-m" [?\C-\M-m])
+   ("C-k C-w" [?\C-\M-w])
+   ("C-k C-v" [?\C-\M-v])
+   ("C-k C-z" [?\C-\M-z])
+
+
+   ("C-k -" 'outline-insert-heading)
+   ))
+   ;; show-all
+   ;; hide-entry  show-entry
+   ;; hide-subtree show-subtree
+   ;; show-children
+   ;; show-branches
+   ;; hide-other
+   ;; hide-leaves
+   ;; hide-sublevels
+   ;; hide-body
+
 
 ;; package
 (with-eval-after-load "package"
@@ -311,9 +355,25 @@
    ("C-a" 'term-previous-matching-input)
    ("C-o" 'term-next-matching-input)))
 
+;; tabulated-list
+
+(with-eval-after-load "tabulated-list"
+  (add-hook-anon
+   'tabulated-list-mode-hook
+   (setq show-trailing-whitespace nil)))
+
 ;; text-mode
 ;;(add-hook 'text-mode-hook #'tabstop-hook)
 (add-hook 'text-mode-hook #'linum-hook)
+
+;; with-editor
+
+(with-eval-after-load "with-editor"
+  (keymap-define-kbd
+   with-editor-mode-map
+   ("C-c")
+   ("C-k C-k" 'with-editor-cancel)
+   ("C-k C-c" 'with-editor-finish)))
 
 ;; Packages
 ;; --------
@@ -327,10 +387,23 @@
  :after
  (progn
    (require 'company)
-   (add-to-list 'company-backends 'company-ghc)))
-
-;; company-ghc
-(el-use-package "company-ghc")
+   ;; (add-to-list 'company-backends 'company-ghc)
+   (keymap-define-kbd
+    company-active-map
+    ("C-g")
+    ("M-," 'company-abort)
+    ("C-h")
+    ("M-k" 'company-show-doc-buffer)
+    ("C-s")
+    ("C-o" 'company-search-candidates)
+    ("C-M-s")
+    ("C-M-o" 'company-filter-candidates)
+    ("M-n")
+    ("M-p")
+    ("M-t" 'company-select-previous)
+    ("M-n" 'company-select-next)
+    ("M-T" 'company-previous-page)
+    ("M-N" 'company-next-page))))
 
 ;; dash
 (el-register-package
@@ -349,7 +422,13 @@
  :after
  (flx-ido-mode))
 
-;; ghc
+;; git modes
+;; commit, rebase, config, ignore
+(el-use-package "git-modes")
+
+;; haskell
+;; (el-use-package "company-ghc")
+
 ;; (el-use-package "ac-ghc-mod")
 (el-register-package
  :name ghc-mod
@@ -361,53 +440,65 @@
 ;; (autoload 'ghc-init "ghc" nil t)
 ;; (autoload 'ghc-debug "ghc" nil t)
 
-;; git modes
-;; commit, rebase, config, ignore
-(el-use-package "git-modes")
-
-;; haskell-mode
-(defvar haskell-mode-remapped nil)
 (el-register-package
  :name haskell-mode
  :type github
  :pkgname "haskell/haskell-mode"
  :info "."
  :build `(("make" ,(format "EMACS=%s" el-get-emacs) "all"))
- :post-init (require 'haskell-mode-autoloads))
+ :post-init (require 'haskell-mode-autoloads)
+ :after
+ (progn
+   (setq indent-tabs-mode nil
+         tab-width 2
+         haskell-indentation-cycle-warn nil
+         ghc-hlint-options '("--ignore=Use camelCase")
+         show-trailing-whitespace t
+         ghc-display-error 'minibuffer
+         ghc-display-hole 'other-buffer)
+   (flyspell-prog-mode)
+   (company-mode)
+   (auto-fill-mode 1)
+   (turn-on-haskell-indentation))
+ )
 
-;; (with-eval-after-load "haskell-cabal"
-;;   (my-keys-remap-mode 'haskell-cabal-mode-map))
+;; (set (make-local-variable
+;;       'fill-nobreak-predicate)
+;;      (lambda ()
+;;        (not (eq (get-text-property (point) 'face)
+;;                 'font-lock-comment-face))))
 
-;; (with-eval-after-load "haskell-interactive-mode"
-;;   (my-keys-remap-mode 'haskell-interactive-mode-map))
 
-;; (with-eval-after-load "haskell-mode"
-;;   (my-keys-remap-mode 'haskell-mode-map))
+;; TODO: ghc-mode edits haskell-mode-map
+(with-eval-after-load "haskell-mode"
+  (keymap-define-kbd
+   haskell-mode-map
+   ("C-k" (lookup-key haskell-mode-map [?\C-c]))
+   ("C-c")))
 
-(add-hook-anon
- 'haskell-mode-hook
- (setq indent-tabs-mode nil
-       tab-width 2
-       haskell-indentation-cycle-warn nil
-       ghc-hlint-options '("--ignore=Use camelCase")
-       show-trailing-whitespace t
-       ghc-display-error 'minibuffer
-       ghc-display-hole 'other-buffer)
- ;; (ghc-init)
- ;; (unless haskell-mode-remapped
- ;;   ;; ghc-mode edits `haskell-mode-map`, so we need to defer the
- ;;   ;; remapping until ghc has been loaded for the first time
- ;;   (my-keys-remap-mode 'haskell-mode-map)
- ;;   (setq haskell-mode-remapped t))
- (flyspell-prog-mode)
- (company-mode)
- (auto-fill-mode 1)
- (turn-on-haskell-indentation)
- (set (make-local-variable
-       'fill-nobreak-predicate)
-      (lambda ()
-        (not (eq (get-text-property (point) 'face)
-                 'font-lock-comment-face)))))
+(with-eval-after-load "haskell-cabal"
+  (setq haskell-cabal-mode-map (make-sparse-keymap))
+  (keymap-define-kbd
+   haskell-cabal-mode-map
+   ("M-t" 'haskell-cabal-previous-subsection)
+   ("M-n" 'haskell-cabal-next-subsection)
+   ("M-T" 'haskell-cabal-previous-section)
+   ("M-N" 'haskell-cabal-next-section)
+   ("C-k C-f" 'haskell-cabal-find-or-create-source-file)
+   ("C-k C-s" 'haskell-cabal-subsection-arrange-lines)))
+
+(with-eval-after-load "haskell-interactive-mode"
+  (keymap-define-kbd
+   haskell-interactive-mode-map
+   ("C-k" (lookup-key haskell-interactive-mode-map [?\C-c]))
+   ("C-c")
+   ("C-a")
+   ("M-n")
+   ("M-p")
+   ("M-A" 'haskell-interactive-mode-beginning)
+   ("M-t" 'haskell-interactive-mode-history-previous)
+   ("M-n" 'haskell-interactive-mode-history-next)
+   ("M-G" 'haskell-interactive-mode-kill-whole-line)))
 
 (mode-extension #'haskell-mode ".hs")
 (mode-extension #'haskell-mode ".hs-boot")
@@ -428,44 +519,146 @@
  (progn
    (require 'magit)
    (setq magit-last-seen-setup-instructions "1.4.0")
-   ;; (my-keys-remap-mode 'git-commit-mode-map)
-   ;; (my-keys-remap-mode 'magit-mode-map)
-   ;; (my-keys-remap-mode 'magit-status-mode-map)
-   ;; (my-keys-remap-mode 'magit-log-mode-map)
-   ;; (my-keys-remap-mode 'magit-cherry-mode-map)
-   ;; (my-keys-remap-mode 'magit-reflog-mode-map)
-   ;; (my-keys-remap-mode 'magit-diff-mode-map)
-   ;; (my-keys-remap-mode 'magit-process-mode-map)
-   ;; (my-keys-remap-mode 'magit-popup-mode-map)
    ))
 
-;; monkey-patch magit to show patch on commit buffer
-(advice-add #'magit-key-mode-popup-committing :after
-            (lambda ()
-              (magit-key-mode-toggle-option (quote committing) "--verbose")))
+(with-eval-after-load "git-commit"
+  (keymap-define-kbd
+   git-commit-mode-map
+   ("C-k" (lookup-key git-commit-mode-map [?\C-c]))
+   ("C-c")
+   ("M-n")
+   ("M-p")
+   ("M-t" 'git-commit-prev-message)
+   ("M-n" 'git-commit-next-message)))
+
+(with-eval-after-load "git-rebase"
+  (keymap-define-kbd
+   git-rebase-mode-map
+   ("C-k")
+   ("M-L" 'git-rebase-kill-line)
+   ("C-x")
+   ("p")
+   ("t" 'git-rebase-backward-line)
+   ("M-T" 'scroll-up-command)
+   ("M-N" 'scroll-down-command)
+   ("M-p")
+   ("M-t" 'git-rebase-move-line-up)
+   ("M-n" 'git-rebase-moveline-down)))
+
+(with-eval-after-load "magit-mode"
+  (keymap-define-kbd
+   magit-mode-map
+   ("C-k" (lookup-key magit-mode-map [?\C-c]))
+   ("C-c")
+   ("C-w")
+   ("M-w")
+   ("C-e" 'magit-copy-as-kill)
+   ("M-e" 'magit-copy-buffer-thing-as-kill)
+   ("p")
+   ("n")
+   ("M-p")
+   ("M-n")
+   ("M-t" 'magit-section-backward)
+   ("M-n" 'magit-section-forward)
+   ("M-T" 'magit-section-up)))
+
+(with-eval-after-load "magit-log"
+  (keymap-define-kbd
+   magit-log-mode-map
+   ("C-c")
+   ("C-k h" 'magit-go-backward)
+   ("C-k s" 'magit-go-forward))
+  )
+
+(with-eval-after-load "magit-diff"
+  (keymap-define-kbd
+   magit-diff-mode-map
+   ("C-c")
+   ("C-k h" 'magit-go-backward)
+   ("C-k s" 'magit-go-forward)
+   ("C-k C-d" 'magit-diff-while-committing)))
+
+
+(with-eval-after-load "magit-popup"
+  (keymap-define-kbd
+   magit-popup-mode-map
+   ("C-c")
+   ("C-k C-c" 'magit-popup-set-default-arguments)
+   ("C-h i")
+   ("M-k i" 'magit-popup-info)
+   ("C-g")
+   ("M-," 'magit-popup-quit)
+   ("C-p")
+   ("C-t" 'backward-button)
+   ("C-w" 'magit-popup-toggle-show-common-commands)))
 
 ;; markdown-mode
 (el-register-package
  :name markdown-mode
- :type elpa
- :after
- (progn
-   (require 'markdown-mode)
-   ;; (my-keys-remap-mode
-   ;;  'markdown-mode-map
-   ;;  '(("M-h" . nil)
-   ;;    ("M-t" . nil)
-   ;;    ("M-n" . nil)
-   ;;    ("M-s" . nil)))
-   (setq indent-line-function 'tab-to-tab-stop
-         markdown-indent-on-enter nil)
-   ))
+ :type elpa)
 
-(add-hook-anon
- 'markdown-mode-hook
- (flyspell-mode)
- (visual-line-mode)
- (wc-mode))
+(with-eval-after-load "markdown-mode"
+  (setq markdown-mode-map (make-sparse-keymap))
+  (keymap-define-kbd
+   markdown-mode-map
+   ("M-q" 'markdown-jump)
+   ("M-;" 'markdown-follow-thing-at-point)
+
+   ("RET" 'markdown-enter-key)
+   ("DEL" 'markdown-exdent-or-delete)
+   ("TAB" 'indent-for-tab-command)
+
+   ("M-t" 'markdown-backward-paragraph)
+   ("M-n" 'markdown-forward-paragraph)
+
+   ("C-M-g" 'outline-backward-same-level)
+   ("C-M-c" 'outline-previous-visible-heading)
+   ("C-M-r" 'outline-next-visible-heading)
+   ("C-M-l" 'outline-forward-same-level)
+
+   ("C-M-d" 'markdown-insert-list-item)
+
+   ("C-M-m" 'markdown-promote)
+   ("C-M-w" 'markdown-move-up)
+   ("C-M-v" 'markdown-move-down)
+   ("C-M-z" 'markdown-demote)
+
+   ("C-s-m" 'markdown-promote-subtree)
+   ("C-s-w" 'markdown-move-subtree-up)
+   ("C-s-v" 'markdown-move-subtree-down)
+   ("C-s-z" 'markdown-demote-subtree)
+
+   ;; Alternate bindings for terminals
+   ("C-k C-g" [?\C-\M-g])
+   ("C-k C-c" [?\C-\M-c])
+   ("C-k C-r" [?\C-\M-r])
+   ("C-k C-l" [?\C-\M-l])
+   ("C-k C-d" [?\C-\M-d])
+   ("C-k C-m" [?\C-\M-m])
+   ("C-k C-w" [?\C-\M-w])
+   ("C-k C-v" [?\C-\M-v])
+   ("C-k C-z" [?\C-\M-z])
+   ("C-k M-m" [?\C-\s-m])
+   ("C-k M-w" [?\C-\s-w])
+   ("C-k M-v" [?\C-\s-v])
+   ("C-k M-z" [?\C-\s-z])
+   )
+
+  (setq markdown-indent-on-enter nil
+        markdown-asymmetric-header t
+        ;; markdown-indent-function 'tab-to-tab-stop ;; 'markdown-indent-line
+        indent-line-function 'tab-to-tab-stop
+        markdown-indent-on-enter nil
+        markdown-enable-math t
+        markdown-unordered-list-item-prefix "- "
+        markdown-font-lock-support-mode nil)
+  (add-hook-anon
+   'markdown-mode-hook
+   (flyspell-mode)
+   (visual-line-mode)
+   (wc-mode))
+  )
+
 
 (push '("---\\(.\\|\n\\)*format:\\s-*markdown" . markdown-mode) magic-mode-alist)
 (mode-extension #'markdown-mode ".md")
@@ -475,12 +668,7 @@
 ;; org
 (el-register-package
  :name org
- :type elpa
- :after
- (progn
-   (require 'org)
-   ;; (my-keys-remap-mode 'org-mode-map)
-   ))
+ :type elpa)
 
 (add-hook-anon
  'org-mode-hook
@@ -499,9 +687,10 @@
  :type github
  :pkgname "duncanburke/subatomic256"
  :depends dash
+ :prepare (add-to-list 'custom-theme-load-path
+                       default-directory)
  :after
  (progn
-   (load-file "subatomic256-theme.el")
    (load-theme 'subatomic256 t)))
 
 ;; visual-fill-column

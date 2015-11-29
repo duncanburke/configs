@@ -57,7 +57,7 @@
  ("M-:" 'eval-expression)
  ("C-M-;")
 
- ("C-q")
+ ("C-q" 'goto-line)
  ("M-q")
  ("M-Q")
  ("C-M-q")
@@ -215,7 +215,13 @@
 (keymap-define-kbd
  (symbol-function 'Control-X-prefix)
  ("<return>" 'execute-extended-command)
- ("M-," 'ignore))
+ ("M-," 'ignore)
+ ("t" 'delete-trailing-whitespace)
+ ("w" 'whitespace-mode)
+ ("b" 'switch-to-buffer)
+ ("l" 'linum-mode)
+ ("g" 'magit-status)
+ )
 
 (keymap-define-kbd
  (symbol-function 'mode-specific-command-prefix)
