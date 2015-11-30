@@ -213,8 +213,8 @@
  )
 
 (keymap-define-kbd
- (symbol-function 'Control-X-prefix)
- ("<return>" 'execute-extended-command)
+ ctl-x-map
+ ("C-m" 'execute-extended-command)
  ("M-," 'ignore)
  ("t" 'delete-trailing-whitespace)
  ("w" 'whitespace-mode)
