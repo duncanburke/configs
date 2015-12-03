@@ -60,6 +60,7 @@ commandBindings conf@(XConfig {XMonad.modMask = modMask'}) =
   [ ((modMask' .|. shiftMask, xK_Return    ), spawn $ terminal conf)
   , ((modMask'              , xK_p         ), spawn "dmenu_run")
   , ((modMask'              , xK_semicolon ), spawn "mpc toggle")
+  , ((modMask' .|. shiftMask, xK_semicolon ), spawn "mpc consume on && mpc next && mpc consume off")
   , ((modMask'              , xK_q         ), spawn "mpc next")
   , ((modMask' .|. shiftMask, xK_q         ), spawn "mpc prev")
   , ((modMask'              , xK_o         ), spawn "mpc random")
