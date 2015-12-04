@@ -196,6 +196,7 @@
    ("M-n" 'help-fo-forward)))
 
 ;; ido
+
 (with-eval-after-load "ido"
   (defun ido-init-completion-maps ())
 
@@ -225,13 +226,24 @@
    ("C-M-r" 'ido-toggle-virtual-buffers)
    )
 
+  (defun ido-complete-enter-dired ()
+    (interactive)
+    (cond
+     (ido-matches
+      (ido-set-current-directory ido-current-directory (ido-name (car ido-matches)) t)
+      (setq ido-text ""
+            ido-exit 'dired)
+      (exit-minibuffer))
+     (t
+      (ido-enter-dired))))
+
   (setq ido-file-dir-completion-map (make-sparse-keymap))
   (set-keymap-parent ido-file-dir-completion-map ido-common-completion-map)
   (keymap-define-kbd
    ido-file-dir-completion-map
    ("C-b" 'ido-enter-switch-buffer)
    ("C-f" 'ido-fallback-command)
-   ("C-d" 'ido-enter-dired)
+   ("C-d" 'ido-complete-enter-dired)
    ("C-t" 'ido-prev-match-dir)
    ("C-n" 'ido-next-match-dir)
    ("<backspace>" 'ido-delete-backward-updir)
@@ -290,17 +302,22 @@
    ("RET" 'Info-follow-nearest-node)
    ("TAB" 'Info-next-reference)
    ("M-TAB" 'Info-prev-reference)
-   ("M-T" 'Info-scroll-down)
-   ("M-N" 'Info-scroll-up)
+   ("C-d" 'Info-up)
    ("q" 'Info-exit)
    ("h" 'Info-prev)
    ("s" 'Info-next)
-   ("t" 'Info-up)
+   ("t" 'Info-scroll-down)
+   ("n" 'Info-scroll-up)
+   ("M-t" 'Info-prev-reference)
+   ("M-n" 'Info-next-reference)
    ("o" 'Info-search)
    ("e" 'Info-copy-current-node-name)
    ("<" 'Info-top-node)
    (">" 'Info-final-node)
-   ("w" 'Info-menu))
+   ("w" 'Info-menu)
+   ("a" 'Info-index)
+   ("o" 'Info-index-next)
+   )
 
   (keymap-define-kbd
    Info-edit-mode-map
