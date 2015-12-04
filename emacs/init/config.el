@@ -18,6 +18,7 @@
  eval-expression-print-length nil
  eval-expression-print-level nil)
 
+(setq linum-format "%3d\u2502")
 
 (try-fn tool-bar-mode -1)
 (try-fn menu-bar-mode -1)
