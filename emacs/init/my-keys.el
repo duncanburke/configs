@@ -124,7 +124,7 @@
 
  ("C-t" 'previous-line)
  ("M-t" 'backward-paragraph)
- ("M-T" 'scroll-down-command) ;; TODO
+ ("M-T" 'scroll-down-command)
  ("C-M-t" 'windmove-up)
 
  ("C-n" 'next-line)
@@ -221,12 +221,18 @@
  ("b" 'switch-to-buffer)
  ("l" 'linum-mode)
  ("g" 'magit-status)
+ ("x" 'switch-to-scratch)
+ ("C-r" 're-builder)
  )
 
 (keymap-define-kbd
- (symbol-function 'mode-specific-command-prefix)
+ mode-specific-map
  ("M-," 'ignore))
 
+(keymap-define-kbd
+ help-map
+ ("i" 'info)
+ ("u" 'Info-virtual-index))
 
 (keymap-define-kbd
  minibuffer-local-map
@@ -287,6 +293,27 @@
  ("M-n" 'scroll-down)
  ("C-M-t" 'scroll-other-window)
  ("C-M-n" 'scroll-other-window-down))
+
+(keymap-define-kbd
+ goto-map
+ ("c")
+ ("g")
+ ("p")
+ ("t" 'previous-error)
+ ("n" 'next-error)
+ ("M-g")
+ ("M-n")
+ ("M-p")
+ ("C-q" 'goto-line)
+ ("M-q" 'goto-char)
+ )
+
+(keymap-define-kbd
+ abbrev-map
+ ("p")
+ ("t" 'expand-jump-to-previous-slot)
+ ("C-a")
+ ("C-d" 'add-mode-abbrev))
 
 (with-eval-after-load "isearch"
   (keymap-define-kbd

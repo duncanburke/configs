@@ -107,4 +107,8 @@
   (interactive)
   (kill-nearby-line nil))
 
+(defun switch-to-scratch ()
+  (interactive)
+  (switch-to-buffer "*scratch*"))
+
 (provide 'utils)
