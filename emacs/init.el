@@ -30,3 +30,5 @@
 (el-get-packages)
 
 (require 'help-fns+)
+
+(require 'generalised-move)

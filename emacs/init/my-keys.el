@@ -83,22 +83,22 @@
  ("C-M-f")
 
  ("C-g" 'backward-delete-char)
- ("M-g" 'backward-kill-word)
+ ("M-g" 'generalised-backward-kill-word)
  ("M-G" 'backward-kill-line)
  ("C-M-g")
 
- ("C-c") ;; TODO
+ ("C-c" 'kill-previous-line)
  ("M-c" 'backward-kill-paragraph)
  ("M-C") ;; TODO
  ("C-M-c")
 
- ("C-r") ;; TODO
+ ("C-r" 'kill-next-line)
  ("M-r" 'kill-paragraph)
  ("M-R") ;; TODO
  ("C-M-r")
 
- ("C-l" 'delete-char)
- ("M-l" 'kill-word)
+ ("C-l" 'delete-forward-char)
+ ("M-l" 'generalised-forward-kill-word)
  ("M-L" 'kill-line)
  ("C-M-l")
 
@@ -118,7 +118,7 @@
  ("C-M-d")
 
  ("C-h" 'backward-char)
- ("M-h" 'left-word)
+ ("M-h" 'generalised-backward-word)
  ("M-H" 'beginning-of-line)
  ("C-M-h" 'windmove-left)
 
@@ -133,7 +133,7 @@
  ("C-M-n" 'windmove-down)
 
  ("C-s" 'forward-char)
- ("M-s" 'right-word)
+ ("M-s" 'generalised-forward-word)
  ("M-S" 'end-of-line)
  ("C-M-s" 'windmove-right)
 

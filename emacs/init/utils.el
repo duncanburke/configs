@@ -48,27 +48,6 @@
       (append-to-buffer bufb (region-beginning) (region-end))
       (ediff-buffers bufa bufb))))
 
-(defvar my-offset 4 "My indentation offset. ")
-(defun backspace-whitespace-to-tab-stop ()
-  "Delete whitespace backwards to the next tab-stop, otherwise delete one character."
-  (interactive)
-  (if (or indent-tabs-mode
-          (region-active-p)
-          (save-excursion
-            (> (point) (progn (back-to-indentation)
-                              (point)))))
-      (call-interactively 'backward-delete-char-untabify)
-    (let ((movement (% (current-column) my-offset))
-          (p (point)))
-      (when (= movement 0) (setq movement my-offset))
-      ;; Account for edge case near beginning of buffer
-      (setq movement (min (- p 1) movement))
-      (save-match-data
-        (if (string-match "[^\t ]*\\([\t ]+\\)$" (buffer-substring-no-properties (- p movement) p))
-            (backward-delete-char (- (match-end 1) (match-beginning 1)))
-          (call-interactively 'backward-delete-char))))))
-
-
 (defun enable-debug ()
   (setq debug-on-error t)
   (setq edebug-all-defs t))
@@ -76,26 +55,6 @@
 (defmacro add-hook-anon (hook &rest rst)
   `(add-hook ,hook
              ,(append (lambda ()) rst)))
-
-(defun tabstop-hook ()
-  (define-key (current-local-map) (kbd "TAB") 'tab-to-tab-stop)
-  (define-key (current-local-map) (kbd "<backspace>") 'delete-to-tabstop)
-  (setq tab-width 4
-        indent-tabs-mode nil
-        tab-stop-list (number-sequence 4 200 4)))
-
-(defun delete-to-tabstop ()
-  (interactive)
-  (let ((prev-tabstop (indent-next-tab-stop (current-column) t))
-        (prev-whitespace (lambda () (or (eq (preceding-char) ?\s)
-                                        (eq (preceding-char) ?\t))))
-        )
-    (if (funcall prev-whitespace)
-        (while (and
-                (> (current-column) prev-tabstop)
-                (funcall prev-whitespace))
-          (delete-backward-char 1))
-      (delete-backward-char 1))))
 
 (defun linum-hook ()
   (linum-mode))
@@ -128,5 +87,24 @@
        (lambda (binding)
          `(,(kbd (car binding)) ,(cadr binding)))
        bindings)))
+
+(defun kill-nearby-line (&optional backward)
+  (interactive)
+  (let ((line-start (save-excursion (beginning-of-line) (point)))
+        (kill-whole-line t))
+    (save-excursion
+      (forward-line (cond (backward -1)
+                          (t         1)))
+      (unless (eq line-start
+                  (point))
+        (kill-line)))))
+
+(defun kill-previous-line ()
+  (interactive)
+  (kill-nearby-line t))
+
+(defun kill-next-line ()
+  (interactive)
+  (kill-nearby-line nil))
 
 (provide 'utils)
