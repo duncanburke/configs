@@ -90,6 +90,49 @@
    ("C-k" (lookup-key conf-mode-map [?\C-c]))
    ("C-c")))
 
+;; compilation-mode
+
+(with-eval-after-load "compile"
+  (keymap-define-kbd
+   compilation-minor-mode-map
+   ("C-c")
+   ("C-o")
+   ("M-n")
+   ("M-p")
+   ("M-{")
+   ("M-}")
+
+   ("M-t" 'compilation-previous-error)
+   ("M-n" 'compilation-next-error)
+   ("C-M-g" 'compilation-previous-file)
+   ("C-M-l" 'compilation-next-file)
+
+   ("C-k C-g" 'compilation-previous-file)
+   ("C-k C-l" 'compilation-next-file)
+
+   ("C-k C-k" 'kill-compilation))
+
+  (keymap-define-kbd
+   compilation-mode-map
+   ("C-c")
+   ("C-o")
+   ("M-n")
+   ("M-p")
+   ("M-{")
+   ("M-}")
+
+   ("M-t" 'compilation-previous-error)
+   ("M-n" 'compilation-next-error)
+   ("C-M-g" 'compilation-previous-file)
+   ("C-M-l" 'compilation-next-file)
+
+   ("C-k C-g" 'compilation-previous-file)
+   ("C-k C-l" 'compilation-next-file)
+
+   ("C-k C-k" 'kill-compilation))
+   )
+
+
 ;; dired
 (with-eval-after-load "dired"
   (keymap-define-kbd
@@ -100,7 +143,15 @@
    ("C-M-n")
    ("C-M-p")
    ("C-M-u")
-   ("M-s"))
+   ("M-s")
+   ("p")
+   ("t" 'dired-previous-line)
+   ("M-{")
+   ("M-}")
+   ("M-t" 'dired-prev-marked-file)
+   ("M-n" 'dired-next-marked-file)
+   ("C-d" 'dired-up-directory)
+   )
   ;; Allow dired to recursive delete without confirmation
   (setq dired-recursive-deletes 'always)
   ;; Stop dired from spamming windows as you navigate
@@ -329,6 +380,15 @@
          tab-width 4
          python-indent 4)))
 
+;; reb-mode
+(with-eval-after-load "re-builder"
+  (keymap-define-kbd
+   reb-mode-map
+   ("C-k" (lookup-key reb-mode-map [?\C-c]))
+   ("C-c")
+   ("C-k C-q")
+   ("C-k C-k" 'reb-quit)))
+
 ;;sh-mode
 (with-eval-after-load "sh-script"
   (keymap-define-kbd
@@ -361,6 +421,14 @@
   (add-hook-anon
    'tabulated-list-mode-hook
    (setq show-trailing-whitespace nil)))
+
+;; tar-mode
+
+(with-eval-after-load "tar-mode"
+  (keymap-define-kbd
+   tar-mode-map
+   ("p")
+   ("t" 'tar-previous-line)))
 
 ;; text-mode
 ;;(add-hook 'text-mode-hook #'tabstop-hook)
