@@ -19,5 +19,7 @@ emacs/init:emacs:~/.emacs.d/init
 
 ncmpcpp:music:~/.ncmpcpp/config
 ncmpcpp_bindings:music:~/.ncmpcpp/bindings
+
 ghci:haskell:~/.ghci
+stack-config.yaml:haskell:~/.stack/config.yaml
 stack_completion.sh:haskell:~/.stackcompletion
