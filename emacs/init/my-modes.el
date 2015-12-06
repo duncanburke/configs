@@ -507,82 +507,9 @@
 (el-use-package "git-modes")
 
 ;; haskell
-;; (el-use-package "company-ghc")
 
-;; (el-use-package "ac-ghc-mod")
-(el-register-package
- :name ghc-mod
- :type github
- :pkgname "kazu-yamamoto/ghc-mod"
- :load-path "elisp")
+(require 'my-haskell)
 
-(setq ghc-interactive-command "ghc-modi")
-;; (autoload 'ghc-init "ghc" nil t)
-;; (autoload 'ghc-debug "ghc" nil t)
-
-(el-register-package
- :name haskell-mode
- :type github
- :pkgname "haskell/haskell-mode"
- :info "."
- :build `(("make" ,(format "EMACS=%s" el-get-emacs) "all"))
- :post-init (require 'haskell-mode-autoloads)
- :after
- (progn
-   (setq indent-tabs-mode nil
-         tab-width 2
-         haskell-indentation-cycle-warn nil
-         ghc-hlint-options '("--ignore=Use camelCase")
-         show-trailing-whitespace t
-         ghc-display-error 'minibuffer
-         ghc-display-hole 'other-buffer)
-   (flyspell-prog-mode)
-   (company-mode)
-   (auto-fill-mode 1)
-   (turn-on-haskell-indentation))
- )
-
-;; (set (make-local-variable
-;;       'fill-nobreak-predicate)
-;;      (lambda ()
-;;        (not (eq (get-text-property (point) 'face)
-;;                 'font-lock-comment-face))))
-
-
-;; TODO: ghc-mode edits haskell-mode-map
-(with-eval-after-load "haskell-mode"
-  (keymap-define-kbd
-   haskell-mode-map
-   ("C-k" (lookup-key haskell-mode-map [?\C-c]))
-   ("C-c")))
-
-(with-eval-after-load "haskell-cabal"
-  (setq haskell-cabal-mode-map (make-sparse-keymap))
-  (keymap-define-kbd
-   haskell-cabal-mode-map
-   ("M-t" 'haskell-cabal-previous-subsection)
-   ("M-n" 'haskell-cabal-next-subsection)
-   ("M-T" 'haskell-cabal-previous-section)
-   ("M-N" 'haskell-cabal-next-section)
-   ("C-k C-f" 'haskell-cabal-find-or-create-source-file)
-   ("C-k C-s" 'haskell-cabal-subsection-arrange-lines)))
-
-(with-eval-after-load "haskell-interactive-mode"
-  (keymap-define-kbd
-   haskell-interactive-mode-map
-   ("C-k" (lookup-key haskell-interactive-mode-map [?\C-c]))
-   ("C-c")
-   ("C-a")
-   ("M-n")
-   ("M-p")
-   ("M-A" 'haskell-interactive-mode-beginning)
-   ("M-t" 'haskell-interactive-mode-history-previous)
-   ("M-n" 'haskell-interactive-mode-history-next)
-   ("M-G" 'haskell-interactive-mode-kill-whole-line)))
-
-(mode-extension #'haskell-mode ".hs")
-(mode-extension #'haskell-mode ".hs-boot")
-(mode-extension #'haskell-cabal-mode ".cabal")
 
 ;; help-fns+
 (el-register-package
