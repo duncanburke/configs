@@ -32,3 +32,4 @@
 (require 'help-fns+)
 
 (require 'generalised-move)
+(require 'my-hydra)

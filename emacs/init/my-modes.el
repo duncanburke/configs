@@ -193,7 +193,13 @@
    help-mode-map
    ("C-c")
    ("M-t" 'help-go-back)
-   ("M-n" 'help-fo-forward)))
+   ("M-n" 'help-fo-forward))
+
+  (add-hook 'help-mode-hook #'my-help-mode-hook))
+
+(defun my-help-mode-hook ()
+  (linum-mode -1)
+  (setq show-trailing-whitespace nil))
 
 ;; ido
 
@@ -333,30 +339,42 @@
 
 ;; outline-mode
 (with-eval-after-load "outline"
+  (require 'hydra)
   (setq outline-mode-map (make-sparse-keymap))
   (keymap-define-kbd
    outline-mode-map
-   ("M-b" 'outline-up-heading)
+   ("C-k -" 'outline-insert-heading))
 
-   ("C-s-h")
-   ("C-s-t" 'outline-previous-visible-heading)
-   ("C-s-n" 'outline-next-visible-heading)
-   ("C-s-s")
+  (defhydra hydra-outline (outline-mode-map "C-b" :color pink :hint nil)
+    "
+^Movement^              ^Subtree^
+^^^^^^^^----------------------------------
+_h_: up heading         _C-h_: promote
+_t_: next heading       _C-t_: move up
+_n_: prev heading       _C-n_: move down
+_T_: up same level      _C-s_: demote
+_N_: down same level
+"
+    ("q" nil "exit" :color blue)
+    ("?" ignore "help" :color red)
 
-   ("C-s-H" 'outline-up-heading)
-   ("C-s-T" 'outline-backward-same-level)
-   ("C-s-N" 'outline-forward-same-level)
-   ("C-s-S")
+    ("h" outline-up-heading)
+    ("t" outline-previous-visible-heading)
+    ("n" outline-next-visible-heading)
+    ("s" ignore)
 
-   ("C-M-h" 'outline-promote)
-   ("C-M-t" 'outline-move-subtree-up)
-   ("C-M-n" 'outline-move-subtree-down)
-   ("C-M-s" 'outline-demote)
+    ("H" nil)
+    ("T" outline-backward-same-level)
+    ("N" outline-forward-same-level)
+    ("S" ignore)
 
-   ;; TODO: Alternate bindings for terminals
+    ("C-h" outline-promote)
+    ("C-t" outline-move-subtree-up)
+    ("C-n" outline-move-subtree-down)
+    ("C-s" outline-demote)
+    )
+  )
 
-   ("C-k -" 'outline-insert-heading)
-   ))
    ;; show-all
    ;; hide-entry  show-entry
    ;; hide-subtree show-subtree
@@ -510,6 +528,14 @@
 
 (require 'my-haskell)
 
+;; hydra
+(el-use-package "hydra")
+
+(with-eval-after-load "hydra"
+  (keymap-define-kbd
+   hydra-base-map
+   ("C-u")
+   ("C-p" 'hydra--universal-argument)))
 
 ;; help-fns+
 (el-register-package
@@ -603,9 +629,11 @@
 ;; markdown-mode
 (el-register-package
  :name markdown-mode
+ :depends (hydra)
  :type elpa)
 
 (with-eval-after-load "markdown-mode"
+  (require 'hydra)
   (setq markdown-mode-map (make-sparse-keymap))
   (keymap-define-kbd
    markdown-mode-map
@@ -617,30 +645,43 @@
    ("TAB" 'indent-for-tab-command)
 
    ("M-t" 'markdown-backward-paragraph)
-   ("M-n" 'markdown-forward-paragraph)
+   ("M-n" 'markdown-forward-paragraph))
 
-   ("C-M-d" 'markdown-insert-list-item)
+  (defhydra hydra-markdown (markdown-mode-map "C-b" :color pink :hint nil)
+    "
+^Movement^              ^Header Actions^    ^Subtree Actions^
+^^^^^^^^------------------------------------------------------------
+_h_: up heading         _C-h_: promote      _M-h_: promote subtree
+_t_: next heading       _C-t_: move up      _M-t_: move subtree up
+_n_: prev heading       _C-n_: move down    _M-n_: move subtree down
+_T_: up same level      _C-s_: demote       _M-s_: demote subtree
+_N_: down same level
+"
+    ("q" nil "exit" :color blue)
 
-   ("C-s-h")
-   ("C-s-t" 'outline-previous-visible-heading)
-   ("C-s-n" 'outline-next-visible-heading)
-   ("C-s-s")
+    ("?" ignore "help" :color red)
 
-   ("C-s-H" 'outline-up-heading)
-   ("C-s-T" 'outline-backward-same-level)
-   ("C-s-N" 'outline-forward-same-level)
-   ("C-s-S")
+    ("h" outline-up-heading)
+    ("t" outline-previous-visible-heading)
+    ("n" outline-next-visible-heading)
+    ("s" ignore)
 
-   ("M-s-h" 'markdown-promote)
-   ("M-s-t" 'markdown-movee-up)
-   ("M-s-n" 'markdown-move-down)
-   ("M-s-s" 'markdown-demote)
+    ("H" nil)
+    ("T" outline-backward-same-level)
+    ("N" outline-forward-same-level)
+    ("S" ignore)
 
-   ("M-s-H" 'markdown-promote-subtree)
-   ("M-s-T" 'markdown-move-subtree-up)
-   ("M-s-N" 'markdown-move-subtree-down)
-   ("M-s-S" 'markdown-demote-subtree)
-   )
+    ("C-h" markdown-promote)
+    ("C-t" markdown-move-up)
+    ("C-n" markdown-move-down)
+    ("C-s" markdown-demote)
+
+    ("M-h" markdown-promote-subtree)
+    ("M-t" markdown-move-subtree-up)
+    ("M-n" markdown-move-subtree-down)
+    ("M-s" markdown-demote-subtree))
+
+    ;;markdown-insert-list-item
 
   (setq markdown-indent-on-enter nil
         markdown-asymmetric-header t

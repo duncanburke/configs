@@ -224,8 +224,10 @@
  ("x" 'switch-to-scratch)
  ("C-r" 're-builder)
 
- ("r y")
- ("r u" 'yank-rectangle)
+ ;; hydra bindings
+ ("r")
+ ("C-t")
+ ("i")
  )
 
 (keymap-define-kbd
@@ -317,6 +319,11 @@
  ("t" 'expand-jump-to-previous-slot)
  ("C-a")
  ("C-d" 'add-mode-abbrev))
+
+(keymap-define-kbd
+ universal-argument-map
+ ("C-u")
+ ("C-p" 'universal-argument-more))
 
 (with-eval-after-load "isearch"
   (keymap-define-kbd
