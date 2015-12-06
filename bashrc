@@ -43,9 +43,5 @@ function hmap { ghc -e "interact ($*)";  }
 function hmapl { hmap  "unlines.($*).lines" ; }
 function hmapw { hmapl "map (unwords.($*).words)" ; }
 
-if which stack > /dev/null; then
-    eval "$(stack --bash-completion-script stack)"
-fi
-
 stty stop undef
 stty start undef

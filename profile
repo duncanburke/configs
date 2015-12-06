@@ -11,6 +11,7 @@ source_if_exists(){
 source_if_exists ~/.localprofile
 source_if_exists ~/.startagent
 source_if_exists ~/.gitcompletion
+source_if_exists ~/.stackcompletion
 
 source_if_exists ~/.bashrc
 
