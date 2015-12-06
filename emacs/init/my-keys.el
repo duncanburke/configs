@@ -223,6 +223,9 @@
  ("g" 'magit-status)
  ("x" 'switch-to-scratch)
  ("C-r" 're-builder)
+
+ ("r y")
+ ("r u" 'yank-rectangle)
  )
 
 (keymap-define-kbd

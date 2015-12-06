@@ -336,29 +336,24 @@
   (setq outline-mode-map (make-sparse-keymap))
   (keymap-define-kbd
    outline-mode-map
-   ("C-M-g" 'outline-backward-same-level)
-   ("C-M-c" 'outline-previous-visible-heading)
-   ("C-M-r" 'outline-next-visible-heading)
-   ("C-M-l" 'outline-forward-same-level)
+   ("M-b" 'outline-up-heading)
 
-   ("C-M-d" 'outline-up-heading)
+   ("C-s-h")
+   ("C-s-t" 'outline-previous-visible-heading)
+   ("C-s-n" 'outline-next-visible-heading)
+   ("C-s-s")
 
-   ("C-M-m" 'outline-promote)
-   ("C-M-w" 'outline-move-subtree-up)
-   ("C-M-v" 'outline-move-subtree-down)
-   ("C-M-z" 'outline-demote)
+   ("C-s-H" 'outline-up-heading)
+   ("C-s-T" 'outline-backward-same-level)
+   ("C-s-N" 'outline-forward-same-level)
+   ("C-s-S")
 
-   ;; Alternate bindings for terminals
-   ("C-k C-g" [?\C-\M-g])
-   ("C-k C-c" [?\C-\M-c])
-   ("C-k C-r" [?\C-\M-r])
-   ("C-k C-l" [?\C-\M-l])
-   ("C-k C-d" [?\C-\M-d])
-   ("C-k C-m" [?\C-\M-m])
-   ("C-k C-w" [?\C-\M-w])
-   ("C-k C-v" [?\C-\M-v])
-   ("C-k C-z" [?\C-\M-z])
+   ("C-M-h" 'outline-promote)
+   ("C-M-t" 'outline-move-subtree-up)
+   ("C-M-n" 'outline-move-subtree-down)
+   ("C-M-s" 'outline-demote)
 
+   ;; TODO: Alternate bindings for terminals
 
    ("C-k -" 'outline-insert-heading)
    ))
@@ -607,6 +602,7 @@
    ))
 
 (with-eval-after-load "git-commit"
+  (require 'magit-diff) ;; magit-diff adds a binding
   (keymap-define-kbd
    git-commit-mode-map
    ("C-k" (lookup-key git-commit-mode-map [?\C-c]))
@@ -696,43 +692,32 @@
    ("M-t" 'markdown-backward-paragraph)
    ("M-n" 'markdown-forward-paragraph)
 
-   ("C-M-g" 'outline-backward-same-level)
-   ("C-M-c" 'outline-previous-visible-heading)
-   ("C-M-r" 'outline-next-visible-heading)
-   ("C-M-l" 'outline-forward-same-level)
-
    ("C-M-d" 'markdown-insert-list-item)
 
-   ("C-M-m" 'markdown-promote)
-   ("C-M-w" 'markdown-move-up)
-   ("C-M-v" 'markdown-move-down)
-   ("C-M-z" 'markdown-demote)
+   ("C-s-h")
+   ("C-s-t" 'outline-previous-visible-heading)
+   ("C-s-n" 'outline-next-visible-heading)
+   ("C-s-s")
 
-   ("C-s-m" 'markdown-promote-subtree)
-   ("C-s-w" 'markdown-move-subtree-up)
-   ("C-s-v" 'markdown-move-subtree-down)
-   ("C-s-z" 'markdown-demote-subtree)
+   ("C-s-H" 'outline-up-heading)
+   ("C-s-T" 'outline-backward-same-level)
+   ("C-s-N" 'outline-forward-same-level)
+   ("C-s-S")
 
-   ;; Alternate bindings for terminals
-   ("C-k C-g" [?\C-\M-g])
-   ("C-k C-c" [?\C-\M-c])
-   ("C-k C-r" [?\C-\M-r])
-   ("C-k C-l" [?\C-\M-l])
-   ("C-k C-d" [?\C-\M-d])
-   ("C-k C-m" [?\C-\M-m])
-   ("C-k C-w" [?\C-\M-w])
-   ("C-k C-v" [?\C-\M-v])
-   ("C-k C-z" [?\C-\M-z])
-   ("C-k M-m" [?\C-\s-m])
-   ("C-k M-w" [?\C-\s-w])
-   ("C-k M-v" [?\C-\s-v])
-   ("C-k M-z" [?\C-\s-z])
+   ("M-s-h" 'markdown-promote)
+   ("M-s-t" 'markdown-movee-up)
+   ("M-s-n" 'markdown-move-down)
+   ("M-s-s" 'markdown-demote)
+
+   ("M-s-H" 'markdown-promote-subtree)
+   ("M-s-T" 'markdown-move-subtree-up)
+   ("M-s-N" 'markdown-move-subtree-down)
+   ("M-s-S" 'markdown-demote-subtree)
    )
 
   (setq markdown-indent-on-enter nil
         markdown-asymmetric-header t
         ;; markdown-indent-function 'tab-to-tab-stop ;; 'markdown-indent-line
-        indent-line-function 'tab-to-tab-stop
         markdown-indent-on-enter nil
         markdown-enable-math t
         markdown-unordered-list-item-prefix "- "
@@ -741,7 +726,9 @@
    'markdown-mode-hook
    (flyspell-mode)
    (visual-line-mode)
-   (wc-mode))
+   (wc-mode)
+   (setq indent-line-function 'tab-to-tab-stop)
+   )
   )
 
 
