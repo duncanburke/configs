@@ -1,6 +1,9 @@
 
 (require 'hydra)
 (require 'dash)
+(require 'whitespace)
+(require 'linum)
+(require 'visual-fill-column)
 
 (defun char-left ()
   (interactive)
@@ -82,6 +85,8 @@
   (interactive "r")
   (rectangle-move start end #'char-down))
 
+;; TODO: get rectangle-mark-mode working
+
 (defhydra hydra-rectangle (ctl-x-map "r" :color pink :hint nil)
   "
 ^Killing^           ^Actions^           ^Movement^  ^Rectangle Movement^
@@ -93,7 +98,6 @@ _U_: yank overwrite ^ ^                 _s_: right  _C-s_: move right
 "
 
   ("q" nil "exit" :color blue)
-  ("?" ignore "help" :color red)
 
   ("e" kill-rectangle)
   ("E" copy-rectangle-as-kill)
@@ -112,11 +116,11 @@ _U_: yank overwrite ^ ^                 _s_: right  _C-s_: move right
   ("C-t" rectangle-up)
   ("C-n" rectangle-down)
   ("C-s" rectangle-right)
-  )
+
+  ("" ignore :exit nil)
+)
 
 (defvar-local hydra-indent-modal-function nil)
-
-
 
 (defvar indentation-functions
   '(tab-to-tab-stop
@@ -151,24 +155,23 @@ _U_: yank overwrite ^ ^                 _s_: right  _C-s_: move right
 (defmacro hydra-set-indent-line-function (function)
   `(setq indent-line-function ,function))
 
-(defhydra hydra-indent (ctl-x-map "i" :color pink :hint nil :pre hydra-indent-set-modal-line-function)
+(defhydra hydra-indent (global-map "C-v" :color pink :hint nil :pre hydra-indent-set-modal-line-function)
   "
-^indent-line-function^                   ^margin^                                       ^fill^
-^^^^-------------------------------------------------------------------------------------------------------------------
-^ ^= % -26`indent-line-function          _m_: set buffer left-margin: % -17`left-margin _a_: fill-column: %`fill-column
-_f_: % -33`hydra-indent-modal-function   _w_: set region left margin                    _o_: auto-fill-mode
-_F_: set modal                           _W_: set region right margin                   _e_: fill-region
-_g_: tab-to-tab-stop                     ^ ^                                            _E_: fill-region-as-paragraph
-_c_: indent-relative                     ^ ^                                            _u_: fill-paragraph
-_r_: indent-relative-maybe               ^ ^                                            _U_: fill-individual-paragraphs
-_l_: indent-to-left-margin
-_h_: electric-indent-mode: %`electric-indent-mode
-_t_: indent-tabs-mode: %`indent-tabs-mode
-_T_: tab-width: %`tab-width
-_n_: tab-always-indent: %`tab-always-indent
+^Indentation^                         ^Margin^                          ^Fill^                           ^Move^
+^^^^^^^^-------------------------------------------------------------------------------------------------------------------------
+^ ^= % -32`indent-line-function _m_: buffer left-margin: % -8`left-margin _a_: fill-column: %-14`fill-column _m_: split whitespace: %`generalised-move-split-whitespace
+_f_: % -32`hydra-indent-modal-function _w_: set region left margin       _o_: fill-region                 _w_: split short segments %`generalised-move-skip-short-segments
+_F_: set modal                        _W_: set region right margin      _O_: fill-region-as-paragraph
+_g_: tab-to-tab-stop                  ^ ^                               _e_: fill-paragraph
+_c_: indent-relative                  ^Display^                         _E_: fill-individual-paragraphs
+_r_: indent-relative-maybe           ^ ^------------------------------  _u_: auto-fill-mode: % -11`auto-fill-function
+_l_: indent-to-left-margin            _j_: truncate lines: % -12`truncate-lines _U_: visual-fill-column: %`visual-fill-column-mode
+_h_: electric-indent-mode: % -10`electric-indent-mode _J_: visual line mode: %`visual-line-mode
+_t_: indent-tabs-mode: % -14`indent-tabs-mode _k_: linum mode: %`linum-mode
+_T_: tab-width: % -21`tab-width _x_: whitespace mode: %`whitespace-mode
+_n_: tab-always-indent: % -13`tab-always-indent
 "
   ("q" nil "exit" :color blue)
-  ("?" ignore "help" :color red)
 
   ("f" (hydra-set-indent-line-function hydra-indent-modal-function))
   ("F" hydra-indent-set-modal-line-function-prompt)
@@ -187,14 +190,46 @@ _n_: tab-always-indent: %`tab-always-indent
   ("W" set-right-margin)
 
   ("a" set-fill-column)
-  ("o" auto-fill-mode)
-  ("e" fill-region)
-  ("E" fill-region-as-paragraph)
-  ("u" fill-paragraph)
-  ("U" fill-individual-paragraphs)
+  ("o" fill-region)
+  ("O" fill-region-as-paragraph)
+  ("e" fill-paragraph)
+  ("E" fill-individual-paragraphs)
+  ("u" auto-fill-mode)
+  ("U" visual-fill-column-mode)
+
+  ("m" (setq generalised-move-split-whitespace (not generalised-move-split-whitespace)))
+  ("w" (setq generalised-move-skip-short-segments (not generalised-move-skip-short-segments)))
+
+  ("j" toggle-truncate-lines)
+  ("J" visual-line-mode)
+  ("k" linum-mode)
+  ("x" whitespace-mode)
+
+  ("" ignore :exit nil)
   )
 
+(defun hydra-indent-enter ()
+  (interactive)
 
+  (hydra-default-pre)
+  (hydra-indent-set-modal-line-function)
+
+
+  (hydra-keyboard-quit)
+  (setq hydra-curr-body-fn 'hydra-indent/body)
+
+  (if hydra-lv
+      (lv-message
+       (eval hydra-indent/hint))
+    (message
+     (eval hydra-indent/hint)))
+  (hydra-set-transient-map
+   hydra-indent/keymap
+   #'(lambda nil (hydra-keyboard-quit) nil) 'run))
+
+(define-key global-map [?\M-v] 'hydra-indent-enter)
+
+    (define-key global-map [?\M-v] nil)
 
 
 

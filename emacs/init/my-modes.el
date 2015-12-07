@@ -19,6 +19,9 @@
    ("C-t" 'bs-up)
    ("C-n" 'bs-down)))
 
+;; buffer-menu
+
+
 ;; cc-mode
 (with-eval-after-load "cc-mode"
   (keymap-define-kbd
@@ -193,7 +196,7 @@
    help-mode-map
    ("C-c")
    ("M-t" 'help-go-back)
-   ("M-n" 'help-fo-forward))
+   ("M-n" 'help-go-forward))
 
   (add-hook 'help-mode-hook #'my-help-mode-hook))
 
@@ -337,6 +340,18 @@
    ("C-c")
    ("C-k C-z" 'run-lisp)))
 
+;; lv
+(with-eval-after-load "lv"
+  (defun lv-window--fixup (fn)
+    (let ((original-window (selected-window))
+          (lv-window (funcall fn)))
+      (select-window lv-window)
+      (linum-mode -1)
+      (setq show-trailing-whitespace nil)
+      (select-window original-window)
+      lv-window))
+  (advice-add 'lv-window :around #'lv-window--fixup))
+
 ;; outline-mode
 (with-eval-after-load "outline"
   (require 'hydra)
@@ -356,7 +371,6 @@ _T_: up same level      _C-s_: demote
 _N_: down same level
 "
     ("q" nil "exit" :color blue)
-    ("?" ignore "help" :color red)
 
     ("h" outline-up-heading)
     ("t" outline-previous-visible-heading)
@@ -372,6 +386,8 @@ _N_: down same level
     ("C-t" outline-move-subtree-up)
     ("C-n" outline-move-subtree-down)
     ("C-s" outline-demote)
+
+    ("" ignore :exit nil)
     )
   )
 
@@ -659,8 +675,6 @@ _N_: down same level
 "
     ("q" nil "exit" :color blue)
 
-    ("?" ignore "help" :color red)
-
     ("h" outline-up-heading)
     ("t" outline-previous-visible-heading)
     ("n" outline-next-visible-heading)
@@ -679,7 +693,9 @@ _N_: down same level
     ("M-h" markdown-promote-subtree)
     ("M-t" markdown-move-subtree-up)
     ("M-n" markdown-move-subtree-down)
-    ("M-s" markdown-demote-subtree))
+    ("M-s" markdown-demote-subtree)
+
+    ("" ignore :exit nil))
 
     ;;markdown-insert-list-item
 

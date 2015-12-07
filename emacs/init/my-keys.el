@@ -212,6 +212,7 @@
  ("<C-M-S-backspace>")
  )
 
+
 (keymap-define-kbd
  ctl-x-map
  ("C-m" 'execute-extended-command)
@@ -224,6 +225,17 @@
  ("x" 'switch-to-scratch)
  ("C-r" 're-builder)
 
+
+ ("C-k")
+ ("C-l")
+ ("C-n")
+ ("C-o")
+ ("C-p")
+ ("C-q")
+ ("C-u")
+ ("C-x")
+ ("C-z")
+ 
  ;; hydra bindings
  ("r")
  ("C-t")
