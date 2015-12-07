@@ -67,55 +67,10 @@
   )
 
 (with-eval-after-load "ghc"
-  (setq ghc-completion-key [?\C-\M-i]
-        ghc-insert-key [?\C-\M-i]
-        ghc-document-key []
-        ghc-import-key []
-        ghc-previous-key [?\M-t]
-        ghc-next-key [?\M-n]
-        ghc-help-key [?\M-?]
-        ghc-sort-key []
-        ghc-type-key []
-        ghc-info-key []
-        ghc-toggle-key []
-        ghc-module-key []
-        ghc-expand-key []
-        ghc-kill-key []
-        ghc-hoogle-key []
-        ghc-shallower-key []
-        ghc-deeper-key []
-        ghc-refine-key []
-        ghc-auto-key []
-        ghc-prev-hole-key []
-        ghc-next-hole-key [])
-
   (defun ghc-init ()
     (ghc-abbrev-init)
     (ghc-type-init)
     (unless ghc-initialized
-      ;; (define-key haskell-mode-map ghc-completion-key  'ghc-complete)
-      ;; (define-key haskell-mode-map ghc-document-key    'ghc-browse-document)
-      ;; (define-key haskell-mode-map ghc-type-key        'ghc-show-type)
-      ;; (define-key haskell-mode-map ghc-info-key        'ghc-show-info)
-      ;; (define-key haskell-mode-map ghc-expand-key      'ghc-expand-th)
-      ;; (define-key haskell-mode-map ghc-import-key      'ghc-import-module)
-      ;; (define-key haskell-mode-map ghc-previous-key    'ghc-goto-prev-error)
-      ;; (define-key haskell-mode-map ghc-next-key        'ghc-goto-next-error)
-      ;; (define-key haskell-mode-map ghc-help-key        'ghc-display-errors)
-      ;; (define-key haskell-mode-map ghc-insert-key      'ghc-insert-template-or-signature)
-      ;; (define-key haskell-mode-map ghc-sort-key        'ghc-sort-lines)
-      ;; (define-key haskell-mode-map ghc-toggle-key      'ghc-toggle-check-command)
-      ;; (define-key haskell-mode-map ghc-jump-key        'ghc-jump-file)
-      ;; (define-key haskell-mode-map ghc-module-key      'ghc-insert-module)
-      ;; (define-key haskell-mode-map ghc-kill-key        'ghc-kill-process)
-      ;; (define-key haskell-mode-map ghc-hoogle-key      'haskell-hoogle)
-      ;; (define-key haskell-mode-map ghc-shallower-key   'ghc-make-indent-shallower)
-      ;; (define-key haskell-mode-map ghc-deeper-key      'ghc-make-indent-deeper)
-      ;; ;(define-key haskell-mode-map ghc-case-split-key  'ghc-case-split)
-      ;; (define-key haskell-mode-map ghc-refine-key      'ghc-refine)
-      ;; (define-key haskell-mode-map ghc-auto-key        'ghc-auto)
-      ;; (define-key haskell-mode-map ghc-prev-hole-key   'ghc-goto-prev-hole)
-      ;; (define-key haskell-mode-map ghc-next-hole-key   'ghc-goto-next-hole)
       (ghc-comp-init)
       (setq ghc-initialized t)
       (add-hook 'kill-buffer-hook 'ghc-kill-process)
@@ -143,7 +98,7 @@
 
   (flyspell-prog-mode)
   (interactive-haskell-mode)
-  
+
   (when haskell-enable-ghc-mod
     (ghc-init)
     (cond
@@ -158,19 +113,97 @@
     (when haskell-enable-hare
       (hare-init))
     )
-
-
   )
-
-
 
 ;; TODO: ghc-mode edits haskell-mode-map
 (with-eval-after-load "haskell-mode"
   (keymap-define-kbd
    haskell-mode-map
-   ("C-k" (lookup-key haskell-mode-map [?\C-c]))
    ("C-c"))
+
   (add-hook 'haskell-mode-hook #'my-haskell-mode-hook)
+
+  ;; haskell-move-nested-left/right
+  ;; beginning/end-of-defun
+  ;; mark-defun
+  ;; haskell-navigate-imports
+  ;; haskell-mode-jump-to-def-or-tag
+
+
+  (defhydra hydra-haskell (haskell-mode-map "C-b" :color pink :hint nil)
+"
+^Process^                   ^Info^                          ^Movement^              ^Actions^
+----------------------------------------------------------------------------------------------------
+_m_: haskell-compile        _c_: ghc-mod show type          _a_: jump to file       _C-M-h_: make indent shallower
+_w_: switch to interactive  _C_: haskell show type          _A_: jump to def or tag _C-M-s_: make indent deeper
+_W_: clear interactive      _r_: ghc-mod show info          _C-M-c_: prev hole      _C-M-H_: move nested left
+_z_: process load-or-reload _R_: haskell show info          _C-M-r_: next hole      _C-M-S_: move nested right
+_Z_: process restart        _l_: expand TH                  _b_: refine hole        _L_: insert template or signature
+_v_: ghc-mod import module  _g_: ghc-mod display errors     _B_: auto fill hole     _o_: format imports
+^ ^                         _G_: check-command: % -11`ghc-check-command _d_: navigate imports   _O_: sort lines
+^ ^                         _C-M-g_: prev error             _C-M-t_: start of defun _e_: insert module
+^ ^                         _C-M-l_: next error             _C-M-n_: end of defun   _u_: complete
+^ ^                         _/_: browse documentation       _-_: mark defun
+^ ^                         _?_: hoogle
+"
+    ("q" nil "exit" :color blue)
+    ;; Process
+    ("m" haskell-compile)
+
+    ("w" haskell-interactive-switch)
+    ("W" haskell-interactive-mode-clear)
+
+    ("z" haskell-process-load-or-reload)
+    ("Z" haskell-process-restart)
+
+    ("v" ghc-import-module)
+
+    ;; Info
+    ("c" ghc-show-type)
+    ("C" haskell-process-do-type)
+    ("r" ghc-show-info)
+    ("R" haskell-process-do-info)
+    ("l" ghc-expand-th)
+
+    ("g" ghc-display-errors)
+    ("G" ghc-toggle-check-command) ;; ghc-check-command
+    ("C-M-g" ghc-goto-prev-error)
+    ("C-M-l" ghc-goto-next-error)
+
+    ("/" ghc-browse-document)
+    ("?" haskell-hoogle)
+
+    ;; Movement
+    ("a" ghc-jump-file)
+    ("A" haskell-mode-jump-to-def-or-tag)
+
+    ("C-M-c" ghc-goto-prev-hole)
+    ("C-M-r" ghc-goto-next-hole)
+    ("b" ghc-refine)
+    ("B" ghc-auto)
+
+    ("d" haskell-navigate-imports)
+
+    ("C-M-t" beginning-of-defun);
+    ("C-M-n" end-of-defun)
+    ("-" mark-defun)
+
+    ;; Actions
+    ("C-M-h" ghc-make-indent-shallower)
+    ("C-M-s" ghc-make-indent-deeper)
+    ("C-M-H" haskell-move-nested-left)
+    ("C-M-S" haskell-move-nested-right)
+
+    ("L" ghc-insert-template-or-signature)
+
+    ("o" haskell-mode-format-imports)
+    ("O" ghc-sort-lines)
+    ("e" ghc-insert-module)
+
+    ("u" ghc-complete)
+
+    ("" ignore :exit nil)
+    )
   )
 
 (with-eval-after-load "haskell-debug"
