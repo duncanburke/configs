@@ -1,3 +1,5 @@
+{-# LANGUAGE RecordWildCards #-}
+
 import Control.Applicative
 import System.IO (hPutStrLn)
 import System.Exit
@@ -97,28 +99,47 @@ screenBindings = [ ((m .|. mod4Mask, key), screenWorkspace sc >>= flip whenJust 
                  | (key, sc) <- zip screenKeys screenOrder
                  , (f, m) <- [(view, 0), (shift, shiftMask)] ]
 
-fnWorkspaceIds :: [WorkspaceId]
-fnWorkspaceIds = (("F" ++) . show) <$> ([1..] :: [Int])
+data Workspace = Workspace
+                 { wsMask :: KeyMask
+                 , wsId :: WorkspaceId
+                 , wsKey :: KeySym }
+                 deriving (Show)
 
-nFn :: Int
-nFn = 12
+myWorkspaces :: [Workspace]
+myWorkspaces = concat $
+               [ defaultWorkspaces
+               , fnWorkspaces
+               , cFnWorkspaces ]
+  where
+    defaultWorkspaces :: [Workspace]
+    defaultWorkspaces =
+      getZipList $ Workspace noModMask <$> wsId' <*> wsKey'
+      where wsId' = show <$> (ZipList ([1..9] ++ [0] :: [Int]))
+            wsKey' = ZipList $ [xK_1..xK_9] ++ [xK_0]
 
-workspaceMap :: KeySym -> WorkspaceId -> [Keybinding]
-workspaceMap k w = [ ((mod4Mask, k), windows $ greedyView w)
-                   , ((shiftMask .|. mod4Mask, k), windows $ shift w) ]
+    fnWorkspaces :: [Workspace]
+    fnWorkspaces =
+      getZipList $ Workspace noModMask <$> wsId' <*> wsKey'
+      where wsId' = (("F" ++) . show) <$> (ZipList (take nFn $ [1..] :: [Int]))
+            wsKey' = ZipList $ take nFn [xK_F1..]
+            nFn = 12
 
-workspaceIds :: [WorkspaceId]
-workspaceIds = (show <$> ([1..9] ++ [0] :: [Int]))
-               ++ (take nFn fnWorkspaceIds)
-
-workspaceKeys :: [KeySym]
-workspaceKeys = [xK_1..xK_9]
-                ++ [xK_0]
-                ++ (take nFn [xK_F1..])
+    cFnWorkspaces :: [Workspace]
+    cFnWorkspaces =
+      getZipList $ Workspace controlMask <$> wsId' <*> wsKey'
+      where wsId' = (("cF" ++) . show) <$> (ZipList (take ncFn $ [1..] :: [Int]))
+            wsKey' = ZipList $ take ncFn [xK_F1..]
+            ncFn = 12
 
 workspaceBindings :: [Keybinding]
-workspaceBindings = zip workspaceKeys workspaceIds
-                    >>= (uncurry workspaceMap)
+workspaceBindings = workspaceBindings' =<< myWorkspaces
+  where workspaceBindings' :: Workspace -> [Keybinding]
+        workspaceBindings' (Workspace {..}) =
+          [ ((mod4Mask .|. wsMask, wsKey), windows $ greedyView wsId)
+          , ((shiftMask .|. mod4Mask .|. wsMask, wsKey), windows $ shift wsId)]
+
+workspaceIds :: [WorkspaceId]
+workspaceIds = wsId <$> myWorkspaces
 
 screenKeys :: [KeySym]
 screenKeys = [xK_h, xK_t, xK_n]
