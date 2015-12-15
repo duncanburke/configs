@@ -497,10 +497,9 @@ _N_: down same level
 ;; company-mode-map company-active-map
 (el-register-package
  :name company
- :type elpa
- :after
- (progn
-   (require 'company)
+ :type elpa)
+
+(with-eval-after-load "company"
    ;; (add-to-list 'company-backends 'company-ghc)
    (keymap-define-kbd
     company-active-map
@@ -517,7 +516,23 @@ _N_: down same level
     ("M-t" 'company-select-previous)
     ("M-n" 'company-select-next)
     ("M-T" 'company-previous-page)
-    ("M-N" 'company-next-page))))
+    ("M-N" 'company-next-page))
+
+   (keymap-define-kbd
+    company-search-map
+    ("C-g")
+    ("M-," 'company-search-abort)
+    ("C-o") ;;company-search-toggle-filtering
+    ("C-r")
+    ("C-s")
+    ("C-a" 'company-search-repeat-backward)
+    ("C-o" 'company-search-repeat-forward)
+    ("C-g" 'company-search-delete-char)
+    ("C-t" 'company-select-previous-or-abort)
+    ("C-n" 'company-select-next-or-abort)
+    ("M-p")
+    ("M-t" 'company-select-previous)
+    ("M-n" 'company-select-next)))
 
 ;; dash
 (el-register-package
