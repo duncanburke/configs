@@ -62,7 +62,8 @@
   (rectangle-write killed-rectangle))
 
 (defun rectangle-move (start end fn)
-  (let ((rectangle))
+  (let ((rectangle)
+        (electric-indent-mode nil))
     (setq rectangle (extract-rectangle start end))
     (clear-rectangle start end)
     (goto-char (region-beginning))
