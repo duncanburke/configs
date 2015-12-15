@@ -4,3 +4,4 @@ templates:
     author-name: Duncan Burke
     copyright: MIT
     github-username: duncanburke
+compiler-check: newer-minor
