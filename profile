@@ -1,5 +1,5 @@
 
-export PATH="~/.local/bin:${PATH}"
+export PATH="$HOME/.local/bin:${PATH}"
 
 
 source_if_exists(){
