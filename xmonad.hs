@@ -73,8 +73,12 @@ commandBindings conf@(XConfig {XMonad.modMask = modMask'}) =
   , ((modMask'              , xK_space     ), sendMessage NextLayout)
   , ((modMask' .|. shiftMask, xK_space     ), setLayout $ layoutHook conf)
   , ((modMask' .|. shiftMask, xK_apostrophe), io (exitWith ExitSuccess))
-  , ((modMask'              , xK_apostrophe), spawn "if type xmonad; then xmonad --recompile && xmonad --restart; else xmessage xmonad not in \\$PATH: \"$PATH\"; fi")
-
+  , ((modMask'              , xK_apostrophe), spawn . unlines $
+                                              [ "if type xmonad; then"
+                                              , "\tstack exec xmonad -- --recompile && xmonad --restart;"
+                                              , "else"
+                                              , "\txmessage xmonad not in \\$PATH: \"$PATH\";"
+                                              , "fi"])
   , ((modMask'              , xK_n         ), refresh)
 
   , ((modMask'              , xK_r         ), windows W.focusDown)
