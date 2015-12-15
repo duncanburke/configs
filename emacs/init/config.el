@@ -6,7 +6,7 @@
  ;; gc tuning
  gc-cons-threshold 20000000
  inhibit-splash-screen t
- vc-follow-symlinks nil
+ vc-follow-symlinks t
  pop-up-windows nil
  split-height-threshold nil
  ;; Make windows split vertically like C-x 3 for things like help, grep, compile, gdb etc.
