@@ -604,11 +604,11 @@ _N_: down same level
    ("C-x")
    ("p")
    ("t" 'git-rebase-backward-line)
-   ("M-T" 'scroll-up-command)
-   ("M-N" 'scroll-down-command)
+   ("M-T" 'scroll-down-command)
+   ("M-N" 'scroll-up-command)
    ("M-p")
    ("M-t" 'git-rebase-move-line-up)
-   ("M-n" 'git-rebase-moveline-down)))
+   ("M-n" 'git-rebase-move-line-down)))
 
 (with-eval-after-load "magit-mode"
   (keymap-define-kbd
