@@ -677,7 +677,8 @@ _N_: down same level
 (el-register-package
  :name markdown-mode
  :depends (hydra)
- :type elpa)
+ :type github
+ :pkgname "jrblevin/markdown-mode")
 
 (with-eval-after-load "markdown-mode"
   (require 'hydra)
@@ -707,8 +708,8 @@ _N_: down same level
     ("q" nil "exit" :color blue)
 
     ("h" outline-up-heading)
-    ("t" outline-previous-visible-heading)
-    ("n" outline-next-visible-heading)
+    ("t" markdown-previous-visible-heading)
+    ("n" markdown-next-visible-heading)
     ("s" ignore)
 
     ("H" nil)
