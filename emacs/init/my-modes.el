@@ -352,6 +352,22 @@
       lv-window))
   (advice-add 'lv-window :around #'lv-window--fixup))
 
+;; nxml-mode
+(with-eval-after-load "nxml-mode"
+  (keymap-define-kbd
+   nxml-mode-map
+   ("C-c")
+   ("C-M-d")
+   ("C-M-n")
+   ("C-M-p")
+   ("C-M-u")
+   ("M-h")
+   ("M-{")
+   ("M-}")
+   ("M-h" 'nxml-backward-up-element)
+   ("M-t" 'nxml-backward-element)
+   ("M-n" 'nxml-forward-element)))
+
 ;; outline-mode
 (with-eval-after-load "outline"
   (require 'hydra)
