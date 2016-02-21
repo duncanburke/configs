@@ -13,7 +13,7 @@
    ("C-d")
    ("C-g" 'bs-delete-backward)
    ("C-g")
-   ("M-," 'bs-abort)
+   ("C-p" 'bs-abort)
    ("C-o")
    ("C-w" 'bs-tmp-select-other-window)
    ("C-t" 'bs-up)
@@ -37,7 +37,7 @@
   (keymap-define-kbd
    c-mode-map
    ("C-k C-e" 'c-macro-expand)
-   ("RET" 'newline-and-indent
+   ("RET" 'newline-and-indent)
    ("C-c"))
   (keymap-define-kbd
    c++-mode-map
@@ -48,7 +48,7 @@
    ("C-M-a")
    ("C-M-e")
    ("M-a")
-   ("M-e")))
+   ("M-e"))
 
   (add-hook-anon
    'c-mode-hook
@@ -520,7 +520,7 @@ _N_: down same level
    (keymap-define-kbd
     company-active-map
     ("C-g")
-    ("M-," 'company-abort)
+    ("C-p" 'company-abort)
     ("C-h")
     ("M-k" 'company-show-doc-buffer)
     ("C-s")
@@ -537,7 +537,7 @@ _N_: down same level
    (keymap-define-kbd
     company-search-map
     ("C-g")
-    ("M-," 'company-search-abort)
+    ("C-p" 'company-search-abort)
     ("C-o") ;;company-search-toggle-filtering
     ("C-r")
     ("C-s")
@@ -668,7 +668,7 @@ _N_: down same level
    ("C-h i")
    ("M-k i" 'magit-popup-info)
    ("C-g")
-   ("M-," 'magit-popup-quit)
+   ("C-p" 'magit-popup-quit)
    ("C-p")
    ("C-t" 'backward-button)
    ("C-w" 'magit-popup-toggle-show-common-commands)))

@@ -1,5 +1,7 @@
 (require 'utils)
 
+(set-quit-char ?\C-p)
+
 (keymap-define-kbd
  global-map
  ("C-'")
@@ -8,17 +10,17 @@
  ("C-M-'")
 
  ("C-,")
- ("M-," 'keyboard-quit)
+ ("M-,")
  ("M-<" 'beginning-of-buffer)
  ("C-M-,")
 
  ("C-.")
- ("M-." 'quit)
+ ("M-." 'keyboard-quit)
  ("M->" 'end-of-buffer)
  ("C-M-.")
 
- ("C-p" 'universal-argument)
- ("M-p")
+ ("C-p" 'keyboard-quit)
+ ("M-p" 'universal-argument)
  ("M-P")
  ("C-M-p")
 
@@ -216,7 +218,7 @@
 (keymap-define-kbd
  ctl-x-map
  ("C-m" 'execute-extended-command)
- ("M-," 'ignore)
+ ("C-p" 'ignore)
  ("t" 'delete-trailing-whitespace)
  ("w" 'whitespace-mode)
  ("b" 'switch-to-buffer)
@@ -244,7 +246,7 @@
 
 (keymap-define-kbd
  mode-specific-map
- ("M-," 'ignore))
+ ("C-p" 'ignore))
 
 (keymap-define-kbd
  help-map
@@ -265,7 +267,7 @@
  ("M-r")
  ("M-s")
 
- ("M-," 'abort-recursive-edit)
+ ("C-p" 'abort-recursive-edit)
  ("C-t" 'previous-history-element)
  ("C-n" 'next-history-element)
  ("C-a" 'previous-matching-history-element)
@@ -289,7 +291,7 @@
 (keymap-define-kbd
  query-replace-map
  ("C-g")
- ("M-," 'quit)
+ ("C-p" 'quit)
  ("C-h")
  ("M-k" 'help)
  ("C-l")
@@ -341,7 +343,7 @@
   (keymap-define-kbd
    isearch-mode-map
    ("C-g")
-   ("M-," 'isearch-abort)
+   ("C-p" 'isearch-abort)
    ("C-q")
    ("C-y" 'isearch-quote-char)
    ("C-r")
