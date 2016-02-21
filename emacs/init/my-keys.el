@@ -141,7 +141,7 @@
  ("M--" 'negative-argument)
  ("C-M--")
  ("C-_")
- ("M-_")
+ ("M-_" (lambda () (interactive) (insert-char #x2014)))
  ("C-M-_")
 
  ("C-b")
