@@ -419,6 +419,102 @@ _N_: down same level
    ;; hide-body
 
 
+;; org-mode
+(with-eval-after-load "org"
+  (keymap-define-kbd
+   org-mode-map
+   ("C-a")
+   ("M-H" 'org-beginning-of-line)
+   ("C-e")
+   ("M-S" 'org-end-of-line)
+   ("C-k" (lookup-key org-mode-map [?\C-c]))
+   ("C-c")
+   ("C-y")
+   ("C-u" 'org-yank)
+
+   ("C-d" 'org-up-element)
+
+   ("C-M-i")
+   ("C-M-t")
+   ("M-a")
+   ("M-e")
+   ("M-h")
+   ("M-{")
+   ("M-}")
+
+   ("<C-S-up>")
+   ("<C-S-down>")
+   ("<C-S-left>")
+   ("<C-S-return>")
+   ("<C-S-right>")
+   ("<M-S-up>")
+   ("<M-S-down>")
+   ("<M-S-left>")
+   ("<M-S-return>")
+   ("<M-S-right>")
+   ("<M-up>")
+   ("<M-down>")
+   ("<M-left>")
+   ("<M-return>")
+   ("<M-right>")
+   ("<S-up>")
+   ("<S-down>")
+   ("<S-left>")
+   ("<S-return>")
+   ("<S-right>"))
+
+  (defhydra hydra-org (org-mode-map "C-b" :color pink :hint nil)
+    "
+    ^Movement^
+^^^^^^^^-------------
+_h_: up heading
+_t_: next heading
+_n_: prev heading
+_T_: up same level
+_N_: down same level
+"
+    ("q" nil "exit" :color blue)
+
+    ("h" outline-up-heading)
+    ("t" outline-previous-visible-heading)
+    ("n" outline-next-visible-heading)
+    ("s" ignore)
+
+    ("H" nil)
+    ("T" outline-backward-same-level)
+    ("N" outline-forward-same-level)
+    ("S" ignore)
+
+    ;; meta-* up/down promote/demote
+
+    ("M-h" org-metaleft)
+    ("M-t" org-metaup)
+    ("M-n" org-metadown)
+    ("M-s" org-metaright)
+
+    ;; shiftmeta-*
+
+    ("M-H" org-shiftmetaleft)
+    ("M-T" org-shiftmetaup)
+    ("M-N" org-shiftmetadown)
+    ("M-S" org-shiftmetaright)
+
+    ("C-h" org-shiftleft)
+    ("C-t" org-shiftup)
+    ("C-n" org-shiftdown)
+    ("C-s" org-shiftright)
+
+    ("C-H" org-shiftcontrolleft)
+    ("C-T" org-shiftcontrolup)
+    ("C-N" org-shiftcontroldown)
+    ("C-S" org-shiftcontrolright)
+
+    ("" ignore :exit nil)
+    )
+
+
+  )
+
 ;; package
 (with-eval-after-load "package"
   (keymap-define-kbd
