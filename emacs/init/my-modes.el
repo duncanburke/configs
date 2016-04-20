@@ -311,7 +311,7 @@
    Info-mode-map
    ("RET" 'Info-follow-nearest-node)
    ("TAB" 'Info-next-reference)
-   ("M-TAB" 'Info-prev-reference)
+   ("<backtab>" 'Info-prev-reference)
    ("C-d" 'Info-up)
    ("q" 'Info-exit)
    ("h" 'Info-prev)
