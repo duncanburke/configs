@@ -15,11 +15,13 @@
 	algorithm = patience
 [sendemail]
 	confirm = auto
-	from = duncankburke@gmail.com
-	smtp-user = duncankburke@gmail.com
-	smtp-server = smtp.gmail.com
+	from = Duncan Burke <duncankburke@gmail.com>
+    smtpEncryption = tls
+	smtpUser = duncankburke@gmail.com
+	smtpServer = smtp.gmail.com
+    smtpServerPort = 587
 	signedoffbycc = no
-	suppress-from = yes
+    chainreplyto = false
 [push]
 	default = simple
 [merge]
