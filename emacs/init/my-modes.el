@@ -142,6 +142,7 @@
    dired-mode-map
    ("C-o")
    ("C-t")
+   ("C-w" 'dired-toggle-read-only)
    ("C-M-d")
    ("C-M-n")
    ("C-M-p")
