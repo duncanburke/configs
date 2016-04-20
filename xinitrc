@@ -12,4 +12,9 @@ xcompmgr&
 feh --bg-scale .wallpaper.png&
 wicd-client&
 
+# Disable screensaver, turn off screen after 1 hour
+# view settings with `xset q`, see xset(1)
+xset s off
+xset dpms 0 0 3600
+
 exec xmonad
