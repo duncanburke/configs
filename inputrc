@@ -46,7 +46,7 @@ set output-meta on
 "\ey": yank-pop
 
 # Numeric Arguments
-"\C-p": universal-argument
+"\M-p": universal-argument
 
 # Completing
 "\C-i": complete
@@ -58,7 +58,7 @@ set output-meta on
 
 # Miscellaneous
 "\C-x\C-r": re-read-init-file
-"\e,": abort
+"\C-p": abort
 "\C-/": undo
 "\e ": set-mark
 
