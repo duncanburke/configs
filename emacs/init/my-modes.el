@@ -591,7 +591,10 @@ _N_: down same level
 
 ;; text-mode
 ;;(add-hook 'text-mode-hook #'tabstop-hook)
-(add-hook 'text-mode-hook #'linum-hook)
+
+(with-eval-after-load "text-mode"
+  (add-hook 'text-mode-hook #'linum-hook)
+  (add-hook 'text-mode-hook #'visual-line-mode))
 
 ;; with-editor
 
@@ -894,12 +897,13 @@ _N_: down same level
 ;; Custom Modes
 
 (define-derived-mode writing-mode
-  markdown-mode "Writing"
+  org-mode "Writing"
   "Major mode for writing large bodies of text."
   (interactive)
   (visual-line-mode)
   (setq visual-fill-column-width 95)
-  (visual-fill-column-mode)
+  ;; visual-fill-column mode is too buggy
+  ;; (visual-fill-column-mode)
   (flyspell-mode)
   (wc-mode))
 
