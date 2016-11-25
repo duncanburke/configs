@@ -917,15 +917,20 @@ _N_: down same level
 ;; Custom Modes
 
 (define-derived-mode writing-mode
-  org-mode "Writing"
+  bbcode-mode "Writing"
   "Major mode for writing large bodies of text."
   (interactive)
   (visual-line-mode)
-  (setq visual-fill-column-width 95)
   ;; visual-fill-column mode is too buggy
+  ;; (setq visual-fill-column-width 95)
   ;; (visual-fill-column-mode)
   (flyspell-mode)
   (wc-mode))
+
+(defun my-writing-mode-hook ()
+  (linum-mode -1))
+
+(add-hook 'writing-mode-hook #'my-writing-mode-hook)
 
 (define-derived-mode large-text-mode
   text-mode "Large-Text"
