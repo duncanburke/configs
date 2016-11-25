@@ -698,7 +698,8 @@ _N_: down same level
 
   (add-hook-anon
    'frink-mode-hook
-   (linum-mode))
+   (linum-mode)
+   (setq comment-start "//"))
   )
 (mode-extension #'frink-mode ".frink")
 
