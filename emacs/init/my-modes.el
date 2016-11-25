@@ -608,6 +608,19 @@ _N_: down same level
 ;; Packages
 ;; --------
 
+;; bbcode-mode
+(el-register-package
+ :name bbcode-mode
+ :type elpa
+ )
+
+(with-eval-after-load "bbcode-mode"
+  (keymap-define-kbd
+   bbcode-mode-map
+   ("C-c"))
+  )
+
+
 ;; company
 ;; hooks: company-completion-(started|cancelled|finished)-hook
 ;; company-mode-map company-active-map
