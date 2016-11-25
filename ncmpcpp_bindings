@@ -15,16 +15,16 @@ def_key "shift-n"
  select_item
  scroll_down
 
-def_key "ctrl-t"
+def_key "alt-t"
  scroll_up_album
 
-def_key "ctrl-n"
+def_key "alt-n"
  scroll_down_album
 
-def_key "alt-t"
+def_key "alt-T"
  scroll_up_artist
 
-def_key "alt-n"
+def_key "alt-N"
  scroll_down_artist
 
 def_key "page_up"
