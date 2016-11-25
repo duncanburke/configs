@@ -196,8 +196,8 @@
   (keymap-define-kbd
    help-mode-map
    ("C-c")
-   ("M-t" 'help-go-back)
-   ("M-n" 'help-go-forward))
+   ("M-c" 'help-go-back)
+   ("M-r" 'help-go-forward))
 
   (add-hook 'help-mode-hook #'my-help-mode-hook))
 
