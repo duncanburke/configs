@@ -20,6 +20,12 @@
 
 (setq linum-format "%3d\u2502")
 
+(setq display-buffer-base-action
+      '((display-buffer--maybe-same-window
+         display-buffer-reuse-window
+         display-buffer-in-previous-window
+         display-buffer-use-some-window)))
+
 (try-fn tool-bar-mode -1)
 (try-fn menu-bar-mode -1)
 (try-fn fringe-mode 0)
