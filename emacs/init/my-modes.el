@@ -879,6 +879,13 @@ _N_: down same level
 
 (push '("---\\(.\\|\n\\)*format:\\s-*org" . org-mode) magic-mode-alist)
 
+;; ruby-mode
+(with-eval-after-load 'ruby-mode
+  (keymap-define-kbd
+   ruby-mode-map
+   ("M-C-p")
+   ("M-C-n")))
+
 ;; smart-tabs-mode
 (el-use-package "smarttabs")
 
