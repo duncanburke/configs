@@ -680,6 +680,28 @@ _N_: down same level
  :after
  (flx-ido-mode))
 
+;; frink-mode
+(el-register-package
+ :name frink
+ :type http
+ :url "https://futureboy.us/frinktools/emacs/frink-mode.el"
+ :after (autoload 'frink-mode "frink-mode.el"))
+
+(with-eval-after-load "frink-mode"
+  (keymap-define-kbd
+   frink-mode-map
+   ("C-c C-c")
+   ("C-c C-l")
+   ("C-k C-c" 'frink-run-buffer)
+   ("C-k C-l" 'frink-run-buffer-then-interactive)
+   ("C-k C-z" 'run-frink))
+
+  (add-hook-anon
+   'frink-mode-hook
+   (linum-mode))
+  )
+(mode-extension #'frink-mode ".frink")
+
 ;; git modes
 ;; commit, rebase, config, ignore
 (el-use-package "git-modes")
