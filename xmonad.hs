@@ -26,14 +26,15 @@ import XMonad.Layout.NoBorders (noBorders)
 main :: IO ()
 main = do
   xmproc <- spawnPipe "/home/duncan/.cabal/bin/xmobar /home/duncan/.xmobarrc"
+  let ws = myWorkspaces
   xmonad $ defaultConfig
-    { workspaces = workspaceIds
+    { workspaces = workspaceIds ws
     , layoutHook = layoutHook'
     , terminal = "urxvtc"
     , normalBorderColor = "#000000"
     , focusedBorderColor = "#1793d1"
     , modMask = mod4Mask
-    , keys = \conf -> Map.fromList $ keys' conf
+    , keys = \conf -> Map.fromList $ keys' ws conf
     , logHook = dynamicLogWithPP $ xmobarPP
                 { ppOutput = hPutStrLn xmproc
                 , ppTitle = xmobarColor "green" "" . shorten 190 }
@@ -52,10 +53,10 @@ manageHook' :: ManageHook
 manageHook' = manageDocks
               <+> composeAll []
 
-keys' :: XConfig Layout -> [Keybinding]
-keys' conf = commandBindings conf
-             ++ workspaceBindings
-             ++ screenBindings
+keys' :: [Workspace] -> XConfig Layout -> [Keybinding]
+keys' ws conf = commandBindings conf
+                ++ (workspaceBindings ws)
+                ++ screenBindings
 
 commandBindings :: XConfig Layout -> [Keybinding]
 commandBindings conf@(XConfig {XMonad.modMask = modMask'}) =
@@ -136,15 +137,15 @@ myWorkspaces = concat $
             wsKey' = ZipList $ take ncFn [xK_F1..]
             ncFn = 12
 
-workspaceBindings :: [Keybinding]
-workspaceBindings = workspaceBindings' =<< myWorkspaces
+workspaceBindings :: [Workspace] -> [Keybinding]
+workspaceBindings ws = workspaceBindings' =<< ws
   where workspaceBindings' :: Workspace -> [Keybinding]
         workspaceBindings' (Workspace {..}) =
           [ ((mod4Mask .|. wsMask, wsKey), windows $ greedyView wsId)
           , ((shiftMask .|. mod4Mask .|. wsMask, wsKey), windows $ shift wsId)]
 
-workspaceIds :: [WorkspaceId]
-workspaceIds = wsId <$> myWorkspaces
+workspaceIds :: [Workspace] -> [WorkspaceId]
+workspaceIds = (wsId <$>)
 
 screenKeys :: [KeySym]
 screenKeys = [xK_h, xK_t, xK_n]
