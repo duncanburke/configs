@@ -312,7 +312,7 @@
    ("RET" 'Info-follow-nearest-node)
    ("TAB" 'Info-next-reference)
    ("<backtab>" 'Info-prev-reference)
-   ("C-d" 'Info-up)
+   ("d" 'Info-up)
    ("q" 'Info-exit)
    ("h" 'Info-prev)
    ("s" 'Info-next)
@@ -327,6 +327,9 @@
    ("w" 'Info-menu)
    ("a" 'Info-index)
    ("o" 'Info-index-next)
+   ("M-A" 'Info-search)
+   ("M-O" 'Info-search-next)
+   ("C-M-a" 'Info-search-backward)
    )
 
   (keymap-define-kbd
