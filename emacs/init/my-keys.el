@@ -237,7 +237,7 @@
  ("C-u")
  ("C-x")
  ("C-z")
- 
+
  ;; hydra bindings
  ("r")
  ("C-t")
