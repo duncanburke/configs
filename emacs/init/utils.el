@@ -86,6 +86,14 @@
          `(,(kbd (car binding)) ,(cadr binding)))
        bindings)))
 
+(defmacro compose-map-define (keymap &rest bindings)
+  `(keymap-define
+    ,keymap
+    ,@(cl-mapcar
+       (lambda (binding)
+         `(,(kbd (car binding)) (lambda () (interactive) (insert-char ,(cadr binding)))))
+       bindings)))
+
 (defun kill-nearby-line (&optional backward)
   (interactive)
   (let ((line-start (save-excursion (beginning-of-line) (point)))
