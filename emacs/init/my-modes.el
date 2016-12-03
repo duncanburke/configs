@@ -161,6 +161,45 @@
   ;; Stop dired from spamming windows as you navigate
   (put 'dired-find-alternate-file 'disabled nil))
 
+;; doc-view
+(with-eval-after-load "doc-view"
+  (setq doc-view-mode-map (make-sparse-keymap))
+  (set-keymap-parent doc-view-mode-map image-mode-map)
+  (keymap-define-kbd
+   doc-view-mode-map
+   ("h" 'doc-view-previous-page)
+   ("t" 'backward-page)
+   ("n" 'forward-page)
+   ("s" 'doc-view-next-page)
+   ("C-t" 'doc-view-previous-line-or-previous-page)
+   ("C-n" 'doc-view-next-line-or-next-page)
+   ("M-t" 'doc-view-scroll-down-or-previous-page)
+   ("M-n" 'doc-view-scroll-up-or-previous-page)
+   ("M-<" 'doc-view-first-page)
+   ("M->" 'doc-view-next-page)
+   ("C-q" 'doc-view-goto-page)
+   ("RET" 'image-next-line)
+   ("+" 'doc-view-enlarge)
+   ("=" 'doc-view-enlarge)
+   ("-" 'doc-view-shrink)
+   ("0" 'doc-view-scale-reset)
+   ("m" 'doc-view-fit-height-to-window)
+   ("w" 'doc-view-fit-width-to-window)
+   ("v" 'doc-view-fit-page-to-window)
+   ("k" 'doc-view-kill-proc)
+   ("C-o" 'doc-view-search)
+   ("C-a" 'doc-view-search-backward)
+   ("C-k C-c" 'doc-view-toggle-display)
+   ("C-k C-t" 'doc-view-open-text)
+   ("g" 'doc-view-revert-buffer)
+   )
+  (keymap-define-kbd
+   doc-view-minor-mode-map
+   ("C-c")
+   ("C-k C-c" 'doc-view-toggle-display)
+   )
+  )
+
 ;; wdired
 (with-eval-after-load "wdired"
   (keymap-define-kbd
@@ -302,6 +341,21 @@
    ("C-k C-b" 'ielm-change-working-buffer)
    ("C-k C-f" 'ielm-display-working-buffer)
    ("C-k C-v" 'ielm-print-working-buffer)))
+
+;; image-mode
+(with-eval-after-load "image-mode"
+  (keymap-define-kbd
+   image-mode-map
+   ("C-c")
+   ("C-k C-c" 'image-toggle-display)
+   ("b")
+   ("n")
+   ("p")
+   ("h" 'image-previous-frame)
+   ("t" 'image-previous-file)
+   ("n" 'image-next-file)
+   ("s" 'image-next-frame)
+   ))
 
 ;; info
 (with-eval-after-load "info"
