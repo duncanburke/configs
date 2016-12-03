@@ -693,11 +693,13 @@ _N_: down same level
 (with-eval-after-load "frink-mode"
   (keymap-define-kbd
    frink-mode-map
-   ("C-c C-c")
-   ("C-c C-l")
+   ("C-c")
    ("C-k C-c" 'frink-run-buffer)
    ("C-k C-l" 'frink-run-buffer-then-interactive)
-   ("C-k C-z" 'run-frink))
+   ("C-k C-z" 'run-frink)
+   ("{")
+   ("}")
+   )
 
   (add-hook-anon
    'frink-mode-hook
