@@ -2,6 +2,8 @@
 
 (set-quit-char ?\C-p)
 
+(setq compose-map (make-sparse-keymap))
+
 (keymap-define-kbd
  global-map
  ("C-'")
@@ -426,6 +428,7 @@
  ("o" 959)
  ("p" 960)
  ("r" 961)
+ ("M-s" 962)
  ("s" 963)
  ("t" 964)
  ("u" 965)
