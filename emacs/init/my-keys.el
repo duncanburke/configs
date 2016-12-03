@@ -31,13 +31,13 @@
  ("M-Y")
  ("C-M-y")
 
- ("C-a" 'isearch-backward)
- ("M-a" 'search-backward-regexp)
+ ("C-a" 'isearch-backward-regexp)
+ ("M-a" 'isearch-backward)
  ("M-A" 'query-replace)
  ("C-M-a" 'replace-regexp)
 
- ("C-o" 'isearch-forward)
- ("M-o" 'isearch-forward-regexp)
+ ("C-o" 'isearch-forward-regexp)
+ ("M-o" 'isearch-forward)
  ("M-O" 'query-replace-regexp)
  ("C-M-o" 'replace-regexp)
 
@@ -270,8 +270,8 @@
  ("M-s")
 
  ("C-p" 'abort-recursive-edit)
- ("C-t" 'previous-history-element)
- ("C-n" 'next-history-element)
+ ("M-t" 'previous-history-element)
+ ("M-n" 'next-history-element)
  ("C-a" 'previous-matching-history-element)
  ("C-o" 'next-matching-history-element)
  )
@@ -388,6 +388,7 @@
    ("M-r")
    ("C-v" 'isearch-toggle-regexp)
 
+   ("C-g" 'isearch-delete-char)
    ("M-s")
    ("<f1>")
    ("<help>"))
