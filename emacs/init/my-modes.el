@@ -518,58 +518,43 @@ _N_: down same level
    ("<S-down>")
    ("<S-left>")
    ("<S-return>")
-   ("<S-right>"))
+   ("<S-right>")
 
-  (defhydra hydra-org (org-mode-map "C-b" :color pink :hint nil)
-    "
-    ^Movement^
-^^^^^^^^-------------
-_h_: up heading
-_t_: next heading
-_n_: prev heading
-_T_: up same level
-_N_: down same level
-"
-    ("q" nil "exit" :color blue)
+   ;; Cursor Movement
+   ("M-7" 'outline-up-heading)
+   ("M-8" 'outline-backward-same-level)
+   ("M-9" 'outline-previous-visible-heading)
+   ("M-0" 'outline-next-visible-heading)
+   ("M-[" 'outline-forward-same-level)
 
-    ("h" outline-up-heading)
-    ("t" outline-previous-visible-heading)
-    ("n" outline-next-visible-heading)
-    ("s" ignore)
+   ;; Heading or table row/column movement
+   ("M-*" 'org-metaleft)
+   ("M-(" 'org-metaup)
+   ("M-)" 'org-metadown)
+   ("M-{" 'org-metaright)
 
-    ("H" nil)
-    ("T" outline-backward-same-level)
-    ("N" outline-forward-same-level)
-    ("S" ignore)
+   ;; Heading movement or table row/column deletion
+   ("M-s-g" 'org-shiftmetaleft)
+   ("M-s-c" 'org-shiftmetaup)
+   ("M-s-r" 'org-shiftmetadown)
+   ("M-s-l" 'org-shiftmetaright)
 
-    ;; meta-* up/down promote/demote
+   ;; Context-dependent cycling
+   ("C-/" 'org-shiftleft)
+   ("C-=" 'org-shiftright)
 
-    ("M-h" org-metaleft)
-    ("M-t" org-metaup)
-    ("M-n" org-metadown)
-    ("M-s" org-metaright)
+   ;; Timestamp or priority movement
+   ("M-/" 'org-shiftup)
+   ("M-=" 'org-shiftdown)
 
-    ;; shiftmeta-*
+   ;; TODO set cycling
+   ("M-?" 'org-shiftcontrolleft)
+   ("M-+" 'org-shiftcontrolright)
 
-    ("M-H" org-shiftmetaleft)
-    ("M-T" org-shiftmetaup)
-    ("M-N" org-shiftmetadown)
-    ("M-S" org-shiftmetaright)
-
-    ("C-h" org-shiftleft)
-    ("C-t" org-shiftup)
-    ("C-n" org-shiftdown)
-    ("C-s" org-shiftright)
-
-    ("C-H" org-shiftcontrolleft)
-    ("C-T" org-shiftcontrolup)
-    ("C-N" org-shiftcontroldown)
-    ("C-S" org-shiftcontrolright)
-
-    ("" ignore :exit nil)
-    )
-
-
+   ;; Change timestamps synchronously
+   ("s-/" 'org-shiftcontrolup)
+   ("s-+" 'org-shiftcontroldown)
+   )
   )
 
 ;; package
