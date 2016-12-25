@@ -409,7 +409,6 @@
    ("p")
    ("t" 'previous-line)))
 
-(setq compose-map (make-sparse-keymap))
 (compose-map-define
  compose-map
  ("a" 945)
