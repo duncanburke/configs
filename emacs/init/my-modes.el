@@ -744,6 +744,15 @@ _N_: down same level
    'frink-mode-hook
    (linum-mode)
    (setq comment-start "//"))
+  (defun frink-interactive ()
+    (interactive)
+    (let ((outbuf (get-buffer-create (concat "*Frink*"))))
+      (switch-to-buffer-other-window outbuf)
+      (comint-mode)
+      (erase-buffer)
+      (setq comint-process-echoes t)  ;; Suppress echoing of input.
+      (comint-exec outbuf "\"frink\"" "frink" nil '("-k"))
+      (end-of-buffer)))
   )
 (mode-extension #'frink-mode ".frink")
 
