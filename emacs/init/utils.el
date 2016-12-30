@@ -100,9 +100,9 @@
 
 (defmacro keymap-define (keymap &rest bindings)
   `(progn ,@(cl-mapcar
-       (lambda (binding)
-         `(force-define-key ,keymap ,(car binding) ,(cadr binding)))
-       bindings)))
+             (lambda (binding)
+               `(force-define-key ,keymap ,(car binding) ,(cadr binding)))
+             bindings)))
 
 (defmacro keymap-define-kbd (keymap &rest bindings)
   `(keymap-define
