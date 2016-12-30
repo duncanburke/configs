@@ -78,6 +78,7 @@
    ("M-p")
    ("M-t" 'comint-previous-input)
    ("M-n" 'comint-next-input)
+   ;; TODO: review the bindings in the prefix map
    ("C-k" (lookup-key comint-mode-map [?\C-c]))
    ("C-c")
    ("M-r")
@@ -217,6 +218,27 @@
    ("C-c")))
 
 ;; eshell
+(with-eval-after-load "esh-mode"
+  (defun eshell-mode-fixup ()
+    (keymap-define-kbd
+     eshell-mode-map
+     ("C-c")
+     ("C-k" eshell-command-prefix)
+     ("M-n")
+     ("M-p")
+     ("M-r")
+     ("M-s")
+     ("M-t" 'eshell-previous-matching-input-from-input)
+     ("M-n" 'eshell-next-matching-input-from-input)
+     ("M-a" 'eshell-previous-matching-input)
+     ("M-o" 'eshell-next-matching-input)
+     )
+
+    ;; TODO: eshell-command-prefix
+    )
+  (advice-add 'eshell-mode :after #'eshell-mode-fixup)
+  )
+
 
 ;; flyspell-mode
 (with-eval-after-load "flyspell"
@@ -600,6 +622,18 @@ _N_: down same level
   (add-hook-anon
    'sh-mode-hook
    (sh-electric-here-document-mode -1)))
+
+;;shell-mode
+
+(with-eval-after-load "shell"
+  (keymap-define-kbd
+   shell-mode-map
+   ("C-c")
+   ;; TODO: review this with comint-mode
+   ("C-k C-t" 'shell-backward-command)
+   ("C-k C-n" 'shell-forward-command)
+   )
+  )
 
 ;; term
 (with-eval-after-load "term"
