@@ -252,6 +252,16 @@
 
 ;; fundamental-mode
 
+;; grep-mode
+
+(with-eval-after-load "grep"
+  (keymap-define-kbd
+   grep-mode-map
+   ("C-c")
+   ("C-k C-f" 'next-error-follow-minor-mode)
+   )
+  )
+
 ;; help-mode
 (with-eval-after-load "help-mode"
   (keymap-define-kbd
@@ -282,7 +292,6 @@
    ("M-h" 'ido-prev-match)
    ("M-s" 'ido-next-match)
    ("SPC" 'ido-complete-space)
-   ("M-k" 'ido-completion-help)
    ("C-j" 'ido-select-text)
    ("RET" 'ido-exit-minibuffer)
    ("C-SPC" 'ido-restrict-to-matches)
@@ -446,7 +455,29 @@
    ("M-}")
    ("M-h" 'nxml-backward-up-element)
    ("M-t" 'nxml-backward-element)
-   ("M-n" 'nxml-forward-element)))
+   ("M-n" 'nxml-forward-element))
+
+  ;; rng-nxml-mode-init has the nasty habit of directly modifying nxml-mode-map
+  (defun rng-nxml-mode-init ()
+    "Initialize `nxml-mode' to take advantage of `rng-validate-mode'.
+This is typically called from `nxml-mode-hook'.
+Validation will be enabled if `rng-nxml-auto-validate-flag' is non-nil."
+    (interactive)
+    (easy-menu-define rng-nxml-menu nxml-mode-map
+      "Menu for nxml-mode used with rng-validate-mode."
+      rng-nxml-easy-menu)
+    (add-to-list 'mode-line-process
+                 '(rng-validate-mode (:eval (rng-compute-mode-line-string)))
+                 'append)
+    (cond (rng-nxml-auto-validate-flag
+           (rng-validate-mode 1)
+           (add-hook 'nxml-completion-hook 'rng-complete nil t)
+           (add-hook 'nxml-in-mixed-content-hook 'rng-in-mixed-content-p nil t))
+          (t
+           (rng-validate-mode 0)
+           (remove-hook 'nxml-completion-hook 'rng-complete t)
+           (remove-hook 'nxml-in-mixed-content-hook 'rng-in-mixed-content-p t))))
+  )
 
 ;; outline-mode
 (with-eval-after-load "outline"
@@ -832,8 +863,8 @@ _N_: down same level
    ("C-c")
    ("M-n")
    ("M-p")
-   ("M-t" 'git-commit-prev-message)
-   ("M-n" 'git-commit-next-message)))
+   ("M-T" 'git-commit-prev-message)
+   ("M-N" 'git-commit-next-message)))
 
 (with-eval-after-load "git-rebase"
   (keymap-define-kbd
@@ -856,15 +887,14 @@ _N_: down same level
    ("C-c")
    ("C-w")
    ("M-w")
-   ("C-e" 'magit-copy-as-kill)
-   ("M-e" 'magit-copy-buffer-thing-as-kill)
    ("p")
    ("n")
    ("M-p")
    ("M-n")
    ("M-t" 'magit-section-backward)
    ("M-n" 'magit-section-forward)
-   ("M-T" 'magit-section-up)))
+   )
+  )
 
 (with-eval-after-load "magit-log"
   (keymap-define-kbd
