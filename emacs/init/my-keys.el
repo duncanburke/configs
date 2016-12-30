@@ -45,13 +45,13 @@
  ("M-e" 'kill-ring-save)
  ("M-E")
  ("s-e" 'clipboard-kill-ring-save)
- ("C-M-e")
+ ("C-M-e" 'clipboard-kill-ring-save)
 
  ("C-u" 'yank)
  ("M-u" 'yank-pop)
  ("M-U")
  ("s-u" 'clipboard-yank)
- ("C-M-u")
+ ("C-M-u" 'clipboard-yank)
 
  ;; TODO: TABS!!!
  ;; ("C-i" ...)

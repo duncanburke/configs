@@ -50,6 +50,12 @@
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
 
+;; System-specific
+
+(cond ((eq system-type 'windows-nt)
+       (setq w32-lwindow-modifier 'super))
+      )
+
 ;; Answer y or n instead of yes or no at minibar prompts.
 (defalias 'yes-or-no-p 'y-or-n-p)
 

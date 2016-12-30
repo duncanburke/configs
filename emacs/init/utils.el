@@ -66,11 +66,37 @@
   `(if (symbol-function (quote ,fn))
        (,fn ,@args)))
 
+;; As of Windows 7, registering a hot key will have no effect if it is
+;; already bound by the system.
+;; Win-U and Win-L, it seems, are special, other bindings can be disabled
+;; through Group Policy or the Registry.
+;; Group Policy:
+;; 1. gpedit.msc
+;; 2. User Configuration/Administrative Templates/Windows Components/File Explorer/
+;; 3. Enable "Turn off Windows+X hotkeys"
+;; 4. restart or log out/log in
+;; Registry Method 1:
+;; HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\NoWinKeys[DWORD]=1
+;; Method 2:
+;; HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\DisabledHotkeys[EXPAND_SZ]="E"
+;; AutoHotkey is apparently able to bind to reserved keys such as Win-U (e.g #u:: works)
+;; How this is accomplished merits further exploration
+(defun win32-maybe-register-keybinding (keyseq)
+  (cl-mapcar
+   (lambda (key)
+     (if (memq 'super (event-modifiers key))
+         (w32-register-hot-key (vector key))))
+   keyseq)
+  )
+
 (defun force-define-key (keymap key def)
   (let ((lookup (lookup-key keymap key)))
     (when (numberp lookup)
       (define-key keymap (cl-subseq key 0 lookup) nil))
-    (define-key keymap key def)))
+    (define-key keymap key def)
+    ;; (if (eq system-type 'windows-nt)
+    ;;     (win32-maybe-register-keybinding key))
+    ))
 
 (defmacro keymap-define (keymap &rest bindings)
   `(progn ,@(cl-mapcar

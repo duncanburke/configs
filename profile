@@ -15,4 +15,9 @@ source_if_exists ~/.stackcompletion
 
 source_if_exists ~/.bashrc
 
-export EDITOR='emacsclient -cnw -a ""'
+case $(uname) in
+    "MINGW64_NT-10.0")
+        export EDITOR='emacsclient -na "runemacs" -c' ;;
+    *)
+        export EDITOR='emacsclient -nw -na "runemacs" -c' ;;
+esac
