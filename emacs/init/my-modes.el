@@ -827,7 +827,7 @@ _N_: down same level
 
 ;; haskell
 
-(require 'my-haskell)
+;; (require 'my-haskell)
 
 ;; hydra
 (el-use-package "hydra")
