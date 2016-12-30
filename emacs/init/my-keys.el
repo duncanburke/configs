@@ -62,7 +62,7 @@
  ("C-M-;")
 
  ("C-q" 'goto-line)
- ("M-q")
+ ("M-q" 'switch-to-minibuffer-window)
  ("M-Q")
  ("C-M-q")
 
