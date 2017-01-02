@@ -136,6 +136,42 @@
    ("C-k C-k" 'kill-compilation))
    )
 
+;; diff
+
+(with-eval-after-load "diff-mode"
+   (keymap-define-kbd
+    diff-mode-shared-map
+    ("P")
+    ("T" 'diff-file-prev)
+    ("K")
+    ("D" 'diff-file-kill)
+    ("h")
+    ("p")
+    ("t" 'diff-hunk-prev)
+    ("k")
+    ("d" 'diff-hunk-kill)
+    )
+   (keymap-define-kbd
+    diff-mode-map
+    ("C-k" (lookup-key diff-mode-map [?\C-c]))
+    ("C-c")
+    ("M-P")
+    ("M-T" 'diff-file-prev)
+    ("M-K")
+    ("M-D" 'diff-file-kill)
+    ("M-h")
+    ("M-p")
+    ("M-t" 'diff-hunk-prev)
+    ("M-k")
+    ("M-d" 'diff-hunk-kill)
+    )
+   ;; diff-minor-mode-prefix
+   (keymap-define-kbd
+    diff-minor-mode-map
+    ("C-k" (lookup-key diff-minor-mode-map [?\C-c]))
+    ("C-c")
+    )
+  )
 
 ;; dired
 (with-eval-after-load "dired"
