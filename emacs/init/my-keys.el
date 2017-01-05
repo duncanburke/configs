@@ -228,6 +228,7 @@
  ("g" 'magit-status)
  ("x" 'switch-to-scratch)
  ("C-r" 're-builder)
+ ("k" 'kill-this-buffer)
 
 
  ("C-k")
