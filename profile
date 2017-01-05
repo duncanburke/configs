@@ -19,5 +19,6 @@ case $(uname) in
     "MINGW64_NT-10.0")
         export EDITOR='emacsclient -na "runemacs" -c' ;;
     *)
-        export EDITOR='emacsclient -nw -na "runemacs" -c' ;;
+        export EDITOR='emacsclient -t -a ""'
+        export VISUAL='emacsclient -c -a ""';;
 esac
