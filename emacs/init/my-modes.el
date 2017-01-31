@@ -19,6 +19,20 @@
    ("C-t" 'bs-up)
    ("C-n" 'bs-down)))
 
+;; buff-menu
+(with-eval-after-load "buff-menu"
+  (keymap-define-kbd
+   Buffer-menu-mode-map
+   ("C-o")
+   ("M-m" 'Buffer-menu-switch-other-window)
+   ("C-k")
+   ("C-d")
+   ("C-g" 'Buffer-menu-delete-backwards)
+   ("M-s")
+   ;; TODO: Buffer-menu-isearch-*, Buffer-menu-multi-occur
+   )
+  )
+
 ;; buffer-menu
 
 
