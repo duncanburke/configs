@@ -870,6 +870,7 @@ _N_: down same level
       (end-of-buffer)))
   )
 (mode-extension #'frink-mode ".frink")
+(autoload 'frink-interactive "frink-mode" nil t)
 
 ;; git modes
 ;; commit, rebase, config, ignore
