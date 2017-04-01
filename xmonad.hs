@@ -15,7 +15,8 @@ import XMonad.Hooks.DynamicLog ( xmobarPP
                                , xmobarColor )
 import XMonad.Hooks.ManageDocks ( manageDocks
                                 , avoidStruts
-                                , docksEventHook )
+                                , docksEventHook
+                                , ToggleStruts(..) )
 import XMonad.Util.Run (spawnPipe)
 import XMonad.StackSet ( greedyView
                        , shift
@@ -71,6 +72,7 @@ commandBindings conf@(XConfig {XMonad.modMask = modMask'}) =
   , ((modMask' .|. shiftMask, xK_a         ), spawn "mpc single")
   , ((modMask'              , xK_comma     ), spawn "toggle_mpdscribble")
   , ((modMask'              , xK_period    ), spawn "mpc pause; slock")
+  , ((modMask' .|. shiftMask, xK_period    ), sendMessage ToggleStruts)
   , ((modMask' .|. shiftMask, xK_j         ), kill)
   , ((modMask'              , xK_space     ), sendMessage NextLayout)
   , ((modMask' .|. shiftMask, xK_space     ), setLayout $ layoutHook conf)
