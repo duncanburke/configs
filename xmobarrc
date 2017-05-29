@@ -1,13 +1,12 @@
 -- -*- mode: Haskell; -*-
 
-Config { font = "xft:Terminus-9",
+Config { font = "-*-terminus-medium-*-*-*-12-*-*-*-*-*-*-*",
          bgColor = "black",
          fgColor = "grey",
          position = TopW L 100,
          lowerOnStart = True,
          commands = [
-           Run MPD ["-t",
-                    "<artist>/<album>/<title> <lapsed>/<length> [<flags>]"] 1,
+           Run MPD ["-t", "<artist>/<album>/<title> <lapsed>/<length> [<flags>]"] 1,
            Run Com "mpdscribble_status" [] "mpdscrib" 1,
            Run Cpu ["-L","10","-H","50","--normal","green","--high","red"] 10,
            Run Memory ["-t","Mem: <usedratio>%"] 10,

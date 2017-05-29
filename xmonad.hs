@@ -26,7 +26,7 @@ import XMonad.Layout.NoBorders (noBorders)
 
 main :: IO ()
 main = do
-  xmproc <- spawnPipe "/home/duncan/.cabal/bin/xmobar /home/duncan/.xmobarrc"
+  xmproc <- spawnPipe "/home/duncan/.local/bin/xmobar /home/duncan/.xmobarrc"
   let ws = myWorkspaces
   xmonad $ defaultConfig
     { workspaces = workspaceIds ws
