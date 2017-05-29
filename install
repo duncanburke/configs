@@ -150,7 +150,7 @@ parse_manifest(){
         to=$(eval echo "${to}")
 
         manifest[${label}]="${manifest[${label}]:-}${manifest[${label}]+;}${from}:${to}"
-    done < <(sed -r "s/^[:space:]*(#.*)?$//;Tx;d;:x" < "${manifest_file}")
+    done < <(sed -r "s/^[[:space:]]*(#.*)?$//;Tx;d;:x" < "${manifest_file}")
 }
 
 over_label(){
