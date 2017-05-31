@@ -63,7 +63,7 @@
 
  ("C-q" 'goto-line)
  ("M-q" 'switch-to-minibuffer-window)
- ("M-Q")
+ ("M-Q" 'toggle-window-dedicated)
  ("C-M-q")
 
  ("C-j" 'newline)

@@ -47,6 +47,13 @@
  ;; I rarely don't want to see trailing whitespace. Also, it's not very intrusive in windowed mode.
  show-trailing-whitespace t)
 
+;; Add indicator in mode line for whether a window is dedicated
+(setf (nthcdr 6 mode-line-format) (cons
+                                   '(:eval (if (window-dedicated-p (get-buffer-window))
+                                               "D" "-"))
+                                   (nthcdr 6 mode-line-format)))
+
+
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
 (put 'set-goal-column 'disabled nil)

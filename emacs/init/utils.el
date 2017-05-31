@@ -160,4 +160,12 @@
     (select-frame-set-input-focus (window-frame (active-minibuffer-window)))
     (select-window (active-minibuffer-window))))
 
+(defun toggle-window-dedicated ()
+  "Toggle whether the active window is dedicated or not"
+  (interactive)
+  (let ((window (get-buffer-window)))
+    (set-window-dedicated-p window (not (window-dedicated-p window)))
+    (redraw-frame)
+    ))
+
 (provide 'utils)
