@@ -1,6 +1,6 @@
 -- -*- mode: Haskell; -*-
 
-Config { font = "-*-terminus-medium-*-*-*-12-*-*-*-*-*-*-*",
+Config { -- font = "-*-terminus-medium-*-*-*-12-*-*-*-*-*-*-*",
          bgColor = "black",
          fgColor = "grey",
          position = TopW L 100,
