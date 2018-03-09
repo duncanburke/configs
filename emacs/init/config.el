@@ -1,6 +1,7 @@
 (require 'utils)
 ;; Alternative: "DejaVu Sans Mono:style=Book:size=12"
-(add-to-list 'default-frame-alist '(font . "Terminus:style=Regular:size=10"))
+;; (add-to-list 'default-frame-alist '(font . "Terminus:style=Regular:size=12"))
+(add-to-list 'default-frame-alist '(font . "-*-terminus-medium-*-*-*-12-*-*-*-*-*-*-*"))
 
 (setq
  ;; gc tuning
