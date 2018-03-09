@@ -168,4 +168,9 @@
     (redraw-frame)
     ))
 
+(defun kill-current-buffer ()
+  "Kills current buffer. kill-this-buffer does nothing if menu bar is not visible."
+  (interactive)
+  (kill-buffer (current-buffer)))
+
 (provide 'utils)
