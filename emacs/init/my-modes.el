@@ -996,8 +996,8 @@ _N_: down same level
    ("DEL" 'markdown-exdent-or-delete)
    ("TAB" 'indent-for-tab-command)
 
-   ("M-t" 'markdown-backward-paragraph)
-   ("M-n" 'markdown-forward-paragraph))
+   ("M-t" 'markdown-backward-block)
+   ("M-n" 'markdown-forward-block))
 
   (defhydra hydra-markdown (markdown-mode-map "C-b" :color pink :hint nil)
     "
