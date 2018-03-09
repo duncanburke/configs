@@ -475,9 +475,16 @@
 ;; lisp-mode
 (with-eval-after-load "lisp-mode"
   (keymap-define-kbd
+   lisp-mode-shared-map
+   ("C-M-q")
+   )
+  (keymap-define-kbd
    lisp-mode-map
    ("C-c")
-   ("C-k C-z" 'run-lisp)))
+   ("C-k C-z" 'run-lisp)
+   ("C-M-q")
+   )
+  )
 
 ;; lv
 (with-eval-after-load "lv"
