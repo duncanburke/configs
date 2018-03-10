@@ -450,7 +450,6 @@
    ("n" 'Info-scroll-up)
    ("M-t" 'Info-prev-reference)
    ("M-n" 'Info-next-reference)
-   ("o" 'Info-search)
    ("e" 'Info-copy-current-node-name)
    ("<" 'Info-top-node)
    (">" 'Info-final-node)
