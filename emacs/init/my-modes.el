@@ -400,7 +400,7 @@
         ido-use-faces t
         ido-buffer-disable-smart-matches nil
         ido-max-prospects 64
-        ido-auto-merge-work-directories-length -1
+        ido-auto-merge-work-directories-length 0
         ido-auto-merge-delay-time 0
         ido-enter-matching-directory nil
         ido-use-virtual-buffers t)
