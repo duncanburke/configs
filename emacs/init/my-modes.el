@@ -309,6 +309,8 @@
    grep-mode-map
    ("C-c")
    ("C-k C-f" 'next-error-follow-minor-mode)
+   ("p")
+   ("t" 'previous-error-no-select)
    )
   )
 
@@ -492,6 +494,17 @@
       lv-window))
   (advice-add 'lv-window :around #'lv-window--fixup))
 
+;; man-mode
+(with-eval-after-load "man"
+  (keymap-define-kbd
+   Man-mode-map
+   ("p")
+   ("t" 'Man-previous-section)
+   ("M-p")
+   ("M-t" 'Man-previous-manpage)
+   )
+  )
+
 ;; nxml-mode
 (with-eval-after-load "nxml-mode"
   (keymap-define-kbd
@@ -528,6 +541,22 @@ Validation will be enabled if `rng-nxml-auto-validate-flag' is non-nil."
            (rng-validate-mode 0)
            (remove-hook 'nxml-completion-hook 'rng-complete t)
            (remove-hook 'nxml-in-mixed-content-hook 'rng-in-mixed-content-p t))))
+  )
+
+;; occur-mode
+(with-eval-after-load "replace"
+  (keymap-define-kbd
+   occur-mode-map
+   ("C-k" (lookup-key occur-mode-map [?\C-c]))
+   ("C-c")
+   ("M-p")
+   ("M-t" 'occur-prev))
+  (keymap-define-kbd
+   occur-edit-mode-map
+   ("C-c C-c")
+   ("C-k C-c" 'occur-cease-edit)
+   ("C-c C-f")
+   ("C-k C-f" 'next-error-follow-minor-mode))
   )
 
 ;; outline-mode
@@ -735,6 +764,10 @@ _N_: down same level
 ;; tabulated-list
 
 (with-eval-after-load "tabulated-list"
+  (keymap-define-kbd
+   tabulated-list-mode-map
+   ("p")
+   ("t" 'previous-line))
   (add-hook-anon
    'tabulated-list-mode-hook
    (setq show-trailing-whitespace nil)))

@@ -404,12 +404,6 @@
    ("C-s" 'isearch-yank-char-in-minibuffer))
   )
 
-(with-eval-after-load "tabulated-list"
-  (keymap-define-kbd
-   tabulated-list-mode-map
-   ("p")
-   ("t" 'previous-line)))
-
 (compose-map-define
  compose-map
  ("a" 945)
