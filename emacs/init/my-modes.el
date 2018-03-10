@@ -625,23 +625,23 @@ _N_: down same level
    ("<S-right>")
 
    ;; Cursor Movement
-   ("M-7" 'outline-up-heading)
-   ("M-8" 'outline-backward-same-level)
-   ("M-9" 'outline-previous-visible-heading)
-   ("M-0" 'outline-next-visible-heading)
-   ("M-[" 'outline-forward-same-level)
+   ("M-s-d" 'outline-up-heading)
+   ("M-s-h" 'outline-backward-same-level)
+   ("M-s-t" 'outline-previous-visible-heading)
+   ("M-s-n" 'outline-next-visible-heading)
+   ("M-s-s" 'outline-forward-same-level)
 
    ;; Heading or table row/column movement
-   ("M-*" 'org-metaleft)
-   ("M-(" 'org-metaup)
-   ("M-)" 'org-metadown)
-   ("M-{" 'org-metaright)
+   ("M-s-g" 'org-metaleft) ;; promote heading, list item at point or move table column left
+   ("M-s-c" 'org-metaup) ;; move subtree up or move table row up
+   ("M-s-r" 'org-metadown) ;; move subtree down or move table row down
+   ("M-s-l" 'org-metaright) ;; demote heading, list item at point or move table column right
 
    ;; Heading movement or table row/column deletion
-   ("M-s-g" 'org-shiftmetaleft)
-   ("M-s-c" 'org-shiftmetaup)
-   ("M-s-r" 'org-shiftmetadown)
-   ("M-s-l" 'org-shiftmetaright)
+   ("C-M-s-g" 'org-shiftmetaleft) ;; Promote subtree or delete table column
+   ("C-M-s-c" 'org-shiftmetaup) ;; drag the line at point up
+   ("C-M-s-r" 'org-shiftmetadown) ;; drag the line at point down
+   ("C-M-s-l" 'org-shiftmetaright) ;; demote subtree or insert table column
 
    ;; Context-dependent cycling
    ("C-/" 'org-shiftleft)
