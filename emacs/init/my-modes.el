@@ -356,16 +356,11 @@
    ("C-M-r" 'ido-toggle-virtual-buffers)
    )
 
-  (defun ido-complete-enter-dired ()
+  (defun ido-strip-enter-dired ()
     (interactive)
-    (cond
-     (ido-matches
-      (ido-set-current-directory ido-current-directory (ido-name (car ido-matches)) t)
-      (setq ido-text ""
-            ido-exit 'dired)
-      (exit-minibuffer))
-     (t
-      (ido-enter-dired))))
+    (setq ido-text ""
+          ido-exit 'dired)
+    (exit-minibuffer))
 
   (setq ido-file-dir-completion-map (make-sparse-keymap))
   (set-keymap-parent ido-file-dir-completion-map ido-common-completion-map)
@@ -373,7 +368,7 @@
    ido-file-dir-completion-map
    ("C-b" 'ido-enter-switch-buffer)
    ("C-f" 'ido-fallback-command)
-   ("C-d" 'ido-complete-enter-dired)
+   ("C-d" 'ido-strip-enter-dired)
    ("C-t" 'ido-prev-match-dir)
    ("C-n" 'ido-next-match-dir)
    ("<backspace>" 'ido-delete-backward-updir)
