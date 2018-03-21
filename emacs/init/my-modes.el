@@ -353,6 +353,205 @@
 
 ;; fundamental-mode
 
+;; gnus
+
+(with-eval-after-load "gnus"
+
+  ;; gnus-agent-group-mode-map
+  ;; gnus-agent-server-mode-map
+  ;; gnus-agent-summary-mode-map
+  (keymap-define-kbd
+   gnus-article-edit-mode-map
+   ("C-k" (lookup-key gnus-article-edit-mode-map [?\C-c]))
+   ("C-c"))
+  ;; gnus-article-edit-wash-map
+  (keymap-define-kbd
+   gnus-article-mode-map
+   ("C-k" (lookup-key gnus-article-mode-map [?\C-c]))
+   ("C-c")
+   ("M-k" (lookup-key gnus-article-mode-map [?\C-h]))
+   ("C-h"))
+  ;; gnus-article-send-map
+  (keymap-define-kbd
+   gnus-browse-mode-map
+   ("C-k" (lookup-key gnus-browse-mode-map [?\C-c]))
+   ("C-c")
+   ("M-p")
+   ("M-t" 'gnus-browse-prev-group))
+  (keymap-define-kbd
+   gnus-category-mode-map
+   ("C-k" (lookup-key gnus-category-mode-map [?\C-c]))
+   ("C-c"))
+  ;; gnus-dead-summary-mode-map
+  ;; gnus-group-cloud-map
+  ;; gnus-group-group-map
+  ;; gnus-group-help-map
+  ;; gnus-group-list-flush-map
+  ;; gnus-group-list-limit-map
+  ;; gnus-group-list-map
+  ;; gnus-group-list-plus-map
+  (keymap-define-kbd
+   gnus-group-mark-map
+   ("w")
+   ("e" 'gnus-group-mark-region))
+  (keymap-define-kbd
+   gnus-group-mode-map
+   ("C-d" 'gnus-group-kill-group)
+   ("C-k" (lookup-key gnus-group-mode-map [?\C-c]))
+   ("C-c")
+   ("C-w")
+   ("C-e" 'gnus-group-kill-region)
+   ("C-y")
+   ("C-u" 'gnus-group-yank-group)
+   ("P" 'gnus-group-topic-map)
+   ("T" 'gnus-group-prev-group)
+   ("p" 'gnus-topic-mode)
+   ("t" 'gnus-group-prev-unread-group)
+   ("M-K")
+   ("M-E" 'gnus-group-edit-global-kill)
+   ("M-k")
+   ("M-e" 'gnus-group-edit-local-kill)
+   ("M-p")
+   ("M-t" 'gnus-group-prev-unread-group-same-level))
+  ;; gnus-group-score-map
+  ;; gnus-group-sieve-map
+  ;; gnus-group-sort-map
+  ;; gnus-group-sort-selected-map
+  ;; gnus-group-sub-map
+  (keymap-define-kbd
+   gnus-kill-file-mode-map
+   ("C-k" (lookup-key gnus-kill-file-mode-map [?\C-c]))
+   ("C-c"))
+  ;; gnus-mime-button-map
+  ;; gnus-mime-security-button-map
+  ;; gnus-next-page-map
+  ;; gnus-prev-page-map
+  (keymap-define-kbd
+   gnus-score-mode-map
+   ("C-k" (lookup-key gnus-score-mode-map [?\C-c]))
+   ("C-c"))
+  ;; gnus-send-bounce-map
+  (keymap-define-kbd
+   gnus-server-mode-map
+   ("C-k" (lookup-key gnus-server-mode-map [?\C-c]))
+   ("C-c")
+   ("p")
+   ("t" 'previous-line))
+  ;; gnus-sticky-article-mode-map
+  (keymap-define-kbd
+   gnus-summary-article-map
+   ("p")
+   ("t" 'gnus-summary-prev-page))
+  ;; gnus-summary-backend-map
+  ;; gnus-summary-buffer-map
+  (keymap-define-kbd
+   gnus-summary-exit-map
+   ("P")
+   ("T" 'gnus-summary-prev-group)
+   ("p")
+   ("t" 'gnus-summary-catchup-and-goto-prev-group))
+  (keymap-define-kbd
+   gnus-summary-generic-mark-map
+   ("e P")
+   ("e T" 'gnus-summary-put-mark-as-expirable-prev-unread)
+   ("e p")
+   ("e t" 'gnus-summary-put-mark-as-expirable-prev)
+   ("? P")
+   ("? T" 'gnus-summary-put-mark-as-dormant-prev-unread)
+   ("? p")
+   ("? t" 'gnus-summary-put-mark-as-dormant-prev)
+   ("! P")
+   ("! T" 'gnus-summary-put-mark-as-ticked-prev-unread)
+   ("! p")
+   ("! t" 'gnus-summary-put-mark-as-ticked-prev)
+   ("u P")
+   ("u T" 'gnus-summary-put-mark-as-unread-prev-unread)
+   ("u p")
+   ("u t" 'gnus-summary-put-mark-as-unread-prev)
+   ("d P")
+   ("d T" 'gnus-summary-put-mark-as-read-prev-unread)
+   ("d p")
+   ("d t" 'gnus-summary-put-mark-as-read-prev))
+  (keymap-define-kbd
+   gnus-summary-goto-map
+   ("C-p")
+   ("C-t" 'gnus-summary-prev-same-subject)
+   ("P")
+   ("T" 'gnus-summary-prev-article)
+   ("p")
+   ("t" 'gnus-summary-prev-unread-article)
+   ("M-p")
+   ("M-t" 'gnus-summary-prev-unread-subject))
+  ;; gnus-summary-help-map
+  ;; gnus-summary-limit-map
+  (keymap-define-kbd
+   gnus-summary-mark-map
+   ("C-c")
+   ("C-k" 'gnus-summary-catchup-all))
+  ;; gnus-summary-mime-map
+  (keymap-define-kbd
+   gnus-summary-mode-map
+   ("C-v" 'gnus-summary-kill-same-subject)
+   ("C-k" (lookup-key gnus-summary-mode-map [?\C-c]))
+   ("C-c")
+   ("P" 'gnus-summary-thread-map)
+   ("T" 'gnus-summary-prev-article)
+   ("p" 'gnus-summary-toggle-header)
+   ("t" gnus-summary-prev-unread-article)
+   ("C-M-p" 'gnus-summary-toggle-threads)
+   ("M-p" 'gnus-summary-toggle-display-buttonized)
+   ("M-t" 'gnus-summary-prev-unread-subject)
+   ("C-M-h")
+   ("C-M-t")
+   ("C-M-n")
+   ("C-M-s")
+   ("C-M-g" 'gnus-summary-hide-thread)
+   ("C-M-l" 'gnus-summary-toggle-threads)
+   ("C-M-w" 'gnus-summary-show-thread)
+   ("C-M-c" 'gnus-summary-prev-same-subject)
+   ("C-M-r" 'gnus-summary-next-same-subject)
+   )
+  ;; gnus-summary-mscore-map
+  ;; gnus-summary-save-map
+  ;; gnus-summary-score-map
+  ;; gnus-summary-send-map
+  (keymap-define-kbd
+   gnus-summary-thread-map
+   ("p")
+   ("t" 'gnus-summary-prev-thread)
+   ("w" 'gnus-summary-rethread-current))
+  ;; gnus-summary-wash-deuglify-map
+  ;; gnus-summary-wash-display-map
+  ;; gnus-summary-wash-empty-map
+  ;; gnus-summary-wash-header-map
+  ;; gnus-summary-wash-hide-map
+  ;; gnus-summary-wash-highlight-map
+  ;; gnus-summary-wash-map
+  ;; gnus-summary-wash-mime-map
+  ;; gnus-summary-wash-time-map
+  ;; gnus-undo-mode-map
+  ;; gnus-url-button-map
+  ;; gnus-uu-extract-map
+  ;; gnus-uu-extract-view-map
+  ;; gnus-uu-mark-map
+
+  (add-to-list
+   'gnus-secondary-select-methods
+   '(nnimap
+     "gmail"
+     (nnimap-address "imap.gmail.com")
+     (nnimap-server-port "imaps")
+     (nnimap-stream ssl)
+     (nnmail-expiry-target "nnimap+gmail:[Gmail]/Trash")  ; Move expired messages to Gmail's trash.
+     (nnmail-expiry-wait immediate))) ; Mails marked as expired can be processed immediately.
+
+  (setq
+   gnus-select-method '(nnnil)
+   mail-sources (imap :server "imap.gmail.com" :port 993 :stream tls :user "duncankburke@gmail.com")
+   gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]"
+   )
+
+  )
 ;; grep-mode
 
 (with-eval-after-load "grep"
