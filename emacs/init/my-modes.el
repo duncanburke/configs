@@ -610,6 +610,8 @@ _N_: down same level
 
 
 ;; org-mode
+(push '("---\\(.\\|\n\\)*format:\\s-*org" . org-mode) magic-mode-alist)
+
 (with-eval-after-load "org"
   (keymap-define-kbd
    org-mode-map
@@ -688,6 +690,12 @@ _N_: down same level
    ("s-/" 'org-shiftcontrolup)
    ("s-+" 'org-shiftcontroldown)
    )
+
+  (add-hook-anon
+   'org-mode-hook
+   (setq org-hide-leading-stars t
+         org-startup-indented nil
+         org-todo-keywords '((sequence "TODO" "DOING" "|" "DONE"))))
   )
 
 ;; package
@@ -1091,18 +1099,8 @@ _N_: down same level
 (mode-extension #'markdown-mode ".mdown")
 (mode-extension #'markdown-mode ".markdown")
 
-;; org
-(el-register-package
- :name org
- :type elpa)
 
-(add-hook-anon
- 'org-mode-hook
- (setq org-hide-leading-stars t
-       org-startup-indented nil
-       org-todo-keywords '((sequence "TODO" "DOING" "|" "DONE"))))
 
-(push '("---\\(.\\|\n\\)*format:\\s-*org" . org-mode) magic-mode-alist)
 
 ;; ruby-mode
 (with-eval-after-load 'ruby-mode
