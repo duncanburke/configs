@@ -1106,7 +1106,26 @@ _N_: down same level
 (mode-extension #'markdown-mode ".mdown")
 (mode-extension #'markdown-mode ".markdown")
 
+;; nov
 
+(el-register-package
+ :name nov
+ :type elpa)
+
+(add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+(with-eval-after-load "nov"
+  (keymap-define-kbd
+   nov-mode-map
+   ("p")
+   ("t" 'nov-scroll-down)
+   ("n" 'nov-scroll-up)
+   ("M-t" 'nov-previous-document)
+   ("M-n" 'nov-next-document)
+   ("d" 'nov-goto-toc))
+  (add-hook-anon
+   'nov-mode-hook
+   (setq show-trailing-whitespace nil))
+  )
 
 
 ;; ruby-mode
