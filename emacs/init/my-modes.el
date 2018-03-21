@@ -767,7 +767,12 @@ _N_: down same level
    ("M-r")
    ("M-s")
    ("C-a" 'term-previous-matching-input)
-   ("C-o" 'term-next-matching-input)))
+   ("C-o" 'term-next-matching-input))
+
+  (add-hook-anon
+   'term-mode-hook
+   (setq show-trailing-whitespace nil))
+  )
 
 ;; tabulated-list
 
@@ -778,7 +783,9 @@ _N_: down same level
    ("t" 'previous-line))
   (add-hook-anon
    'tabulated-list-mode-hook
-   (setq show-trailing-whitespace nil)))
+   (setq show-trailing-whitespace nil))
+  (add-hook 'tabulated-list-mode-hook #'linum-hook)
+  )
 
 ;; tar-mode
 
