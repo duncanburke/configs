@@ -94,7 +94,7 @@
 ^^^^^^^^^^^^------------------------------------------------------------
 _e_: kill           _o_: open           _h_: left   _C-h_: move left
 _E_: copy as kill   _i_: insert string  _t_: up     _C-t_: move up
-_u_: yank           ^ ^                 _n_: down   _C-n_: move down
+_u_: yank           _d_: string         _n_: down   _C-n_: move down
 _U_: yank overwrite ^ ^                 _s_: right  _C-s_: move right
 "
 
@@ -107,6 +107,7 @@ _U_: yank overwrite ^ ^                 _s_: right  _C-s_: move right
 
   ("o" open-rectangle)
   ("i" string-insert-rectangle)
+  ("d" string-rectangle)
 
   ("h" char-left)
   ("t" char-up)
@@ -119,7 +120,7 @@ _U_: yank overwrite ^ ^                 _s_: right  _C-s_: move right
   ("C-s" rectangle-right)
 
   ("" ignore :exit nil)
-)
+  )
 
 (defvar-local hydra-indent-modal-function nil)
 
