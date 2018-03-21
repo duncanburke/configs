@@ -711,6 +711,8 @@
    ("M-A" 'Info-search)
    ("M-O" 'Info-search-next)
    ("C-M-a" 'Info-search-backward)
+   ("C-c" 'Info-history-back)
+   ("C-r" 'Info-history-forward)
    )
 
   (keymap-define-kbd
