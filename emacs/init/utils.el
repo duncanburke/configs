@@ -173,4 +173,11 @@
   (interactive)
   (kill-buffer (current-buffer)))
 
+(defun my-lookup-key (key)
+  "Search for KEY in all known keymaps."
+  (mapatoms (lambda (ob) (when (and (boundp ob) (keymapp (symbol-value ob)))
+                      (when (functionp (lookup-key (symbol-value ob) key))
+                        (message "%S" ob))))
+            obarray))
+
 (provide 'utils)
