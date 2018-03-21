@@ -61,6 +61,22 @@
 (put 'narrow-to-region 'disabled nil)
 (put 'narrow-to-page 'disabled nil)
 
+;; mail
+
+;; Generate google app password and put in ~/.authinfo.gpg:
+;; machine imap.gmail.com login duncankburke@gmail.com password <password> port imaps
+;; machine smtp.gmail.com login duncankburke@gmail.com password <password> port 587
+
+(setq
+ user-mail-address "duncankburke@gmail.com"
+ user-full-name "Duncan Burke"
+ send-mail-function 'smtpmail-send-it
+ smtpmail-smtp-server "smtp.gmail.com"
+ smtpmail-smtp-service 587
+ smtpmail-stream-type 'starttls
+ )
+
+
 ;; System-specific
 
 (cond ((eq system-type 'windows-nt)
