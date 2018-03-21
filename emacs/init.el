@@ -29,6 +29,7 @@
 (el-get-packages)
 
 (purpose-mode)
+(yas-global-mode 1)
 
 (require 'generalised-move)
 (require 'my-hydra)

@@ -1490,6 +1490,23 @@ If BUFFER-OR-NAME is nil, select the buffer returned by `other-buffer'."
 (el-use-package "yaml-mode")
 (mode-extension #'yaml-mode ".yaml")
 
+;; yasnippet
+(el-use-package "yasnippet")
+(el-use-package "yasnippet-snippets")
+
+(with-eval-after-load "yasnippet"
+  (keymap-define-kbd
+   yas-minor-mode-map
+   ("SPC" yas-maybe-expand)
+   ("C-k" (lookup-key yas-minor-mode-map [?\C-c]))
+   ("C-c"))
+
+  (keymap-define-kbd
+   yas-keymap
+   ("C-g")
+   ("C-p" 'yas-abort-snippet))
+  )
+
 ;; Custom Modes
 
 (define-derived-mode writing-mode
