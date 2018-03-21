@@ -56,8 +56,8 @@
  ;; TODO: TABS!!!
  ;; ("C-i" ...)
 
- ("M-;")
  ("C-;" 'universal-argument)
+ ("M-;") ;; follow link
  ("M-:" 'eval-expression)
  ("C-M-;")
 
