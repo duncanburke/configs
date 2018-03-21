@@ -1127,6 +1127,45 @@ _N_: down same level
    (setq show-trailing-whitespace nil))
   )
 
+;; purpose
+
+(el-use-package "window-purpose")
+
+(with-eval-after-load 'window-purpose
+  (keymap-define-kbd
+   purpose-mode-map
+   ("C-c")
+   ("M-j" 'purpose-mode-prefix-map)
+   ("C-x m" 'purpose-switch-buffer-with-purpose)
+   ("C-x b" 'switch-buffer-without-purpose)
+   ("C-x p" 'purpose-switch-buffer-with-some-purpose)
+   )
+
+  ;; purpose-switch-buffer force-same-window
+  (defun purpose-switch-buffer (buffer-or-name
+                                &optional norecord force-same-window)
+    "Select buffer BUFFER-OR-NAME, preferably in the selected window.
+If FORCE-SAME-WINDOW is non-nil, don't select a different window if the
+currently selected window is not available.
+If BUFFER-OR-NAME is nil, select the buffer returned by `other-buffer'."
+    (interactive (list (read-buffer-to-switch "[PU] Switch to buffer: ")))
+    ;; `display-buffer' should call `purpose--action-function', and
+    ;; `purpose--action-function' should try to switch buffer in current window,
+    ;; and if that's impossible - display buffer in another window.
+    (message "purpose-switch-buffer %s %s %s" buffer-or-name norecord force-same-window)
+    (purpose-select-buffer (window-normalize-buffer-to-switch-to buffer-or-name)
+                           'force-same-window
+                           norecord))
+
+  (setq purpose-user-mode-purposes
+        '((Info-mode . info)
+          ))
+  (setq purpose-user-name-purposes
+        '())
+  (purpose-compile-user-configuration)
+  (purpose-compile-extended-configuration)
+  (purpose-compile-default-configuration)
+ )
 
 ;; ruby-mode
 (with-eval-after-load 'ruby-mode

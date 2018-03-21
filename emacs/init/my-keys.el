@@ -67,8 +67,8 @@
  ("C-M-q")
 
  ("C-j" 'newline)
- ("M-j")
- ("M-J")
+ ("M-j") ;; purpose-mode-prefix-map
+ ("M-J" 'purpose-toggle-window-purpose-dedicated)
  ("C-M-j")
 
  ("C-k" 'mode-specific-command-prefix)

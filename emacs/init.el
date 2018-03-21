@@ -28,5 +28,7 @@
 
 (el-get-packages)
 
+(purpose-mode)
+
 (require 'generalised-move)
 (require 'my-hydra)
