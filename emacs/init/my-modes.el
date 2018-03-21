@@ -926,9 +926,9 @@ _N_: down same level
 ;; help-fns+
 (el-register-package
  :name help-fns+
- :type elpa
- :features 'help-fns+
- :lazy nil)
+ :type http
+ :url "https://www.emacswiki.org/emacs/download/help-fns+.el"
+ :after (require 'help-fns+))
 
 ;; magit
 (el-register-package

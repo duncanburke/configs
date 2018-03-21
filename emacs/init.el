@@ -26,10 +26,7 @@
 (require 'my-keys)
 (require 'my-modes)
 
-;;(el-use-package "help-fns+")
 (el-get-packages)
-
-(require 'help-fns+)
 
 (require 'generalised-move)
 (require 'my-hydra)
