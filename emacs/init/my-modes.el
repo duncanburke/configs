@@ -997,10 +997,18 @@ _N_: down same level
 (with-eval-after-load "re-builder"
   (keymap-define-kbd
    reb-mode-map
-   ("C-k" (lookup-key reb-mode-map [?\C-c]))
-   ("C-c")
-   ("C-k C-q")
-   ("C-k C-k" 'reb-quit)))
+   ("C-k C-b" 'reb-change-target-buffer)
+   ("C-k C-c" 'reb-toggle-case)
+   ("C-k C-e" 'reb-enter-subexp-mode)
+   ("C-k TAB" 'reb-change-syntax)
+   ("C-k C-k" 'reb-quit)
+   ("C-k M-c" 'reb-prev-match)
+   ("C-k M-r" 'reb-next-match)
+   ("C-k C-u" 'reb-force-update)
+   ("C-k C-e" 'reb-copy))
+
+  (setq reb-re-syntax 'string)
+  )
 
 ;;sh-mode
 (with-eval-after-load "sh-script"
