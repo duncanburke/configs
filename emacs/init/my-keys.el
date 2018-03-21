@@ -56,8 +56,8 @@
  ;; TODO: TABS!!!
  ;; ("C-i" ...)
 
- ("C-;")
  ("M-;")
+ ("C-;" 'universal-argument)
  ("M-:" 'eval-expression)
  ("C-M-;")
 
