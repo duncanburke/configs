@@ -29,7 +29,14 @@
    ("C-d")
    ("C-g" 'Buffer-menu-delete-backwards)
    ("M-s")
-   ;; TODO: Buffer-menu-isearch-*, Buffer-menu-multi-occur
+   ("t")
+   ("w" 'Buffer-menu-visit-tags-table)
+   ("M-s a C-s")
+   ("M-s a M-C-s")
+   ("M-s a C-o")
+   ("C-k C-o" 'Buffer-menu-isearch-buffers-regexp)
+   ("C-k M-o" 'Buffer-menu-isearch-buffers)
+   ("C-w" 'Buffer-menu-multi-occur)
    )
   )
 
