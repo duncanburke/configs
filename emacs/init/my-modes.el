@@ -556,6 +556,27 @@
    )
   )
 
+;; message-mode
+(with-eval-after-load "message-mode"
+  (keymap-define-kbd
+   message-mode-map
+   ("C-k" (lookup-key message-mode-map [?\C-c]))
+   ("C-c")
+   ("C-a")
+   ("M-H" 'message-beginning-of-line)
+   ("M-n")
+   ("M-w" 'message-display-abbrev)
+   )
+  )
+
+;; mml-mode
+(with-eval-after-load "mml-mode"
+  (keymap-define-kbd
+   mml-mode-map
+   ("C-k" (lookup-key mml-mode-map [?\C-c]))
+   ("C-c")
+   )
+  )
 ;; nxml-mode
 (with-eval-after-load "nxml-mode"
   (keymap-define-kbd
