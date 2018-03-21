@@ -182,7 +182,7 @@ _n_: tab-always-indent: % -13`tab-always-indent
   ("r" (hydra-set-indent-line-function 'indent-relative-maybe))
   ("l" (hydra-set-indent-line-function 'indent-to-left-margin))
 
-  ("h" electric-indent-mode)
+  ("h" electric-indent-local-mode)
   ("t" (setq indent-tabs-mode (not indent-tabs-mode)))
   ("T" hydra-indent-set-tab-width)
   ("n" (setq tab-always-indent (not tab-always-indent)))
