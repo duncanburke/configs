@@ -1226,6 +1226,13 @@ _N_: down same level
  :url "https://www.emacswiki.org/emacs/download/help-fns+.el"
  :after (require 'help-fns+))
 
+;; iy-goto-char
+
+(el-register-package
+ :name iy-go-to-char
+ :type github
+ :pkgname "doitian/iy-go-to-char")
+
 ;; magit
 (el-register-package
  :name magit

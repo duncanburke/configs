@@ -32,12 +32,12 @@
  ("C-M-y")
 
  ("C-a" 'isearch-backward-regexp)
- ("M-a" 'isearch-backward)
+ ("M-a" 'iy-go-to-char-backward)
  ("M-A" 'query-replace)
  ("C-M-a" 'replace-regexp)
 
  ("C-o" 'isearch-forward-regexp)
- ("M-o" 'isearch-forward)
+ ("M-o" 'iy-go-to-char)
  ("M-O" 'query-replace-regexp)
  ("C-M-o" 'replace-regexp)
 
