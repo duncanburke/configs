@@ -369,7 +369,6 @@
    ("C-e" 'isearch-yank-word-or-char)
    ("C-M-w")
    ("C-M-e" 'isearch-del-char)
-   ("C-y")
    ("C-u" 'isearch-yank-kill)
    ("C-M-y")
    ("C-M-u" 'isearch-yank-char)
