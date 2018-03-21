@@ -267,6 +267,57 @@
    ("C-k" (lookup-key edmacro-mode-map [?\C-c]))
    ("C-c")))
 
+;; epa-key-list-mode
+(with-eval-after-load "epa"
+  (keymap-define-kbd
+   epa-key-list-mode-map
+   ("C-c")
+   ("C-k C-c" 'exit-recursive-edit)
+   ("p")
+   ("t" 'previous-line))
+
+   ;; For some reason exit-recursive-edit is hardcoded in the function, so it
+   ;; needs to be overwritten
+  (defun epa--select-keys (prompt keys)
+    (unless (and epa-keys-buffer
+                 (buffer-live-p epa-keys-buffer))
+      (setq epa-keys-buffer (generate-new-buffer "*Keys*")))
+    (with-current-buffer epa-keys-buffer
+      (epa-key-list-mode)
+      ;; C-c C-c is the usual way to finish the selection (bug#11159).
+      ;; (define-key (current-local-map) "\C-k\C-c" 'exit-recursive-edit)
+      (let ((inhibit-read-only t)
+	    buffer-read-only)
+        (erase-buffer)
+        (insert prompt "\n"
+	        (substitute-command-keys "\
+- `\\[epa-mark-key]' to mark a key on the line
+- `\\[epa-unmark-key]' to unmark a key on the line\n"))
+        (widget-create 'link
+		       :notify (lambda (&rest _ignore) (abort-recursive-edit))
+		       :help-echo
+		       "Click here or \\[abort-recursive-edit] to cancel"
+		       "Cancel")
+        (widget-create 'link
+		       :notify (lambda (&rest _ignore) (exit-recursive-edit))
+		       :help-echo
+		       "Click here or \\[exit-recursive-edit] to finish"
+		       "OK")
+        (insert "\n\n")
+        (epa--insert-keys keys)
+        (widget-setup)
+        (set-keymap-parent (current-local-map) widget-keymap)
+        (setq epa-exit-buffer-function #'abort-recursive-edit)
+        (goto-char (point-min))
+        (let ((display-buffer-mark-dedicated 'soft))
+          (pop-to-buffer (current-buffer))))
+      (unwind-protect
+	  (progn
+	    (recursive-edit)
+	    (epa--marked-keys))
+        (kill-buffer epa-keys-buffer))))
+  )
+
 ;; eshell
 (with-eval-after-load "esh-mode"
   (defun eshell-mode-fixup ()
